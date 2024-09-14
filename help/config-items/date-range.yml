@@ -1,0 +1,14 @@
+daterange:
+  label:
+    en: Date Range
+    de: Datumsbereich
+  placeholder:
+    en: Select date range
+    de: Datumsbereich auswählen
+  type: daterange
+  required: true
+  min: "1900-01-01"
+  max: "2023-12-31"
+  error_message:
+    en: Please select a valid date range
+    de: Bitte wählen Sie einen gültigen Datumsbereich

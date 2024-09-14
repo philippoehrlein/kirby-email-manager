@@ -1,0 +1,17 @@
+attachment:
+  label:
+    en: Attachment
+    de: Anhang
+  placeholder:
+    en: Choose a file
+    de: Datei auswählen
+  type: file
+  required: false
+  max_size: 5242880  # 5MB in Bytes
+  allowed_mimes: 
+    - application/pdf
+    - image/jpeg
+    - image/png
+  error_message:
+    en: Please upload a valid file (PDF, JPEG, PNG, max 5MB)
+    de: Bitte laden Sie eine gültige Datei hoch (PDF, JPEG, PNG, max. 5MB)

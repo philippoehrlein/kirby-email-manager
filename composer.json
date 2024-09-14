@@ -1,0 +1,19 @@
+{
+  "name": "philippoehrlein/kirby-email-manager",
+  "description": "A Kirby plugin for managing email templates",
+  "type": "kirby-plugin",
+  "require": {
+    "getkirby/cms": "^4.0",
+    "getkirby/composer-installer": "^1.1"
+  },
+  "autoload": {
+      "psr-4": {
+          "KirbyEmailManager\\": "src/"
+      }
+  },
+  "extra": {
+      "kirby-plugin": {
+          "root": "site/plugins/kirby-email-manager"
+      }
+  }
+}

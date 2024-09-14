@@ -1,0 +1,13 @@
+phone:
+  label:
+    en: Phone Number
+    de: Telefonnummer
+  placeholder:
+    en: Enter your phone number
+    de: Geben Sie Ihre Telefonnummer ein
+  type: tel
+  required: true
+  pattern: "^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$"
+  error_message:
+    en: Please enter a valid phone number (e.g., 123-456-7890)
+    de: Bitte geben Sie eine gültige Telefonnummer ein (z.B. 0123-456789)

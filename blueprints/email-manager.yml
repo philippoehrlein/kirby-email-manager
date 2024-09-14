@@ -1,0 +1,67 @@
+type: tabs
+label: email_tab_label
+icon: server
+
+columns:
+  main:
+    width: 2/3
+    fields:
+      email_templates_headline:
+        label: email_templates_headline
+        type: headline
+
+      email_templates:
+        label: email_templates_label
+        type: select
+        options: query
+        required: true
+        query:
+          fetch: kirby.option('philippoehrlein.kirby-email-manager.templates')
+          text: "{{ item.name }}"
+          value: "{{ item.id }}"
+
+      send_to_more:
+        type: toggle
+        label: send_to_more_label
+        text: 
+          - send_to_one
+          - send_to_many
+
+      send_to:
+        label: send_to_label
+        type: email
+        when:
+          send_to_more: false
+        required: true
+
+      send_to_structure:
+        label: send_to_structure_label
+        type: structure
+        when:
+          send_to_more: true
+        fields:
+          topic:
+            label: topic_label
+            type: text
+            required: true
+          email:
+            label: email_label
+            type: email
+            required: true
+        help: send_to_structure_help
+        required: true
+
+  sidebar:
+    width: 1/3
+    fields:
+      gdpr_checkbox:
+        label: gdpr_checkbox_label
+        type: toggle
+        default: false
+        help: gdpr_checkbox_help
+
+      gdpr_text:
+        label: gdpr_text_label
+        type: writer
+        when:
+          gdpr_checkbox: true

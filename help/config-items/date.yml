@@ -1,0 +1,14 @@
+birthdate:
+  label:
+    en: Date of Birth
+    de: Geburtsdatum
+  placeholder:
+    en: YYYY-MM-DD
+    de: JJJJ-MM-TT
+  type: date
+  required: true
+  min: "1900-01-01"
+  max: "2023-12-31"
+  error_message:
+    en: Please enter a valid date
+    de: Bitte geben Sie ein gültiges Datum ein

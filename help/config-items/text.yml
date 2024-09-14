@@ -1,0 +1,13 @@
+name:
+  label:
+    en: Name
+    de: Name
+  placeholder:
+    en: Enter your full name
+    de: Geben Sie Ihren vollständigen Namen ein
+  type: text
+  required: true
+  validate: minLength:2
+  error_message:
+    en: Please enter a valid name (at least 2 characters)
+    de: Bitte geben Sie einen gültigen Namen ein (mindestens 2 Zeichen)

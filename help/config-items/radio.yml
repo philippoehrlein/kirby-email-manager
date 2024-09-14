@@ -1,0 +1,17 @@
+gender:
+  label:
+    en: Gender
+    de: Geschlecht
+  type: radio
+  required: true
+  options:
+    male:
+      en: Male
+      de: Männlich
+    female:
+      en: Female
+      de: Weiblich
+    other:
+      en: Other
+      de: Divers
+  value: female

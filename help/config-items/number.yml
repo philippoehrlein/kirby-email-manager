@@ -1,0 +1,15 @@
+age:
+  label:
+    en: Age
+    de: Alter
+  placeholder:
+    en: Enter your age
+    de: Geben Sie Ihr Alter ein
+  type: number
+  required: true
+  min: 0
+  max: 120
+  step: 1
+  error_message:
+    en: Please enter a valid age (0-120)
+    de: Bitte geben Sie ein gültiges Alter ein (0-120)

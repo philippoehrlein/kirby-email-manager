@@ -3,9 +3,24 @@ namespace KirbyEmailManager\Helpers;
 
 use Kirby\Toolkit\V;
 
+/**
+ * ValidationHelper class provides methods to validate form fields.
+ * Author: Philip Oehrlein
+ * Version: 1.0.0
+ */
 class ValidationHelper {
+    /**
+     * Validates a field based on its configuration and data.
+     *
+     * @param string $fieldKey The key of the field to validate.
+     * @param array $fieldConfig The configuration of the field.
+     * @param array $data The form data.
+     * @param array $translations The translations array.
+     * @param string $languageCode The language code.
+     * @return array The validation errors.
+     */
     public static function validateField($fieldKey, $fieldConfig, $data, $translations, $languageCode) {
-    $errors = [];
+        $errors = [];
 
     if (!empty($fieldConfig['validate'])) {
         switch ($fieldConfig['validate']) {
@@ -45,8 +60,8 @@ class ValidationHelper {
                     $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
                         ?? $translations['error_messages']['max_date'] 
                         ?? 'Date is later than allowed.';
-                }
-                break;
+                    }
+                    break;
         
             case 'select':
                 $errors = array_merge($errors, self::validateRequired($fieldKey, $fieldConfig, $data, $translations, $languageCode));
@@ -71,30 +86,51 @@ class ValidationHelper {
                         ?? 'Please enter a valid phone number.';
                 }
                 break;
+            }
         }
+
+        return $errors;
     }
 
-    return $errors;
-    }
-
+    /**
+     * Validates if a field is required.
+     *
+     * @param string $fieldKey The key of the field to validate.
+     * @param array $fieldConfig The configuration of the field.
+     * @param array $data The form data.
+     * @param array $translations The translations array.
+     * @param string $languageCode The language code.
+     * @return array The validation errors. 
+     */
     public static function validateRequired($fieldKey, $fieldConfig, $data, $translations, $languageCode) {
-    $errors = [];
-    if (!empty($fieldConfig['required']) && empty($data[$fieldKey])) {
-        $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
-            ?? $translations['error_messages']['required'];
-    }
-    return $errors;
-    }
-
-    public static function validateMinLength($fieldKey, $fieldConfig, $data, $translations, $languageCode) {
-    $errors = [];
-    if (!empty($data[$fieldKey]) && !empty($fieldConfig['validate']) && strpos($fieldConfig['validate'], 'minLength:') === 0) {
-        $minLength = intval(substr($fieldConfig['validate'], 10));
-        if (strlen($data[$fieldKey]) < $minLength) {
+        $errors = [];
+        if (!empty($fieldConfig['required']) && empty($data[$fieldKey])) {
             $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
-                ?? str_replace(':minLength', $minLength, $translations['error_messages']['message_too_short']);
+                ?? $translations['error_messages']['required'];
         }
+        return $errors;
     }
-    return $errors;
+    
+    /**
+     * Validates the minimum length of a field.
+     *
+     * @param string $fieldKey The key of the field to validate.
+     * @param array $fieldConfig The configuration of the field.
+     * @param array $data The form data.
+     * @param array $translations The translations array.
+     * @param string $languageCode The language code.
+     * @return array The validation errors. 
+     */
+    public static function validateMinLength($fieldKey, $fieldConfig, $data, $translations, $languageCode) {
+        $errors = [];
+        if (!empty($data[$fieldKey]) && !empty($fieldConfig['validate']) && strpos($fieldConfig['validate'], 'minLength:') === 0) {
+            $minLength = intval(substr($fieldConfig['validate'], 10));
+            if (strlen($data[$fieldKey]) < $minLength) {
+                $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
+                    ?? str_replace(':minLength', $minLength, $translations['error_messages']['message_too_short']);
+            }
+        }
+
+        return $errors;
     }
 }

@@ -60,19 +60,38 @@ $data = $formHandler['data'] ?? [];
       <p class="alert alert--error  general-error"><?= $alert['message'] ?></p>
   <?php endif ?>
 
-  <?php if ($page->use_email_structure()->toBool()): ?>
-  <div class="field field--select">
-    <label for="subject"><?= t('subject') ?></label>
-    <select name="subject" id="subject" required>
-      <option value=""><?= t('select_subject') ?></option>
-      <?php foreach ($page->email_structure()->toStructure() as $item): ?>
-        <option value="<?= $item->subject() ?>" <?= ($data['subject'] ?? '') === $item->subject() ? 'selected' : '' ?>>
-          <?= $item->subject() ?>
-        </option>
-      <?php endforeach ?>
-    </select>
-</div>
-<?php endif ?>
+  <div class="honeypot" aria-hidden="true" style="position: absolute; left: -9999px;">
+    <label for="website">Website (Bitte nicht ausfüllen)</label>
+    <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+  </div>
+
+  <?= csrf_field() ?>
+
+  <input type="hidden" name="timestamp" value="<?= time() ?>">
+
+  <?php if ($page->send_to_more()->toBool()): ?>
+    <div class="field field--select">
+      <label for="topic"><?= t('topic_label') ?></label>
+      <?php
+      $options = [];
+      foreach ($page->send_to_structure()->toStructure() as $item) {
+        $options[$item->topic()->value()] = $item->topic()->value();
+      }
+      snippet('email-templates/form/select', [
+        'fieldKey' => 'topic',
+        'fieldConfig' => [
+          'type' => 'select',
+          'required' => true,
+          'placeholder' => [
+            $languageCode => t('select_topic')
+          ],
+          'options' => $options
+        ],
+        'value' => $data['topic'] ?? '',
+        'languageCode' => $languageCode
+      ]) ?>
+    </div>
+  <?php endif ?>
 
   <?php foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig): ?>
     <div class="field field--<?= $fieldConfig['type'] ?>">

@@ -44,7 +44,9 @@ return [
       'date_after_max' => 'End date is later than allowed.',
       'invalid_option' => 'Invalid option selected.',
       'min_length_password' => 'Password must be at least :minLength characters long.',
-      'invalid_phone' => 'Please enter a valid phone number.'
+      'invalid_phone' => 'Please enter a valid phone number.',
+      'csrf_error' => 'Invalid CSRF token.',
+      'submission_time_error' => 'Invalid submission time.'
   ],
 
   // Button texts

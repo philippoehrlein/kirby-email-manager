@@ -2,6 +2,7 @@
 use KirbyEmailManager\Helpers\EmailHelper;
 use KirbyEmailManager\Helpers\ExceptionHelper;
 use KirbyEmailManager\Helpers\ValidationHelper;
+use KirbyEmailManager\Hooks\SystemHooks;
 
 // Konstanten definieren
 define('PLUGIN_DIR', __DIR__);
@@ -40,7 +41,11 @@ Kirby::plugin('philippoehrlein/kirby-email-manager', [
 
     'options' => require PLUGIN_DIR . '/config/options.php',
 
-    'hooks' => require SRC_DIR . '/Hooks/SystemHooks.php',
+    'hooks' => [
+        'system.loadPlugins:after' => function () {
+            SystemHooks::loadPluginsAfter(); 
+        }
+    ],
 
     'translations' => [
         'en' => require PLUGIN_DIR . '/translations/en.php',

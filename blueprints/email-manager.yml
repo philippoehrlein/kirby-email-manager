@@ -6,7 +6,7 @@ icon: server
 
 columns:
   main:
-    width: 2/3
+    width: 1/2
     fields:
       email_templates_headline:
         label: email_templates_headline
@@ -55,6 +55,11 @@ columns:
         type: structure
         when:
           send_to_more: true
+        columns:
+          topic: 
+            width: 1/2
+          email:
+            width: 1/2
         fields:
           topic:
             label: topic_label
@@ -66,6 +71,7 @@ columns:
             required: true
           success:
             type: structure
+            max: 1
             label: send_to_more_success_message_label
             fields:
               title:
@@ -80,8 +86,12 @@ columns:
         required: true
 
   sidebar:
-    width: 1/3
+    width: 1/2
     fields:
+      email_legal_headline:
+        label: email_legal_headline_label
+        type: headline
+
       gdpr_checkbox:
         label: gdpr_checkbox_label
         type: toggle
@@ -93,3 +103,8 @@ columns:
         type: writer
         when:
           gdpr_checkbox: true
+      
+      email_legal_footer:
+        label: 'Email Footer'
+        type: writer
+        help: 'Optionaler rechtlicher Footer, der in Bestätigungsmails angezeigt wird.'

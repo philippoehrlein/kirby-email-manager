@@ -2,7 +2,7 @@
 
 return [
     'email_tab_label' => 'Administrador de correos electrónicos',
-    'email_templates_headline' => 'Seleccionar plantilla de correo electrónico',
+    'email_templates_headline' => 'Plantillas de correo electrónico',
     'email_templates_label' => 'Plantilla de correo electrónico',
     'send_to_more_label' => '¿Enviar correos electrónicos a diferentes direcciones según el asunto?',
     'send_to_one' => 'No, solo una dirección de correo electrónico',
@@ -29,6 +29,7 @@ return [
     'send_to_more_success_message_label' => 'Mensaje de éxito',
     'send_to_more_success_title_label' => 'Título de éxito',
     'send_to_more_success_text_label' => 'Texto de éxito',
+    'email_legal_headline_label' => 'Legal',
 
     // Mensajes de error anidados
     'error_messages' => [

@@ -84,8 +84,8 @@ class FormHandler
      * @return array The form result.
      */
     public function handle()
-    {
-        $this->kirby->session();
+    {    
+        $session = $this->kirby->session();
         $data = $this->kirby->request()->data();
 
         if (!empty($data['website'])) {
@@ -157,13 +157,12 @@ class FormHandler
                         $alert['type'] = 'success';
                         $alert['message'] = $this->translations['form_success'];
                         
-                        $successMessage = SuccessMessageHelper::getSuccessMessage(
-                            $this->page,
-                            $data,
-                            $this->languageCode
-                        );
-                        $alert['successMessage'] = $successMessage;
-                        $data = [];
+                        $successMessage = SuccessMessageHelper::getSuccessMessage($this->page, $data, $this->languageCode);
+                        $session->set('form.success', $successMessage);
+                    
+                        go($this->page->url());
+                        exit;
+
                     } catch (Exception $e) {
                         $alert = ExceptionHelper::handleException($e, $this->translations);
                         LogHelper::logError($e);

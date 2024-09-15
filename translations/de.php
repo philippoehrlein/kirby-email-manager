@@ -2,7 +2,7 @@
 
 return [
     'email_tab_label' => 'E-Mail Manager',
-    'email_templates_headline' => 'E-Mail-Vorlagen auswählen',
+    'email_templates_headline' => 'E-Mail-Vorlagen',
     'email_templates_label' => 'E-Mail-Vorlage',
     'send_to_more_label' => 'E-Mail über Betreff an verschiedene E-Mail-Adressen senden?',
     'send_to_one' => 'Nein, nur eine E-Mail-Adresse',
@@ -29,6 +29,7 @@ return [
     'send_to_more_success_message_label' => 'Erfolgsmeldung',
     'send_to_more_success_title_label' => 'Erfolgstitel',
     'send_to_more_success_text_label' => 'Erfolgstext',
+    'email_legal_headline_label' => 'Rechtliches',
 
 
     // Nested error messages

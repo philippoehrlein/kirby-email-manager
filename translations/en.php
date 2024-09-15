@@ -2,7 +2,7 @@
 
 return [
   'email_tab_label' => 'E-Mail Manager',
-  'email_templates_headline' => 'Select Email Templates',
+  'email_templates_headline' => 'Email Templates',
   'email_templates_label' => 'Email Template',
   'send_to_more_label' => 'Send email based on subject to multiple addresses?',
   'send_to_one' => 'No, only one email address',
@@ -29,6 +29,7 @@ return [
   'send_to_more_success_message_label' => 'Success Message',
   'send_to_more_success_title_label' => 'Success Title',
   'send_to_more_success_text_label' => 'Success Text',
+  'email_legal_headline_label' => 'Legal',
 
   // Nested error messages
   'error_messages' => [

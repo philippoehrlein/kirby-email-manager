@@ -2,7 +2,7 @@
 
 return [
     'email_tab_label' => 'Gestore delle email',
-    'email_templates_headline' => 'Seleziona un modello di email',
+    'email_templates_headline' => 'Modelli di email',
     'email_templates_label' => 'Modello di email',
     'send_to_more_label' => 'Inviare email a indirizzi diversi in base all\'oggetto?',
     'send_to_one' => 'No, solo un indirizzo email',
@@ -29,6 +29,7 @@ return [
     'send_to_more_success_message_label' => 'Messaggio di successo',
     'send_to_more_success_title_label' => 'Titolo di successo',
     'send_to_more_success_text_label' => 'Testo di successo',
+    'email_legal_headline_label' => 'Legale',
 
     // Messaggi di errore annidati
     'error_messages' => [

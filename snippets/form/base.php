@@ -21,11 +21,12 @@ if ($fieldConfig['type'] === 'textarea') {
 
 $span = FormHelper::getResponsiveSpan($fieldConfig['width'] ?? '1/1');
 $spanStyle = FormHelper::generateSpanStyles($span);
+
 ?>
 
 <div class="<?= $fieldClass ?>" style="<?= $spanStyle ?>">
   <label for="<?= $fieldKey ?>" class="<?= $labelClass ?>"><?= $fieldConfig['label'][$languageCode] ?></label>
-  <?php snippet('email-templates/form/' . $fieldConfig['type'], [
+  <?php snippet('email-manager/form/' . $fieldConfig['type'], [
     'fieldKey' => $fieldKey,
     'fieldConfig' => $fieldConfig,
     'value' => $value,

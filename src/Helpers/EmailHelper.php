@@ -66,6 +66,11 @@ class EmailHelper {
             $confirmationSenderName = self::getConfirmationSender($templateConfig, $languageCode);
             $confirmationSenderEmail = self::createNoReplyEmail($kirby);
 
+            if ($page->email_legal_footer()->isNotEmpty()) {
+                $footerContent = UrlHelper::convertLinksToAbsolute($page->email_legal_footer()->kt(), $kirby);
+                $emailData['footer'] = $footerContent;
+            }
+
             $kirby->email([
                 'template' => $confirmationTemplatePath,
                 'from'     => [$confirmationSenderEmail => $confirmationSenderName],

@@ -1,6 +1,7 @@
 <?php
-
 namespace KirbyEmailManager\Hooks;
+
+use KirbyEmailManager\Helpers\TemplateHelper;
 
 class SystemHooks
 {
@@ -8,7 +9,7 @@ class SystemHooks
     {
         kirby()->extend([
             'options' => [
-                'philippoehrlein.kirby-email-manager.templates' => option('philippoehrlein.kirby-email-manager.templates')()
+                'philippoehrlein.kirby-email-manager.templates' => \KirbyEmailManager\Helpers\TemplateHelper::getEmailTemplates(),
             ]
         ]);
     }

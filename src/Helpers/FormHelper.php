@@ -39,21 +39,21 @@ class FormHelper
      */
     public static function getResponsiveSpan($width): array
     {
-        $breakpoints = ['default', 'medium', 'large'];
-        $spans = [];
-
-        if (is_array($width)) {
-            foreach ($breakpoints as $breakpoint) {
-                $spans[$breakpoint] = self::calculateSpan($width[$breakpoint] ?? $width['default'] ?? '1/1');
-            }
-        } else {
-            $span = self::calculateSpan($width ?? '1/1');
-            foreach ($breakpoints as $breakpoint) {
-                $spans[$breakpoint] = $span;
-            }
-        }
-
-        return $spans;
+      $breakpoints = ['default', 'medium', 'large'];
+      $spans = [];
+  
+      if (is_array($width)) {
+          foreach ($breakpoints as $breakpoint) {
+              $spans[$breakpoint] = self::calculateSpan($width[$breakpoint] ?? $width['default'] ?? '1/1');
+          }
+      } else {
+          $span = self::calculateSpan($width ?? '1/1');
+          foreach ($breakpoints as $breakpoint) {
+              $spans[$breakpoint] = $span;
+          }
+      }
+  
+      return $spans;
     }
 
     /**

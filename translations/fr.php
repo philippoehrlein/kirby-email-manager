@@ -2,7 +2,7 @@
 
 return [
     'email_tab_label' => 'Gestionnaire d\'emails',
-    'email_templates_headline' => 'Sélectionner un modèle d\'email',
+    'email_templates_headline' => 'Modèles d\'email',
     'email_templates_label' => 'Modèle d\'email',
     'send_to_more_label' => 'Envoyer des emails à différentes adresses en fonction du sujet ?',
     'send_to_one' => 'Non, à une seule adresse email',
@@ -29,6 +29,7 @@ return [
     'send_to_more_success_message_label' => 'Message de succès',
     'send_to_more_success_title_label' => 'Titre de succès',
     'send_to_more_success_text_label' => 'Texte de succès',
+    'email_legal_headline_label' => 'Légal',
 
     // Messages d'erreur imbriqués
     'error_messages' => [

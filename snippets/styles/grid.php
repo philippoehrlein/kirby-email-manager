@@ -24,22 +24,18 @@ $formFieldClass = FormHelper::getClassName('field', $config);
   }
 
   .<?= $formFieldClass ?> {
-    grid-column: span 12;
-  }
-
-  .<?= $formFieldClass ?>[style*="--span"] {
-    grid-column: span var(--span);
+    grid-column: span var(--span, 12);
   }
 
   @media (min-width: 768px) {
-    .<?= $formFieldClass ?>[style*="--span-medium"] {
-      grid-column: span var(--span-medium);
+    .<?= $formFieldClass ?> {
+      grid-column: span var(--span-medium, var(--span, 12));
     }
   }
 
   @media (min-width: 1024px) {
-    .<?= $formFieldClass ?>[style*="--span-large"] {
-      grid-column: span var(--span-large);
+    .<?= $formFieldClass ?> {
+      grid-column: span var(--span-large, var(--span-medium, var(--span, 12)));
     }
   }
 

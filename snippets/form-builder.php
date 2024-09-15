@@ -55,8 +55,8 @@ $resetButtonText = $buttonTexts['reset'][$languageCode] ?? $defaultButtonTexts['
 $alert = $formHandler['alert'] ?? [];
 $data = $formHandler['data'] ?? [];
 
-snippet('email-templates/styles/honeypot');
-snippet('email-templates/styles/grid');
+snippet('email-manager/styles/honeypot');
+snippet('email-manager/styles/grid');
 
 $pluginConfig = kirby()->option('philippoehrlein.kirby-email-manager.classConfig', []);
 $config = [
@@ -71,18 +71,7 @@ $keepForm = $templateConfig['keep_form'] ?? false;
 
 ?>
 
-<?php
-if ($successMessage && $alert['type'] === 'success') {
-  ?>
-  <div class="<?= FormHelper::getClassName('success-message', $config) ?>">
-      <h2 class="<?= FormHelper::getClassName('success-title', $config) ?>"><?= $successMessage['title'] ?></h2>
-      <div class="<?= FormHelper::getClassName('success-text', $config) ?>"><?= $successMessage['text'] ?></div>
-  </div>
-  <?php
-}
-?>
 
-<?php if (!$successMessage || $keepForm): ?>
 <form method="post" action="<?= $page->url() ?>" class="<?= FormHelper::getClassName('form', $config) ?>">
     <?php if (isset($alert['message']) && $alert['type'] === 'error'): ?>
         <p class="<?= FormHelper::getClassName('error', $config, 'error') ?>"><?= $alert['message'] ?></p>
@@ -112,7 +101,7 @@ if ($successMessage && $alert['type'] === 'success') {
       foreach ($page->send_to_structure()->toStructure() as $item) {
         $options[$item->topic()->value()] = $item->topic()->value();
       }
-      snippet('email-templates/form/select', [
+      snippet('email-manager/form/select', [
         'fieldKey' => 'topic',
         'fieldConfig' => [
           'type' => 'select',
@@ -134,7 +123,7 @@ if ($successMessage && $alert['type'] === 'success') {
     <?php
       $span = FormHelper::getResponsiveSpan($fieldConfig['width'] ?? '1/1');
     ?>
-    <?php snippet('email-templates/form/base', [
+    <?php snippet('email-manager/form/base', [
         'fieldKey' => $fieldKey,
         'fieldConfig' => $fieldConfig,
         'value' => $data[$fieldKey] ?? '',
@@ -160,5 +149,5 @@ if ($successMessage && $alert['type'] === 'success') {
 </div>
 
   <input type="hidden" name="csrf" value="<?= csrf() ?>">
+  
 </form>
-<?php endif ?>

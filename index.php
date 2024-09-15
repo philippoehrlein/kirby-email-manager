@@ -3,42 +3,45 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use KirbyEmailManager\Helpers\EmailHelper;
 use KirbyEmailManager\Helpers\ExceptionHelper;
+use KirbyEmailManager\Helpers\PathHelper;
+use KirbyEmailManager\Helpers\SessionHelper;
+use KirbyEmailManager\Helpers\TemplateHelper;
+use KirbyEmailManager\Helpers\TranslationHelper;
 use KirbyEmailManager\Helpers\ValidationHelper;
 use KirbyEmailManager\Hooks\SystemHooks;
+use KirbyEmailManager\PageMethods\FormHandler;
 
-// 
-define('PLUGIN_DIR', __DIR__);
-define('SRC_DIR', PLUGIN_DIR . '/src');
-define('SNIPPETS_DIR', PLUGIN_DIR . '/snippets');
-
-
-// Plugin-Konfiguration
 Kirby::plugin('philippoehrlein/kirby-email-manager', [
     'blueprints' => [
-        'email/manager' => PLUGIN_DIR . '/blueprints/email-manager.yml',
+        'email/manager' => PathHelper::blueprintDir() . 'email-manager.yml',
     ],
 
     'pageMethods' => [
-        'form_handler' => require SRC_DIR . '/PageMethods/FormHandler.php'
+        'form_handler' => function() {    
+            $handler = new \KirbyEmailManager\PageMethods\FormHandler(kirby(), $this);
+            return $handler->handle();
+        },
+        'isFormSuccess' => function() {
+            return SessionHelper::isFormSuccess();
+        },
+        'successTitle' => function() {
+            return SessionHelper::getSuccessTitle($this);
+        },
+        'successText' => function() {
+            return SessionHelper::getSuccessText($this);
+        },
     ],
 
-    'snippets' => require PLUGIN_DIR . '/config/snippets.php',
+    'snippets' => require PathHelper::configDir() . 'snippets.php',
 
-    'options' => require PLUGIN_DIR . '/config/options.php',
+    'options' => require PathHelper::configDir() . 'main.php',
 
-    'translations' => [
-        'en' => require PLUGIN_DIR . '/translations/en.php',
-        'de' => require PLUGIN_DIR . '/translations/de.php',
-        'fr' => require PLUGIN_DIR . '/translations/fr.php',
-        'es' => require PLUGIN_DIR . '/translations/es.php',
-        'it' => require PLUGIN_DIR . '/translations/it.php'
-    ],
+    'translations' => TranslationHelper::loadTranslations(PathHelper::translationDir()),
     
     'hooks' => [
         'system.loadPlugins:after' => function () {
             SystemHooks::loadPluginsAfter();
             SystemHooks::extendTranslations();
-        }
+        },
     ],
-
 ]);

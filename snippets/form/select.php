@@ -1,11 +1,8 @@
 <?php
-$type = 'select';
-$base_class = $type;
-
 $attributes = [
   'id' => $fieldKey,
   'name' => $fieldKey,
-  'class' => $base_class,
+  'class' => $inputClass,
   'required' => $fieldConfig['required'] ?? false
 ];
 

@@ -1,5 +1,7 @@
 <?php
 use Kirby\Data\Data;
+use KirbyEmailManager\Helpers\FormHelper;
+
 // Form-Builder: Generates the form layout and structure
 
 // Get the selected language code
@@ -53,27 +55,45 @@ $resetButtonText = $buttonTexts['reset'][$languageCode] ?? $defaultButtonTexts['
 $alert = $formHandler['alert'] ?? [];
 $data = $formHandler['data'] ?? [];
 
+snippet('email-templates/styles/honeypot');
+snippet('email-templates/styles/grid');
+
+$pluginConfig = kirby()->option('philippoehrlein.kirby-email-manager.classConfig', []);
+$config = [
+  'classPrefix' => $pluginConfig['classPrefix'] ?? $prefix ?? 'kem-',
+  'classes' => $pluginConfig['classes'] ?? [],
+  'additionalClasses' => $pluginConfig['additionalClasses'] ?? [],
+  'noPrefixElements' => $pluginConfig['noPrefixElements'] ?? []
+];
+
 ?>
 
-<form method="post" action="<?= $page->url() ?>" class="form">
-  <?php if (isset($alert['message']) && $alert['type'] === 'error'): ?>
-      <p class="alert alert--error  general-error"><?= $alert['message'] ?></p>
-  <?php endif ?>
+<form method="post" action="<?= $page->url() ?>" class="<?= FormHelper::getClassName('form', $config) ?>">
+    <?php if (isset($alert['message']) && $alert['type'] === 'error'): ?>
+        <p class="<?= FormHelper::getClassName('error', $config, 'error') ?>"><?= $alert['message'] ?></p>
+    <?php elseif (isset($alert['message']) && $alert['type'] === 'warning'): ?>
+        <p class="<?= FormHelper::getClassName('error', $config, 'warning') ?>"><?= $alert['message'] ?></p>
+    <?php endif ?>
 
-  <div class="honeypot" aria-hidden="true" style="position: absolute; left: -9999px;">
-    <label for="website">Website (Bitte nicht ausfüllen)</label>
+    <div class="honeypot" aria-hidden="true">
+    <label for="website" tabindex="-1">
+      <span class="visually-hidden">Bitte nicht ausfüllen (Spamschutz)</span>
+    </label>
     <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
   </div>
-
-  <?= csrf_field() ?>
 
   <input type="hidden" name="timestamp" value="<?= time() ?>">
 
   <?php if ($page->send_to_more()->toBool()): ?>
-    <div class="field field--select">
-      <label for="topic"><?= t('topic_label') ?></label>
+    <div class="<?= FormHelper::getClassName('field', $config, 'select') ?>" style="<?= FormHelper::generateSpanStyles([12]) ?>">
+      <label class="<?= FormHelper::getClassName('label', $config) ?>" for="topic"><?= t('topic_label') ?></label>
       <?php
       $options = [];
+      $inputClass = FormHelper::getClassName('input', $config, 'select');
+
+      $span = FormHelper::getResponsiveSpan('1/1');
+      $spanStyle = FormHelper::generateSpanStyles($span);
+
       foreach ($page->send_to_structure()->toStructure() as $item) {
         $options[$item->topic()->value()] = $item->topic()->value();
       }
@@ -88,39 +108,41 @@ $data = $formHandler['data'] ?? [];
           'options' => $options
         ],
         'value' => $data['topic'] ?? '',
-        'languageCode' => $languageCode
+        'languageCode' => $languageCode,
+        'inputClass' => $inputClass
       ]) ?>
     </div>
   <?php endif ?>
 
+  <div class="<?= FormHelper::getClassName('grid', $config) ?>">
   <?php foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig): ?>
-    <div class="field field--<?= $fieldConfig['type'] ?>">
-      <label for="<?= $fieldKey ?>"><?= $fieldConfig['label'][$languageCode] ?></label>
-      <?php snippet('email-templates/form/base', [
+    <?php
+      $span = FormHelper::getResponsiveSpan($fieldConfig['width'] ?? '1/1');
+    ?>
+    <?php snippet('email-templates/form/base', [
         'fieldKey' => $fieldKey,
         'fieldConfig' => $fieldConfig,
         'value' => $data[$fieldKey] ?? '',
         'placeholder' => $fieldConfig['placeholder'][$languageCode] ?? '',
+        'config' => $config,
+        'languageCode' => $languageCode
       ] )?>
-      
-      <!-- Display validation error if present -->
-      <?php if (isset($alert['errors'][$fieldKey])): ?>
-        <p class="form-error"><?= $alert['errors'][$fieldKey] ?></p>
-      <?php endif ?>
-    </div>
   <?php endforeach ?>
+  </div>
 
   <!-- GDPR Checkbox -->
   <?php if ($page->gdpr_checkbox()->toBool()): ?>
-    <div class="field field--checkbox">
-      <input type="checkbox" class="checkbox" id="gdpr" name="gdpr" <?= array_key_exists('gdpr', $data) ? 'checked' : '' ?> required>
+    <div class="<?= FormHelper::getClassName('field', $config, 'checkbox') ?>">
+      <input type="checkbox" class="<?= FormHelper::getClassName('input', $config) ?> <?= FormHelper::getClassName('input', $config) ?>--checkbox" id="gdpr" name="gdpr" <?= array_key_exists('gdpr', $data) ? 'checked' : '' ?> required>
       <label for="gdpr"><?= $page->gdpr_text()->kt() ?></label>
     </div>
   <?php endif; ?>
 
   <!-- Form Actions (Buttons) -->
-  <div class="form__actions">
-    <button type="reset" class="button button--secondary"><?= $resetButtonText ?></button>
-    <input type="submit" class="button button--primary" name="submit" value="<?= $sendButtonText ?>" />
-  </div>
+  <div class="<?= FormHelper::getClassName('form', $config, 'actions') ?>">
+    <button type="reset" class="<?= FormHelper::getClassName('button', $config, 'secondary') ?>"><?= $resetButtonText ?></button>
+    <input type="submit" class="<?= FormHelper::getClassName('button', $config, 'primary') ?>" name="submit" value="<?= $sendButtonText ?>" />
+</div>
+
+  <input type="hidden" name="csrf" value="<?= csrf() ?>">
 </form>

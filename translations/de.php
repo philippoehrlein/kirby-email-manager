@@ -46,7 +46,8 @@ return [
         'min_length_password' => 'Das Passwort muss mindestens :minLength Zeichen lang sein.',
         'invalid_phone' => 'Bitte geben Sie eine gültige Telefonnummer ein.',
         'csrf_error' => 'Ungültiges CSRF-Token.',
-        'submission_time_error' => 'Ungültige Übermittlungszeit.'
+        'submission_time_error' => 'Ungültige Übermittlungszeit.',
+        'submission_time_warning' => 'Die Übermittlungszeit ist abgelaufen. Bitte überprüfen Sie Ihre Eingaben und senden Sie das Formular erneut.'
     ],
 
     // Button texts

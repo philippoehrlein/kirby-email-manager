@@ -1,17 +1,15 @@
 <?php
-$type = 'textarea';
-$base_class = $type;
-$resizeStyle = $fieldConfig['resizable'] ?? 'none';
-
 $attributes = [
   'id' => $fieldKey,
   'name' => $fieldKey,
-  'class' => $base_class,
+  'class' => $inputClass,
   'placeholder' => $placeholder,
   'required' => $fieldConfig['required'] ?? false,
-  'rows' => $fieldConfig['rows'] ?? 6,
-  'style' => "resize: $resizeStyle;"
+  'rows' => $fieldConfig['rows'] ?? 6
 ];
+
+$resizeStyle = $fieldConfig['resizable'] ?? 'none';
+$attributes['style'] = "resize: $resizeStyle;";
 
 if (!empty($fieldConfig['validate'])) {
   if (strpos($fieldConfig['validate'], 'minLength:') === 0) {

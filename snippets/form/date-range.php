@@ -1,8 +1,4 @@
 <?php
-$type = 'date';
-$base_class = 'input';
-$modifier = $base_class . '--' . $type;
-
 $attributes = [
   'type' => $type,
   'class' => $base_class . ' ' . $modifier,
@@ -21,14 +17,16 @@ $startAttributes = array_merge($attributes, [
   'id' => $fieldKey . '_start',
   'name' => $fieldKey . '_start',
   'placeholder' => $placeholder . ' (Start)',
-  'value' => $value['start'] ?? ''
+  'value' => $value['start'] ?? '',
+  'class' => $inputClass
 ]);
 
 $endAttributes = array_merge($attributes, [
   'id' => $fieldKey . '_end',
   'name' => $fieldKey . '_end',
   'placeholder' => $placeholder . ' (End)',
-  'value' => $value['end'] ?? ''
+  'value' => $value['end'] ?? '',
+  'class' => $inputClass
 ]);
 ?>
 

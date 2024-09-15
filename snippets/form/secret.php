@@ -1,13 +1,9 @@
 <?php
-$type = 'password';
-$base_class = 'input';
-$modifier = $base_class . '--' . $type;
-
 $attributes = [
   'type' => $type,
   'id' => $fieldKey,
   'name' => $fieldKey,
-  'class' => $base_class . ' ' . $modifier,
+  'class' => $inputClass,
   'placeholder' => $placeholder,
   'required' => $fieldConfig['required'] ?? false
 ];

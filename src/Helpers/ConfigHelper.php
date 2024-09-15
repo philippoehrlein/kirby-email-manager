@@ -1,0 +1,56 @@
+<?php
+
+namespace KirbyEmailManager\Helpers;
+
+use Exception;
+
+/**
+ * ConfigHelper class provides methods to validate the template configuration.
+ * @author Philip Oehrlein
+ * @version 1.0.0
+ */
+class ConfigHelper
+{
+  /**
+   * Validates the template configuration.
+   *
+   * @param array $templateConfig The template configuration to validate.
+   * @throws Exception If the template configuration is empty or missing required keys.
+   */
+  public static function validateTemplateConfig($templateConfig)
+  {
+      if (empty($templateConfig)) {
+          throw new Exception('Template configuration is empty.');
+      }
+
+      $requiredKeys = ['fields', 'button_texts'];
+      foreach ($requiredKeys as $key) {
+          if (!isset($templateConfig[$key])) {
+              throw new Exception("Missing required key '{$key}' in template configuration.");
+          }
+      }
+
+      self::validateFields($templateConfig['fields']);
+    }
+  
+   /**
+     * Validates the fields in the template configuration.
+     *
+     * This method ensures that each field has the required properties:
+     * 'type', 'label'.
+     *
+     * @param array $fields The fields to validate.
+     * @throws Exception If a field is missing required properties.
+     */
+    private static function validateFields($fields)
+    {
+        foreach ($fields as $fieldKey => $fieldConfig) {
+            $requiredProperties = ['type', 'label'];
+            foreach ($requiredProperties as $property) {
+                if (!isset($fieldConfig[$property])) {
+                    throw new Exception("Missing '{$property}' for field '{$fieldKey}' in template configuration.");
+                }
+            }
+        }
+    }
+}

@@ -1,13 +1,10 @@
 <?php
-$type = 'radio';
-$base_class = $type;
-
 foreach ($fieldConfig['options'] as $optionValue => $optionLabel):
   $attributes = [
     'type' => $type,
     'id' => $fieldKey . '_' . $optionValue,
     'name' => $fieldKey,
-    'class' => $base_class,
+    'class' => $inputClass,
     'value' => $optionValue,
     'required' => $fieldConfig['required'] ?? false
   ];

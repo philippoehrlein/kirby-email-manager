@@ -12,4 +12,18 @@ class SystemHooks
             ]
         ]);
     }
+
+    public static function extendTranslations()
+    {
+        $kirby = kirby();
+        $customTranslations = $kirby->option('philippoehrlein.kirby-email-manager.translations', []);
+        
+        foreach ($customTranslations as $lang => $translations) {
+            $kirby->extend([
+                'translations' => [
+                    $lang => array_merge($kirby->translations($lang), $translations)
+                ]
+            ]);
+        }   
+    }
 }

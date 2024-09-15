@@ -7,6 +7,8 @@ use Kirby\Exception\Exception;
 use KirbyEmailManager\Helpers\EmailHelper;
 use KirbyEmailManager\Helpers\ExceptionHelper;
 use KirbyEmailManager\Helpers\ValidationHelper;
+use KirbyEmailManager\Helpers\LogHelper;
+use KirbyEmailManager\Helpers\ConfigHelper;
 
 /**
  * FormHandler class provides methods to handle form submissions.
@@ -60,6 +62,8 @@ class FormHandler
             throw new Exception('Konfigurations-Datei nicht gefunden: ' . $configPath);
         }
         $this->templateConfig = Data::read($configPath);
+
+        ConfigHelper::validateTemplateConfig($this->templateConfig);
     }
     
     /**
@@ -80,6 +84,9 @@ class FormHandler
      */
     public function handle()
     {
+        $this->kirby->session();
+        $data = $this->kirby->request()->data();
+
         if (!empty($data['website'])) {
             go($this->page->url());
             exit;
@@ -90,21 +97,31 @@ class FormHandler
             'message' => $this->translations['form_ready']
         ];
 
-        if (!csrf($data['csrf'] ?? '')) {
-            throw new Exception($this->translations['error_messages']['csrf_error'] ?? 'Ungültiges CSRF-Token.');
-        }
-
-        $submissionTime = $data['timestamp'] ?? 0;
-        $currentTime = time();
-        $timeDifference = $currentTime - $submissionTime;
-        if ($timeDifference < 3 || $timeDifference > 3600) {
-            throw new Exception($this->translations['error_messages']['submission_time_error'] ?? 'Ungültige Übermittlungszeit.');
-        }
+        
 
         if ($this->kirby->request()->is('POST') && get('submit')) {
-            try {
 
-                $data = $this->kirby->request()->data();
+            if (!csrf($data['csrf'] ?? '')) {
+                LogHelper::logError('CSRF-Token-Fehler: ' . $data['csrf']);
+                throw new Exception($this->translations['error_messages']['csrf_error'] ?? 'Invalid CSRF token.');
+            }
+    
+            $submissionTime = (int)($data['timestamp'] ?? 0);
+            $currentTime = time();
+            $timeDifference = abs($currentTime - $submissionTime);
+
+            LogHelper::logInfo("Submission time: $submissionTime, Current time: $currentTime, Difference: $timeDifference");
+
+            if ($timeDifference > 7200) {
+                $alert['type'] = 'warning';
+                $alert['message'] = $this->translations['error_messages']['submission_time_warning'] ?? 'Die Übermittlungszeit ist abgelaufen. Bitte überprüfen Sie Ihre Eingaben und senden Sie das Formular erneut.';
+                return [
+                    'alert' => $alert,
+                    'data' => $data
+                ];
+            }
+
+            try {
 
                 $errors = [];
                 $emailContent = [];
@@ -136,10 +153,12 @@ class FormHandler
                         $alert['message'] = $this->translations['form_success'];
                     } catch (Exception $e) {
                         $alert = ExceptionHelper::handleException($e, $this->translations);
+                        LogHelper::logError($e);
                     }
                 }
             } catch (Exception $e) {
                 $alert = ExceptionHelper::handleException($e, $this->translations);
+                LogHelper::logError($e);
             }
         }
 

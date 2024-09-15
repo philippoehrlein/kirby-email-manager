@@ -1,13 +1,9 @@
 <?php
-  $base_class = 'input';
-  $type = 'email';
-  $modifier = $base_class . '--' . $type;
   $attributes = [
-    'type' => $type,
     'id' => $fieldKey,
     'name' => $fieldKey,
     'placeholder' => $placeholder,
-    'class' => $base_class . ' ' . $modifier,
+    'class' => $inputClass,
     'value' => $value,
     'required' => $fieldConfig['required'] ?? false
   ];

@@ -1,31 +1,16 @@
 <?php
+require_once __DIR__ . '/vendor/autoload.php';
+
 use KirbyEmailManager\Helpers\EmailHelper;
 use KirbyEmailManager\Helpers\ExceptionHelper;
 use KirbyEmailManager\Helpers\ValidationHelper;
 use KirbyEmailManager\Hooks\SystemHooks;
 
-// Konstanten definieren
+// 
 define('PLUGIN_DIR', __DIR__);
 define('SRC_DIR', PLUGIN_DIR . '/src');
 define('SNIPPETS_DIR', PLUGIN_DIR . '/snippets');
 
-// Autoloader für Klassen im src-Verzeichnis
-spl_autoload_register(function ($class) {
-    $prefix = 'KirbyEmailManager\\';
-    $base_dir = __DIR__ . '/src/';
-
-    $len = strlen($prefix);
-    if (strncmp($prefix, $class, $len) !== 0) {
-        return;
-    }
-
-    $relative_class = substr($class, $len);
-    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
-
-    if (file_exists($file)) {
-        require_once $file;
-    }
-});
 
 // Plugin-Konfiguration
 Kirby::plugin('philippoehrlein/kirby-email-manager', [
@@ -41,14 +26,19 @@ Kirby::plugin('philippoehrlein/kirby-email-manager', [
 
     'options' => require PLUGIN_DIR . '/config/options.php',
 
+    'translations' => [
+        'en' => require PLUGIN_DIR . '/translations/en.php',
+        'de' => require PLUGIN_DIR . '/translations/de.php',
+        'fr' => require PLUGIN_DIR . '/translations/fr.php',
+        'es' => require PLUGIN_DIR . '/translations/es.php',
+        'it' => require PLUGIN_DIR . '/translations/it.php'
+    ],
+    
     'hooks' => [
         'system.loadPlugins:after' => function () {
-            SystemHooks::loadPluginsAfter(); 
+            SystemHooks::loadPluginsAfter();
+            SystemHooks::extendTranslations();
         }
     ],
 
-    'translations' => [
-        'en' => require PLUGIN_DIR . '/translations/en.php',
-        'de' => require PLUGIN_DIR . '/translations/de.php'
-    ]
 ]);

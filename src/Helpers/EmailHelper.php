@@ -28,11 +28,14 @@ class EmailHelper {
         $receiverTemplate = $templateConfig['templates']['receiver'] ?? '';
         $templatePath = $selectedTemplate . '/' . $receiverTemplate;
 
+        $senderName = self::getEmailSender($templateConfig, $languageCode);
+        $senderEmail = self::getFromEmail($templateConfig, $data, $kirby);
+
         try {
             $kirby->email([
                 'template' => $templatePath, 
-                'from'     => self::getFromEmail($templateConfig, $data, $kirby),
-                'replyTo'  => self::getFromEmail($templateConfig, $data, $kirby),
+                'from'     => [$senderEmail => $senderName],
+                'replyTo'  => $senderEmail,
                 'to'       => $to,
                 'subject'  => $subject,
                 'data'     => [
@@ -59,12 +62,15 @@ class EmailHelper {
         
             $confirmationTemplatePath = $selectedTemplate . '/' . $confirmationTemplate;
         
-        
+            $confirmationSubject = self::getConfirmationSubject($templateConfig, $languageCode);
+            $confirmationSenderName = self::getConfirmationSender($templateConfig, $languageCode);
+            $confirmationSenderEmail = self::createNoReplyEmail($kirby);
+
             $kirby->email([
                 'template' => $confirmationTemplatePath,
-                'from'     => self::createNoReplyEmail($kirby),
+                'from'     => [$confirmationSenderEmail => $confirmationSenderName],
                 'to'       => $data['email'],
-                'subject'  => $templateConfig['translations'][$languageCode]['confirmation_subject'] ?? 'Confirmation',
+                'subject'  => $confirmationSubject,
                 'data'     => [
                     'formData' => $data,
                     'kirby'   => $kirby,
@@ -107,10 +113,25 @@ class EmailHelper {
      * @return string The email subject.
      */
     public static function getEmailSubject($page, $data, $templateConfig, $languageCode) {
-    if ($page->send_to_more()->toBool() && isset($data['topic'])) {
-        return $data['topic'];
-    }
-    return $templateConfig['email_subject'][$languageCode] ?? $templateConfig['email_subject']['en'] ?? 'Kontaktformular Nachricht';
+        if ($page->send_to_more()->toBool() && isset($data['topic'])) {
+            $subject = $templateConfig['email_subject']['topic'] ?? $templateConfig['email_subject']['default'] ?? 'Kontaktformular Nachricht: :topic';
+        } else {
+            $subject = $templateConfig['email_subject']['default'] ?? 'Kontaktformular Nachricht';
+        }
+    
+        $replacements = [
+            ':topic' => $data['topic'] ?? '',
+            ':langCode' => strtoupper($languageCode)
+        ];
+    
+        // Nur die Platzhalter ersetzen, die tatsächlich im Betreff vorhanden sind
+        foreach ($replacements as $placeholder => $value) {
+            if (strpos($subject, $placeholder) !== false) {
+                $subject = str_replace($placeholder, $value, $subject);
+            }
+        }
+    
+        return $subject;
     }
 
     /**
@@ -146,5 +167,44 @@ class EmailHelper {
         $siteUrl = $kirby->site()->url();
         $host = parse_url($siteUrl, PHP_URL_HOST);
         return 'no-reply@' . $host;
+    }
+
+    /**
+     * Retrieves the email sender name based on the template configuration and language code.
+     *
+     * @param array $templateConfig The configuration for the email template.
+     * @param string $languageCode The language code.
+     * @return string The email sender name.
+     */
+    public static function getEmailSender($templateConfig, $languageCode) {
+        return $templateConfig['email_sender'][$languageCode] 
+            ?? $templateConfig['email_sender']['en'] 
+            ?? 'Contact Form';
+    }
+
+    /**
+     * Retrieves the confirmation subject based on the template configuration and language code.
+     *
+     * @param array $templateConfig The configuration for the email template.
+     * @param string $languageCode The language code.
+     * @return string The confirmation subject.
+     */
+    public static function getConfirmationSubject($templateConfig, $languageCode) {
+        return $templateConfig['confirmation_subject'][$languageCode] 
+            ?? $templateConfig['confirmation_subject']['en'] 
+            ?? 'Confirmation of your inquiry';
+    }
+    
+    /**
+     * Retrieves the confirmation sender based on the template configuration and language code.
+     *
+     * @param array $templateConfig The configuration for the email template.
+     * @param string $languageCode The language code.
+     * @return string The confirmation sender.
+     */
+    public static function getConfirmationSender($templateConfig, $languageCode) {
+        return $templateConfig['confirmation_sender'][$languageCode] 
+            ?? $templateConfig['confirmation_sender']['en'] 
+            ?? 'No Reply';
     }
 }

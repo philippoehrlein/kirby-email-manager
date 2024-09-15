@@ -11,6 +11,7 @@ return [
     'send_to_structure_label' => 'Gérer les adresses email',
     'send_to_structure_help' => 'Ajoutez ici les options de sujet et les adresses email correspondantes.',
     'topic_label' => 'Sujet',
+    'topic_subject' => 'Message du formulaire de contact: :topic',
     'email_label' => 'Adresse email',
     'gdpr_checkbox_label' => 'Case d\'acceptation des conditions de confidentialité obligatoire ?',
     'gdpr_checkbox_help' => 'Si sélectionné, la case d\'acceptation des conditions de confidentialité apparaîtra dans le formulaire.',
@@ -22,6 +23,12 @@ return [
     'form_success' => 'Formulaire envoyé avec succès.',
     'error_occurred' => 'Une erreur est survenue : ',
     'not_specified' => 'Non spécifié',
+    'email_subject' => 'Message du formulaire de contact',
+    'send_to_success_title_label' => 'Titre de succès',
+    'send_to_success_text_label' => 'Texte de succès',
+    'send_to_more_success_message_label' => 'Message de succès',
+    'send_to_more_success_title_label' => 'Titre de succès',
+    'send_to_more_success_text_label' => 'Texte de succès',
 
     // Messages d'erreur imbriqués
     'error_messages' => [

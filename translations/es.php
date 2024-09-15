@@ -11,6 +11,7 @@ return [
     'send_to_structure_label' => 'Gestionar direcciones de correo electrónico',
     'send_to_structure_help' => 'Agrega aquí las opciones de asunto y las direcciones de correo electrónico correspondientes.',
     'topic_label' => 'Asunto',
+    'topic_subject' => 'Mensaje del formulario de contacto: :topic',
     'email_label' => 'Dirección de correo electrónico',
     'gdpr_checkbox_label' => '¿Es necesario el consentimiento de protección de datos?',
     'gdpr_checkbox_help' => 'Si está seleccionado, se mostrará la casilla de consentimiento de protección de datos en el formulario.',
@@ -22,6 +23,12 @@ return [
     'form_success' => 'Formulario enviado con éxito.',
     'error_occurred' => 'Ocurrió un error: ',
     'not_specified' => 'No especificado',
+    'email_subject' => 'Formulario de contacto',
+    'send_to_success_title_label' => 'Título de éxito',
+    'send_to_success_text_label' => 'Texto de éxito',
+    'send_to_more_success_message_label' => 'Mensaje de éxito',
+    'send_to_more_success_title_label' => 'Título de éxito',
+    'send_to_more_success_text_label' => 'Texto de éxito',
 
     // Mensajes de error anidados
     'error_messages' => [

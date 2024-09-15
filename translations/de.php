@@ -11,6 +11,7 @@ return [
     'send_to_structure_label' => 'E-Mail-Adressen verwalten',
     'send_to_structure_help' => 'Füge hier die Betreff-Optionen und die entsprechenden E-Mail-Adressen hinzu.',
     'topic_label' => 'Betreff',
+    'topic_subject' => 'Kontaktformular Nachricht: :topic',
     'email_label' => 'E-Mail-Adresse',
     'gdpr_checkbox_label' => 'Datenschutz Checkbox erforderlich?',
     'gdpr_checkbox_help' => 'Wenn ausgewählt, wird die Datenschutz-Checkbox im Formular angezeigt.',
@@ -22,6 +23,13 @@ return [
     'form_success' => 'Formular erfolgreich abgesendet.',
     'error_occurred' => 'Ein Fehler ist aufgetreten: ',
     'not_specified' => 'Nicht angegeben',
+    'email_subject' => 'Kontaktformular Nachricht',
+    'send_to_success_title_label' => 'Erfolgstitel',
+    'send_to_success_text_label' => 'Erfolgstext',
+    'send_to_more_success_message_label' => 'Erfolgsmeldung',
+    'send_to_more_success_title_label' => 'Erfolgstitel',
+    'send_to_more_success_text_label' => 'Erfolgstext',
+
 
     // Nested error messages
     'error_messages' => [

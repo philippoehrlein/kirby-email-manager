@@ -9,6 +9,7 @@ use KirbyEmailManager\Helpers\ExceptionHelper;
 use KirbyEmailManager\Helpers\ValidationHelper;
 use KirbyEmailManager\Helpers\LogHelper;
 use KirbyEmailManager\Helpers\ConfigHelper;
+use KirbyEmailManager\Helpers\SuccessMessageHelper;
 
 /**
  * FormHandler class provides methods to handle form submissions.
@@ -97,8 +98,6 @@ class FormHandler
             'message' => $this->translations['form_ready']
         ];
 
-        
-
         if ($this->kirby->request()->is('POST') && get('submit')) {
 
             if (!csrf($data['csrf'] ?? '')) {
@@ -122,7 +121,6 @@ class FormHandler
             }
 
             try {
-
                 $errors = [];
                 $emailContent = [];
                 $subject = $this->translations['default_subject'] ?? 'Kontaktformular';
@@ -148,9 +146,24 @@ class FormHandler
                     $alert['errors'] = $errors;
                 } else {
                     try {
+                        // Sende die Hauptmail
                         EmailHelper::sendEmail($this->kirby, $this->page, $this->templateConfig, $emailContent, $data, $this->languageCode);
+                        
+                        // Sende die Bestätigungsmail, falls konfiguriert
+                        if ($this->page->send_confirmation()->toBool()) {
+                            EmailHelper::sendConfirmationEmail($this->kirby, $this->page, $this->templateConfig, $data, $this->languageCode);
+                        }
+
                         $alert['type'] = 'success';
                         $alert['message'] = $this->translations['form_success'];
+                        
+                        $successMessage = SuccessMessageHelper::getSuccessMessage(
+                            $this->page,
+                            $data,
+                            $this->languageCode
+                        );
+                        $alert['successMessage'] = $successMessage;
+                        $data = [];
                     } catch (Exception $e) {
                         $alert = ExceptionHelper::handleException($e, $this->translations);
                         LogHelper::logError($e);

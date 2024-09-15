@@ -11,6 +11,7 @@ return [
   'send_to_structure_label' => 'Manage Email Addresses',
   'send_to_structure_help' => 'Add the subject options and the corresponding email addresses here.',
   'topic_label' => 'Subject',
+  'topic_subject' => 'Contact Form Message: :topic',
   'email_label' => 'Email Address',
   'gdpr_checkbox_label' => 'Is GDPR checkbox required?',
   'gdpr_checkbox_help' => 'If selected, a GDPR checkbox will be displayed in the form.',
@@ -22,6 +23,12 @@ return [
   'form_success' => 'Form successfully submitted.',
   'error_occurred' => 'An error occurred: ',
   'not_specified' => 'Not specified',
+  'email_subject' => 'Contact Form Message',
+  'send_to_success_title_label' => 'Success Title',
+  'send_to_success_text_label' => 'Success Text',
+  'send_to_more_success_message_label' => 'Success Message',
+  'send_to_more_success_title_label' => 'Success Title',
+  'send_to_more_success_text_label' => 'Success Text',
 
   // Nested error messages
   'error_messages' => [

@@ -11,6 +11,7 @@ return [
     'send_to_structure_label' => 'Gestisci gli indirizzi email',
     'send_to_structure_help' => 'Aggiungi qui le opzioni per l\'oggetto e gli indirizzi email corrispondenti.',
     'topic_label' => 'Oggetto',
+    'topic_subject' => 'Messaggio del modulo di contatto: :topic',
     'email_label' => 'Indirizzo email',
     'gdpr_checkbox_label' => 'Casella di controllo della privacy obbligatoria?',
     'gdpr_checkbox_help' => 'Se selezionato, la casella di controllo della privacy apparirà nel modulo.',
@@ -22,6 +23,12 @@ return [
     'form_success' => 'Modulo inviato con successo.',
     'error_occurred' => 'Si è verificato un errore: ',
     'not_specified' => 'Non specificato',
+    'email_subject' => 'Messaggio del modulo di contatto',
+    'send_to_success_title_label' => 'Titolo di successo',
+    'send_to_success_text_label' => 'Testo di successo',
+    'send_to_more_success_message_label' => 'Messaggio di successo',
+    'send_to_more_success_title_label' => 'Titolo di successo',
+    'send_to_more_success_text_label' => 'Testo di successo',
 
     // Messaggi di errore annidati
     'error_messages' => [

@@ -66,8 +66,23 @@ $config = [
   'noPrefixElements' => $pluginConfig['noPrefixElements'] ?? []
 ];
 
+$successMessage = $alert['successMessage'] ?? null;
+$keepForm = $templateConfig['keep_form'] ?? false;
+
 ?>
 
+<?php
+if ($successMessage && $alert['type'] === 'success') {
+  ?>
+  <div class="<?= FormHelper::getClassName('success-message', $config) ?>">
+      <h2 class="<?= FormHelper::getClassName('success-title', $config) ?>"><?= $successMessage['title'] ?></h2>
+      <div class="<?= FormHelper::getClassName('success-text', $config) ?>"><?= $successMessage['text'] ?></div>
+  </div>
+  <?php
+}
+?>
+
+<?php if (!$successMessage || $keepForm): ?>
 <form method="post" action="<?= $page->url() ?>" class="<?= FormHelper::getClassName('form', $config) ?>">
     <?php if (isset($alert['message']) && $alert['type'] === 'error'): ?>
         <p class="<?= FormHelper::getClassName('error', $config, 'error') ?>"><?= $alert['message'] ?></p>
@@ -146,3 +161,4 @@ $config = [
 
   <input type="hidden" name="csrf" value="<?= csrf() ?>">
 </form>
+<?php endif ?>

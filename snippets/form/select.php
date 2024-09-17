@@ -3,20 +3,19 @@ $attributes = [
   'id' => $fieldKey,
   'name' => $fieldKey,
   'class' => $inputClass,
-  'required' => $fieldConfig['required'] ?? false
 ];
 
-$isRequired = $fieldConfig['required'] ?? false;
+if (isset($fieldConfig['required']) && $fieldConfig['required'] === true) {
+  $attributes['required'] = true;
+}
+
+$isRequired = isset($fieldConfig['required']) && $fieldConfig['required'] === true;
 
 ?>
 
 <select <?= Html::attr($attributes) ?>>
-  <?php if (isset($fieldConfig['placeholder'])): ?>
-    <option value="" <?= ($value === '') ? 'selected' : '' ?> 
-            <?= $isRequired ? 'disabled' : '' ?> 
-            class="placeholder">
-      <?= $fieldConfig['placeholder'][$languageCode] ?? '' ?>
-    </option>
+  <?php if (!$isRequired): ?>
+    <option value=""></option>
   <?php endif; ?>
 
   <?php foreach ($fieldConfig['options'] as $optionValue => $optionLabel): ?>

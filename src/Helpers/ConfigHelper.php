@@ -6,7 +6,7 @@ use Exception;
 
 /**
  * ConfigHelper class provides methods to validate the template configuration.
- * @author Philip Oehrlein
+ * @author Philipp Oehrlein
  * @version 1.0.0
  */
 class ConfigHelper

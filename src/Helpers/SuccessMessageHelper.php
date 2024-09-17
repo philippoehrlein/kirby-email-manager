@@ -2,15 +2,15 @@
 
 namespace KirbyEmailManager\Helpers;
 
-use Kirby\Cms\Page;
+use KirbyEmailManager\PageMethods\ContentWrapper;
 
 class SuccessMessageHelper
 {
-    public static function getSuccessMessage(Page $page, array $data, string $languageCode): array
+    public static function getSuccessMessage(ContentWrapper $contentWrapper, array $data, string $languageCode): array
     {
-        if ($page->send_to_more()->toBool() && isset($data['topic'])) {
+        if ($contentWrapper->send_to_more()->toBool() && isset($data['topic'])) {
             $topic = $data['topic'];
-            $successStructure = $page->send_to_structure()->toStructure()->findBy('topic', $topic);
+            $successStructure = $contentWrapper->send_to_structure()->toStructure()->findBy('topic', $topic);
             if ($successStructure) {
                 return [
                     'title' => $successStructure->success()->toStructure()->first()->title()->value(),
@@ -19,10 +19,10 @@ class SuccessMessageHelper
             }
         }
 
-        // Fallback auf die allgemeine Erfolgsmeldung
+        // Fallback to the general success message
         return [
-            'title' => $page->send_to_success_title()->value(),
-            'text' => $page->send_to_success_text()->value()
+            'title' => $contentWrapper->send_to_success_title()->value(),
+            'text' => $contentWrapper->send_to_success_text()->value()
         ];
     }
 }

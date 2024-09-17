@@ -1,0 +1,21 @@
+type: tabs
+label: email_legal_headline_label
+icon: document
+
+fields:
+  gdpr_checkbox:
+    label: gdpr_checkbox_label
+    type: toggle
+    default: false
+    help: gdpr_checkbox_help
+
+  gdpr_text:
+    label: gdpr_text_label
+    type: writer
+    when:
+      gdpr_checkbox: true
+  
+  email_legal_footer:
+    label: 'Email Footer'
+    type: writer
+    help: 'Optionaler rechtlicher Footer, der in Bestätigungsmails angezeigt wird.'

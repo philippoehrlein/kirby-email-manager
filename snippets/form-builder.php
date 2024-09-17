@@ -1,18 +1,15 @@
 <?php
 use Kirby\Data\Data;
 use KirbyEmailManager\Helpers\FormHelper;
+use KirbyEmailManager\Helpers\SecurityHelper; 
 
 // Form-Builder: Generates the form layout and structure
 
 // Get the selected language code
-$languageCode = $kirby->language()->code() ?? 'en';
+$languageCode = kirby()->language()->code() ?? 'en';
 
 // Load the selected template from the panel
-$selectedTemplate = $page->email_templates()->value();
-
-// Load the configuration file for the selected template
-// Load the selected template from the panel
-$selectedTemplateId = $page->email_templates()->value();
+$selectedTemplateId = $contentWrapper->email_templates()->value();
 $templates = kirby()->option('philippoehrlein.kirby-email-manager.templates');
 $templateConfig = $templates[$selectedTemplateId] ?? [];
 
@@ -20,15 +17,13 @@ if (empty($templateConfig)) {
     throw new Exception('Selected email template configuration not found.');
 }
 
-$configPath = $kirby->root('site') . '/templates/emails/' . $selectedTemplateId . '/config.yml';
+$configPath = kirby()->root('site') . '/templates/emails/' . $selectedTemplateId . '/config.yml';
 
 if (!file_exists($configPath)) {
     throw new Exception('Configuration file not found: ' . $configPath);
 }
 
 $templateConfig = Data::read($configPath);
-error_log('Debug: $templateConfig = ' . print_r($templateConfig, true));
-error_log('Debug: Keys in $templateConfig = ' . implode(', ', array_keys($templateConfig)));
 
 if (empty($templateConfig)) {
     throw new Exception('Template configuration is empty.');
@@ -55,9 +50,6 @@ $resetButtonText = $buttonTexts['reset'][$languageCode] ?? $defaultButtonTexts['
 $alert = $formHandler['alert'] ?? [];
 $data = $formHandler['data'] ?? [];
 
-snippet('email-manager/styles/honeypot');
-snippet('email-manager/styles/grid');
-
 $pluginConfig = kirby()->option('philippoehrlein.kirby-email-manager.classConfig', []);
 $config = [
   'classPrefix' => $pluginConfig['classPrefix'] ?? $prefix ?? 'kem-',
@@ -68,6 +60,9 @@ $config = [
 
 $successMessage = $alert['successMessage'] ?? null;
 $keepForm = $templateConfig['keep_form'] ?? false;
+
+snippet('email-manager/styles/honeypot');
+snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
 
 ?>
 
@@ -88,17 +83,17 @@ $keepForm = $templateConfig['keep_form'] ?? false;
 
   <input type="hidden" name="timestamp" value="<?= time() ?>">
 
-  <?php if ($page->send_to_more()->toBool()): ?>
+  <?php if ($contentWrapper->send_to_more()->toBool()): ?>
     <div class="<?= FormHelper::getClassName('field', $config, 'select') ?>" style="<?= FormHelper::generateSpanStyles([12]) ?>">
       <label class="<?= FormHelper::getClassName('label', $config) ?>" for="topic"><?= t('topic_label') ?></label>
       <?php
       $options = [];
-      $inputClass = FormHelper::getClassName('input', $config, 'select');
+      $inputClass = FormHelper::getClassName('select', $config);
 
       $span = FormHelper::getResponsiveSpan('1/1');
       $spanStyle = FormHelper::generateSpanStyles($span);
-
-      foreach ($page->send_to_structure()->toStructure() as $item) {
+    
+      foreach ($contentWrapper->send_to_structure()->toStructure() as $item) {
         $options[$item->topic()->value()] = $item->topic()->value();
       }
       snippet('email-manager/form/select', [
@@ -121,12 +116,12 @@ $keepForm = $templateConfig['keep_form'] ?? false;
   <div class="<?= FormHelper::getClassName('grid', $config) ?>">
   <?php foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig): ?>
     <?php
-      $span = FormHelper::getResponsiveSpan($fieldConfig['width'] ?? '1/1');
-    ?>
-    <?php snippet('email-manager/form/base', [
+    $value = SecurityHelper::escapeHtml($data[$fieldKey] ?? '');
+    
+    snippet('email-manager/form/base', [
         'fieldKey' => $fieldKey,
         'fieldConfig' => $fieldConfig,
-        'value' => $data[$fieldKey] ?? '',
+        'value' => $value,
         'placeholder' => $fieldConfig['placeholder'][$languageCode] ?? '',
         'config' => $config,
         'languageCode' => $languageCode
@@ -135,10 +130,10 @@ $keepForm = $templateConfig['keep_form'] ?? false;
   </div>
 
   <!-- GDPR Checkbox -->
-  <?php if ($page->gdpr_checkbox()->toBool()): ?>
+  <?php if ($contentWrapper->gdpr_checkbox()->toBool()): ?>
     <div class="<?= FormHelper::getClassName('field', $config, 'checkbox') ?>">
       <input type="checkbox" class="<?= FormHelper::getClassName('input', $config) ?> <?= FormHelper::getClassName('input', $config) ?>--checkbox" id="gdpr" name="gdpr" <?= array_key_exists('gdpr', $data) ? 'checked' : '' ?> required>
-      <label for="gdpr"><?= $page->gdpr_text()->kt() ?></label>
+      <label for="gdpr"><?= $contentWrapper->gdpr_text() ?></label>
     </div>
   <?php endif; ?>
 

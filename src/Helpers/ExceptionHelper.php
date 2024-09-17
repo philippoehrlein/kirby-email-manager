@@ -2,7 +2,7 @@
 namespace KirbyEmailManager\Helpers;
 /**
  * ExceptionHelper class provides methods to handle exceptions and generate error messages.
- * Author: Philip Oehrlein
+ * Author: Philipp Oehrlein
  * Version: 1.0.0
  */
 class ExceptionHelper {

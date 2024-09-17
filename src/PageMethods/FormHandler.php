@@ -10,36 +10,39 @@ use KirbyEmailManager\Helpers\ValidationHelper;
 use KirbyEmailManager\Helpers\LogHelper;
 use KirbyEmailManager\Helpers\ConfigHelper;
 use KirbyEmailManager\Helpers\SuccessMessageHelper;
+use KirbyEmailManager\PageMethods\ContentWrapper;
+
 
 /**
  * FormHandler class provides methods to handle form submissions.
- * Author: Philip Oehrlein
+ * Author: Philipp Oehrlein
  * Version: 1.0.0
  */
 class FormHandler
 {
     protected $kirby;
-    protected $page;
+    protected $contentWrapper; 
     protected $languageCode;
     protected $templateConfig;
     protected $translations;
-
+    protected $page;
     /**
      * Constructor for FormHandler.
      *
      * @param \Kirby\Cms\App $kirby The Kirby application instance.
      * @param \Kirby\Cms\Page $page The current page instance.
      */
-    public function __construct($kirby, $page)
+    public function __construct($kirby, $page, $contentWrapper)
     {
         $this->kirby = $kirby;
         $this->page = $page;
+        $this->contentWrapper = $contentWrapper;
         $this->languageCode = $kirby->language()->code() ?? 'en';
         
         // Lade das Template-Konfiguration
         $this->loadTemplateConfig();
         
-        // Lade die Übersetzungen
+        // // Lade die Übersetzungen
         $this->loadTranslations();
     }
     
@@ -50,12 +53,17 @@ class FormHandler
      */
     protected function loadTemplateConfig()
     {
-        $selectedTemplateId = $this->page->email_templates()->value();
+        $selectedTemplateId = $this->contentWrapper->email_templates()->value();
+        
+        if (empty($selectedTemplateId)) {
+            throw new Exception('No email template selected.');
+        }
+
         $templates = $this->kirby->option('philippoehrlein.kirby-email-manager.templates');
         $this->templateConfig = $templates[$selectedTemplateId] ?? [];
 
         if (empty($this->templateConfig)) {
-            throw new Exception('Selected email template configuration not found.');
+            throw new Exception('Selected email template configuration not found in FormHandler.');
         }
 
         $configPath = $this->kirby->root('site') . '/templates/emails/' . $selectedTemplateId . '/config.yml';
@@ -63,6 +71,9 @@ class FormHandler
             throw new Exception('Konfigurations-Datei nicht gefunden: ' . $configPath);
         }
         $this->templateConfig = Data::read($configPath);
+
+        // Fügen Sie den Template-Pfad zur Konfiguration hinzu
+        $this->templateConfig['template_path'] = 'emails/' . $selectedTemplateId;
 
         ConfigHelper::validateTemplateConfig($this->templateConfig);
     }
@@ -132,11 +143,11 @@ class FormHandler
                     }
 
                     $emailContent[$fieldConfig['label'][$this->languageCode]] = is_array($data[$fieldKey]) 
-                        ? implode(', ', $data[$fieldKey]) 
-                        : ($data[$fieldKey] ?? $this->translations['not_specified']);
+                    ? implode(', ', array_map('htmlspecialchars', $data[$fieldKey])) 
+                    : htmlspecialchars($data[$fieldKey] ?? $this->translations['not_specified']);
                 }
 
-                if ($this->page->gdpr_checkbox()->toBool() && empty($data['gdpr'])) {
+                if ($this->contentWrapper->gdpr_checkbox()->toBool() && empty($data['gdpr'])) {
                     $errors['gdpr'] = $this->translations['error_messages']['gdpr_required'] ?? 'GDPR consent is required.';
                 }
 
@@ -146,18 +157,19 @@ class FormHandler
                     $alert['errors'] = $errors;
                 } else {
                     try {
+                        
                         // Sende die Hauptmail
-                        EmailHelper::sendEmail($this->kirby, $this->page, $this->templateConfig, $emailContent, $data, $this->languageCode);
+                        EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $emailContent, $data, $this->languageCode);
                         
                         // Sende die Bestätigungsmail, falls konfiguriert
-                        if ($this->page->send_confirmation()->toBool()) {
-                            EmailHelper::sendConfirmationEmail($this->kirby, $this->page, $this->templateConfig, $data, $this->languageCode);
+                        if ($this->contentWrapper->send_confirmation_email()->toBool()) {
+                            EmailHelper::sendConfirmationEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $data, $this->languageCode);
                         }
 
                         $alert['type'] = 'success';
                         $alert['message'] = $this->translations['form_success'];
                         
-                        $successMessage = SuccessMessageHelper::getSuccessMessage($this->page, $data, $this->languageCode);
+                        $successMessage = SuccessMessageHelper::getSuccessMessage($this->contentWrapper, $data, $this->languageCode);
                         $session->set('form.success', $successMessage);
                     
                         go($this->page->url());

@@ -13,4 +13,4 @@
   }
 ?>
 
-<input <?= Html::attr($attributes) ?> />
+<input <?= Html::attr(array_map('htmlspecialchars', $attributes)) ?> />

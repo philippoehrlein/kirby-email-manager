@@ -1,9 +1,9 @@
 <?php
 namespace KirbyEmailManager\Helpers;
-
+use KirbyEmailManager\Helpers\UrlHelper;
 /**
  * Helper class for email-related operations.
- * Author: Philip Oehrlein
+ * Author: Philipp Oehrlein
  * Version: 1.0.0
  */
 class EmailHelper {
@@ -18,10 +18,12 @@ class EmailHelper {
      * @param string $languageCode The language code.  
      * @throws \Exception If there's an error sending the email.
      */
-    public static function sendEmail($kirby, $page, $templateConfig, $emailContent, $data, $languageCode) {
-        $to = self::getReceiverEmail($page, $data);
-        $subject = self::getEmailSubject($page, $data, $templateConfig, $languageCode);
-        $selectedTemplate = $page->email_templates()->value();
+    public static function sendEmail($kirby, $contentWrapper, $page, $templateConfig, $emailContent, $data, $languageCode) {
+        $preferredLanguage = $templateConfig['preferred_language'] ?? $languageCode;
+
+        $to = self::getReceiverEmail($contentWrapper, $data);
+        $subject = self::getEmailSubject($contentWrapper, $data, $templateConfig, $languageCode);
+        $selectedTemplate = $contentWrapper->email_templates();
 
         $templatePath = $kirby->root('site') . '/templates/emails/' . $selectedTemplate;
 
@@ -43,6 +45,8 @@ class EmailHelper {
                     'kirby'   => $kirby,
                     'site'    => $kirby->site(),
                     'page'    => $page,
+                    'config'  => $templateConfig,
+                    'languageCode' => $preferredLanguage
                 ]
             ]);
         } catch (Exception $e) {
@@ -66,11 +70,16 @@ class EmailHelper {
             $confirmationSenderName = self::getConfirmationSender($templateConfig, $languageCode);
             $confirmationSenderEmail = self::createNoReplyEmail($kirby);
 
-            if ($page->email_legal_footer()->isNotEmpty()) {
-                $footerContent = UrlHelper::convertLinksToAbsolute($page->email_legal_footer()->kt(), $kirby);
-                $emailData['footer'] = $footerContent;
-            }
+            $footerContent = UrlHelper::convertLinksToAbsolute($contentWrapper->email_legal_footer(), $kirby) ?? null;
+            error_log("Original footer content: " . $contentWrapper->email_legal_footer());
+            error_log("Converted footer content: " . $footerContent);
 
+            if (strpos($footerContent, 'x-webdoc://') !== false) {
+                error_log("Fehler: x-webdoc Link gefunden im konvertierten Footer: " . $footerContent);
+            } else {
+                error_log("Erfolg: Keine x-webdoc Links im konvertierten Footer.");
+            }
+            
             $kirby->email([
                 'template' => $confirmationTemplatePath,
                 'from'     => [$confirmationSenderEmail => $confirmationSenderName],
@@ -81,6 +90,9 @@ class EmailHelper {
                     'kirby'   => $kirby,
                     'site'    => $kirby->site(),
                     'page'    => $page,
+                    'config'  => $templateConfig,
+                    'languageCode' => $languageCode,
+                    'footer' => $footerContent
                 ]
             ]);
         }
@@ -93,9 +105,9 @@ class EmailHelper {
      * @param array $data The form data.
      * @return string The receiver email address.
      */
-    public static function getReceiverEmail($page, $data) {
-        if ($page->send_to_more()->toBool()) {
-            $emailStructure = $page->send_to_structure()->toStructure();
+    public static function getReceiverEmail($contentWrapper, $data) {
+        if ($contentWrapper->send_to_more()->toBool()) {
+            $emailStructure = $contentWrapper->send_to_structure()->toStructure();
             if ($emailStructure->count() > 0 && isset($data['topic'])) {
             foreach ($emailStructure as $item) {
                 if ($item->topic() == $data['topic']) {
@@ -105,7 +117,7 @@ class EmailHelper {
             }
         }
 
-        return $page->send_to()->value();
+        return $contentWrapper->send_to()->value();
     }
 
     /**
@@ -117,8 +129,8 @@ class EmailHelper {
      * @param string $languageCode The language code.
      * @return string The email subject.
      */
-    public static function getEmailSubject($page, $data, $templateConfig, $languageCode) {
-        if ($page->send_to_more()->toBool() && isset($data['topic'])) {
+    public static function getEmailSubject($contentWrapper, $data, $templateConfig, $languageCode) {
+        if ($contentWrapper->send_to_more()->toBool() && isset($data['topic'])) {
             $subject = $templateConfig['email_subject']['topic'] ?? $templateConfig['email_subject']['default'] ?? 'Kontaktformular Nachricht: :topic';
         } else {
             $subject = $templateConfig['email_subject']['default'] ?? 'Kontaktformular Nachricht';
@@ -169,9 +181,34 @@ class EmailHelper {
      * @return string The no-reply email address.
      */
     public static function createNoReplyEmail($kirby) {
-        $siteUrl = $kirby->site()->url();
-        $host = parse_url($siteUrl, PHP_URL_HOST);
-        return 'no-reply@' . $host;
+        $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? null;
+        
+        if (!$host) {
+            $host = parse_url($kirby->url(), PHP_URL_HOST);
+        }
+    
+        if (!$host) {
+            throw new \Exception("Konnte keinen gültigen Host ermitteln.");
+        }
+    
+        // Entferne die Subdomain, falls vorhanden
+        $hostParts = explode('.', $host);
+        if (count($hostParts) > 2) {
+            $host = implode('.', array_slice($hostParts, -2));
+        }
+    
+        $email = 'no-reply@' . $host;
+    
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Verwende eine konfigurierbare Fallback-Adresse
+            $email = option('email.noreply');
+            
+            if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new \Exception("Keine gültige No-Reply-E-Mail-Adresse verfügbar: " . $email . " (Host: " . $host . ")");
+            }
+        }
+        
+        return $email;
     }
 
     /**

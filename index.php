@@ -10,15 +10,22 @@ use KirbyEmailManager\Helpers\TranslationHelper;
 use KirbyEmailManager\Helpers\ValidationHelper;
 use KirbyEmailManager\Hooks\SystemHooks;
 use KirbyEmailManager\PageMethods\FormHandler;
-
+use KirbyEmailManager\PageMethods\ContentWrapper;
 Kirby::plugin('philippoehrlein/kirby-email-manager', [
     'blueprints' => [
-        'email/manager' => PathHelper::blueprintDir() . 'email-manager.yml',
+        'email-manager' => PathHelper::blueprintDir() . 'tabs/email-manager.yml',
+        'email-manager/legal-section' => PathHelper::blueprintDir() . 'sections/legal-section.yml',
+        'email-manager/email-section' => PathHelper::blueprintDir() . 'sections/email-section.yml',
+        'email-manager/legal-tab' => PathHelper::blueprintDir() . 'tabs/legal-tab.yml',
+        'email-manager/email-tab' => PathHelper::blueprintDir() . 'tabs/email-tab.yml',
     ],
 
     'pageMethods' => [
-        'form_handler' => function() {    
-            $handler = new \KirbyEmailManager\PageMethods\FormHandler(kirby(), $this);
+        'form_handler' => function ($contentWrapper = null) {
+            if (!$contentWrapper) {
+                $contentWrapper = new \KirbyEmailManager\PageMethods\ContentWrapper($this, null);
+            }
+            $handler = new \KirbyEmailManager\PageMethods\FormHandler(kirby(), $this, $contentWrapper);
             return $handler->handle();
         },
         'isFormSuccess' => function() {

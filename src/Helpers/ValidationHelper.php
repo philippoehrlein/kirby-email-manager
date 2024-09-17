@@ -5,7 +5,7 @@ use Kirby\Toolkit\V;
 
 /**
  * ValidationHelper class provides methods to validate form fields.
- * Author: Philip Oehrlein
+ * Author: Philipp Oehrlein
  * Version: 1.0.0
  */
 class ValidationHelper {
@@ -133,4 +133,5 @@ class ValidationHelper {
 
         return $errors;
     }
+    
 }

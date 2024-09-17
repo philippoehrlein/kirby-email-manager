@@ -94,6 +94,8 @@ class FormHelper
             'input'   => 'input',
             'error'   => 'error',
             'button'  => 'button',
+            'select'  => 'select',
+            'textarea' => 'textarea',
         ];
 
         $prefix = $config['classPrefix'] ?? 'kem-';

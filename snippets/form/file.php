@@ -1,15 +1,23 @@
 <?php
+use KirbyEmailManager\Helpers\FormHelper;
+$maxFiles = $fieldConfig['max_files'] ?? 1;
+$maxSize = $fieldConfig['max_size'] ?? 5242880; // Default to 5MB if not specified
+$allowedMimes = $fieldConfig['allowed_mimes'] ?? [];
+
 $attributes = [
-  'type' => $type,
+  'type' => 'file',
   'id' => $fieldKey,
-  'name' => $fieldKey,
-  'class' => $inputClass,
-  'accept' => implode(',', $fieldConfig['allowed_mimes'] ?? []),
-  'required' => $fieldConfig['required'] ?? false
+  'name' => $fieldKey . ($maxFiles > 1 ? '[]' : ''),
+  'class' => 'input-file',
+  'accept' => implode(',', $allowedMimes),
+  'required' => $fieldConfig['required'] ?? false,
+  'data-max-files' => $maxFiles,
+  'data-max-size' => $maxSize
 ];
 
-$maxSize = $fieldConfig['max_size'] ?? 5242880; // Default to 5MB if not specified
+if ($maxFiles > 1) {
+  $attributes['multiple'] = true;
+}
 ?>
 
 <input <?= Html::attr($attributes) ?> />
-<small><?= t('max_file_size', null, 'Max file size: ') . (round($maxSize / 1048576, 2)) . ' MB' ?></small>

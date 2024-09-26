@@ -61,7 +61,7 @@ return [
 
     // Button texts
     'button_texts' => [
-        'send' => 'Senden T',
+        'send' => 'Senden',
         'reset' => 'Zurücksetzen'
     ]
 ];

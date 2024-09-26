@@ -9,8 +9,6 @@ if (isset($fieldConfig['required']) && $fieldConfig['required'] === true) {
   $attributes['required'] = true;
 }
 
-$isRequired = isset($fieldConfig['required']) && $fieldConfig['required'] === true;
-
 ?>
 
 <select <?= Html::attr($attributes) ?>>

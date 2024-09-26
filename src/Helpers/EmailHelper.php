@@ -18,7 +18,7 @@ class EmailHelper {
      * @param string $languageCode The language code.  
      * @throws \Exception If there's an error sending the email.
      */
-    public static function sendEmail($kirby, $contentWrapper, $page, $templateConfig, $emailContent, $data, $languageCode) {
+    public static function sendEmail($kirby, $contentWrapper, $page, $templateConfig, $emailContent, $data, $languageCode, $attachments) {
         $preferredLanguage = $templateConfig['preferred_language'] ?? $languageCode;
 
         $to = self::getReceiverEmail($contentWrapper, $data);
@@ -32,6 +32,7 @@ class EmailHelper {
 
         $senderName = self::getEmailSender($templateConfig, $languageCode);
         $senderEmail = self::getFromEmail($templateConfig, $data, $kirby);
+        error_log('Attachments: ' . print_r($attachments, true));
 
         try {
             $kirby->email([
@@ -40,6 +41,7 @@ class EmailHelper {
                 'replyTo'  => $senderEmail,
                 'to'       => $to,
                 'subject'  => $subject,
+                'attachments' => $attachments,
                 'data'     => [
                     'formData' => $data,
                     'kirby'   => $kirby,
@@ -181,6 +183,7 @@ class EmailHelper {
      * @return string The no-reply email address.
      */
     public static function createNoReplyEmail($kirby) {
+        return 'no-reply@kolk17.de';
         $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? null;
         
         if (!$host) {

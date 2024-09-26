@@ -67,7 +67,7 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
 ?>
 
 
-<form method="post" action="<?= $page->url() ?>" class="<?= FormHelper::getClassName('form', $config) ?>">
+<form method="post" enctype="multipart/form-data" action="<?= $page->url() ?>" class="<?= FormHelper::getClassName('form', $config) ?>">
     <?php if (isset($alert['message']) && $alert['type'] === 'error'): ?>
         <p class="<?= FormHelper::getClassName('error', $config, 'error') ?>"><?= $alert['message'] ?></p>
     <?php elseif (isset($alert['message']) && $alert['type'] === 'warning'): ?>

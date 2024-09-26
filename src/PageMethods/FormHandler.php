@@ -3,6 +3,8 @@ namespace KirbyEmailManager\PageMethods;
 
 use Kirby\Data\Data;
 use Kirby\Toolkit\V;
+use Kirby\Filesystem\F;
+
 use Kirby\Exception\Exception;
 use KirbyEmailManager\Helpers\EmailHelper;
 use KirbyEmailManager\Helpers\ExceptionHelper;
@@ -110,7 +112,28 @@ class FormHandler
         ];
 
         if ($this->kirby->request()->is('POST') && get('submit')) {
+            $uploads = $this->kirby->request()->files()->toArray();
 
+            $attachments = [];
+            foreach ($uploads as $fieldName => $uploadField) {
+                foreach ($uploadField as $upload) {
+                    if ($upload['error'] === UPLOAD_ERR_OK) {
+                        $tmpName = $upload['tmp_name'];
+                        $originalName = $upload['name'];
+                        $safeFileName = F::safeName($originalName);
+                        $targetPath = $tmpName . '_' . $safeFileName;
+
+                        if (move_uploaded_file($tmpName, $targetPath)) {
+                            $attachments[] = $targetPath;
+                        } else {
+                            error_log('Fehler beim Verschieben der Datei. PHP-Fehler: ' . error_get_last()['message']);
+                        }
+                    }
+                }
+            }
+
+            // error_log('Attachments: ' . print_r($attachments, true));
+            
             if (!csrf($data['csrf'] ?? '')) {
                 LogHelper::logError('CSRF-Token-Fehler: ' . $data['csrf']);
                 throw new Exception($this->translations['error_messages']['csrf_error'] ?? 'Invalid CSRF token.');
@@ -137,6 +160,10 @@ class FormHandler
                 $subject = $this->translations['default_subject'] ?? 'Kontaktformular';
 
                 foreach ($this->templateConfig['fields'] as $fieldKey => $fieldConfig) {
+                    if ($fieldConfig['type'] === 'file') {
+                        continue;
+                    }
+
                     $fieldErrors = ValidationHelper::validateField($fieldKey, $fieldConfig, $data, $this->translations, $this->languageCode);
                     if (!empty($fieldErrors)) {
                         $errors = array_merge($errors, $fieldErrors);
@@ -145,6 +172,8 @@ class FormHandler
                     $emailContent[$fieldConfig['label'][$this->languageCode]] = is_array($data[$fieldKey]) 
                     ? implode(', ', array_map('htmlspecialchars', $data[$fieldKey])) 
                     : htmlspecialchars($data[$fieldKey] ?? $this->translations['not_specified']);
+
+                    
                 }
 
                 if ($this->contentWrapper->gdpr_checkbox()->toBool() && empty($data['gdpr'])) {
@@ -159,7 +188,9 @@ class FormHandler
                     try {
                         
                         // Sende die Hauptmail
-                        EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $emailContent, $data, $this->languageCode);
+                        error_log('Attachments vor sendEmail: ' . print_r($attachments, true));
+
+                        EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $emailContent, $data, $this->languageCode, $attachments);
                         
                         // Sende die Bestätigungsmail, falls konfiguriert
                         if ($this->contentWrapper->send_confirmation_email()->toBool()) {

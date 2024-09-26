@@ -22,10 +22,15 @@ if ($fieldConfig['type'] === 'textarea') {
 $span = FormHelper::getResponsiveSpan($fieldConfig['width'] ?? '1/1');
 $spanStyle = FormHelper::generateSpanStyles($span);
 
+$isRequired = $fieldConfig['required'] ?? false;
+$requiredClass = $isRequired ? 'is-required' : '';
+
 ?>
 
 <div class="<?= $fieldClass ?>" style="<?= $spanStyle ?>">
-  <label for="<?= $fieldKey ?>" class="<?= $labelClass ?>"><?= $fieldConfig['label'][$languageCode] ?></label>
+  <label for="<?= $fieldKey ?>" class="<?= $labelClass . ' ' . $requiredClass ?>">
+    <?= $fieldConfig['label'][$languageCode] ?>
+  </label>
   <?php snippet('email-manager/form/' . $fieldConfig['type'], [
     'fieldKey' => $fieldKey,
     'fieldConfig' => $fieldConfig,
@@ -34,6 +39,12 @@ $spanStyle = FormHelper::generateSpanStyles($span);
     'languageCode' => $languageCode,
     'inputClass' => $inputClass
   ]); ?>
+
+  <?php if (isset($fieldConfig['helper_text'][$languageCode])): ?>
+    <p class="<?= FormHelper::getClassName('helper-text', $config) ?>">
+      <?= $fieldConfig['helper_text'][$languageCode] ?>
+    </p>
+  <?php endif; ?>
   
   <?php if (isset($alert['errors'][$fieldKey])): ?>
     <p class="<?= FormHelper::getClassName('error', $config) ?>"><?= $alert['errors'][$fieldKey] ?></p>

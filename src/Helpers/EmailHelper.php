@@ -183,32 +183,28 @@ class EmailHelper {
      * @return string The no-reply email address.
      */
     public static function createNoReplyEmail($kirby) {
-        return 'no-reply@kolk17.de';
-        $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? null;
+        // Versuche zuerst, die E-Mail-Adresse aus der Konfiguration zu holen
+        $email = option('email.noreply');
         
-        if (!$host) {
+        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Wenn keine gültige E-Mail in der Konfiguration, versuche sie aus der URL zu erstellen
             $host = parse_url($kirby->url(), PHP_URL_HOST);
-        }
-    
-        if (!$host) {
-            throw new \Exception("Konnte keinen gültigen Host ermitteln.");
-        }
-    
-        // Entferne die Subdomain, falls vorhanden
-        $hostParts = explode('.', $host);
-        if (count($hostParts) > 2) {
-            $host = implode('.', array_slice($hostParts, -2));
-        }
-    
-        $email = 'no-reply@' . $host;
-    
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            // Verwende eine konfigurierbare Fallback-Adresse
-            $email = option('email.noreply');
             
-            if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new \Exception("Keine gültige No-Reply-E-Mail-Adresse verfügbar: " . $email . " (Host: " . $host . ")");
+            // Entferne Port-Informationen, falls vorhanden
+            $host = preg_replace('/:\d+$/', '', $host);
+            
+            // Entferne die Subdomain, falls vorhanden
+            $hostParts = explode('.', $host);
+            if (count($hostParts) > 2) {
+                $host = implode('.', array_slice($hostParts, -2));
             }
+            
+            $email = 'no-reply@' . $host;
+        }
+        
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Wenn immer noch keine gültige E-Mail, verwende einen Fallback
+            $email = 'no-reply@example.com';
         }
         
         return $email;

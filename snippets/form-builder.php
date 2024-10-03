@@ -133,7 +133,10 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
   <?php if ($contentWrapper->gdpr_checkbox()->toBool()): ?>
     <div class="<?= FormHelper::getClassName('field', $config, 'checkbox') ?>">
       <input type="checkbox" class="<?= FormHelper::getClassName('input', $config) ?> <?= FormHelper::getClassName('input', $config) ?>--checkbox" id="gdpr" name="gdpr" <?= array_key_exists('gdpr', $data) ? 'checked' : '' ?> required>
-      <label for="gdpr"><?= $contentWrapper->gdpr_text() ?></label>
+      <?php
+       $gdprText = $contentWrapper->gdpr_text()->kt()->permalinksToUrls();
+      ?>
+      <label for="gdpr"><?= $gdprText ?></label>
     </div>
   <?php endif; ?>
 

@@ -32,7 +32,7 @@ class EmailHelper {
 
         $senderName = self::getEmailSender($templateConfig, $languageCode);
         $senderEmail = self::getFromEmail($templateConfig, $data, $kirby);
-        error_log('Attachments: ' . print_r($attachments, true));
+        // error_log('Attachments: ' . print_r($attachments, true));
 
         try {
             $kirby->email([
@@ -71,16 +71,15 @@ class EmailHelper {
             $confirmationSubject = self::getConfirmationSubject($templateConfig, $languageCode);
             $confirmationSenderName = self::getConfirmationSender($templateConfig, $languageCode);
             $confirmationSenderEmail = self::createNoReplyEmail($kirby);
+            error_log("Original footer content: " . $contentWrapper->email_legal_footer()->kt()->value());
+            $footerContent = UrlHelper::convertLinksToAbsolute($contentWrapper->email_legal_footer()->kt()->value(), $kirby) ?? null;
+            
 
-            $footerContent = UrlHelper::convertLinksToAbsolute($contentWrapper->email_legal_footer(), $kirby) ?? null;
-            error_log("Original footer content: " . $contentWrapper->email_legal_footer());
-            error_log("Converted footer content: " . $footerContent);
-
-            if (strpos($footerContent, 'x-webdoc://') !== false) {
-                error_log("Fehler: x-webdoc Link gefunden im konvertierten Footer: " . $footerContent);
-            } else {
-                error_log("Erfolg: Keine x-webdoc Links im konvertierten Footer.");
-            }
+            // if (strpos($footerContent, 'x-webdoc://') !== false) {
+            //     error_log("Fehler: x-webdoc Link gefunden im konvertierten Footer: " . $footerContent);
+            // } else {
+            //     error_log("Erfolg: Keine x-webdoc Links im konvertierten Footer.");
+            // }
             
             $kirby->email([
                 'template' => $confirmationTemplatePath,

@@ -24,8 +24,13 @@ $formFieldClass = FormHelper::getClassName('field', $config);
   }
 
   .<?= $formFieldClass ?> {
+    grid-column: span 12;
+  }
+  @media (min-width: 600px) {
+  .<?= $formFieldClass ?> {
     grid-column: span var(--span, 12);
   }
+}
 
   @media (min-width: 768px) {
     .<?= $formFieldClass ?> {

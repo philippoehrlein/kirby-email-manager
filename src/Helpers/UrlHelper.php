@@ -31,39 +31,31 @@ class UrlHelper
 
     private static function convertXWebdocUrl($url, $kirby)
     {
-        error_log("Processing x-webdoc URL: " . $url);
         $pagePos = strpos($url, '/@/page/');
         if ($pagePos !== false) {
             $pageId = substr($url, $pagePos + 8);
             $page = $kirby->site()->page('@' . $pageId);
             if ($page) {
                 $url = $page->url();
-                error_log("Found page for x-webdoc URL: " . $url);
                 return $url;
             } else {
-                error_log("Page not found for x-webdoc URL: " . $url . " (PageID: " . $pageId . ")");
                 return $url; // Behalte den ursprünglichen Link bei
             }
         } else {
             $url = preg_replace('/^x-webdoc:\/\/[^\/]+/', '', $url);
             $url = self::getBaseUrl() . '/' . ltrim($url, '/');
-            error_log("Converted x-webdoc URL to: " . $url);
             return $url;
         }
     }
 
     private static function convertInternalPageUrl($url, $kirby)
     {
-        $baseUrl = self::getBaseUrl();
-
         $pageId = substr($url, 8);
         $page = $kirby->site()->page('@' . $pageId);
         if ($page) {
-            $url = $baseUrl . '/' . $page->url();
-            error_log("Internal page link converted: " . $url);
+            $url = $page->url();
             return $url;
         } else {
-            error_log("Page not found for link: " . $url . " (PageID: " . $pageId . ")");
             return $url; // Behalte den ursprünglichen Link bei
         }
     }
@@ -72,7 +64,6 @@ class UrlHelper
     {
         $baseUrl = self::getBaseUrl();
         $url = $baseUrl . '/' . ltrim($url, '/');
-        error_log("Relative link converted: " . $url);
         return $url;
     }
 
@@ -80,7 +71,6 @@ class UrlHelper
     {
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
         $host = $_SERVER['HTTP_HOST'];
-        error_log("Base URL: " . $protocol . $host);
         return $protocol . $host;
     }
 

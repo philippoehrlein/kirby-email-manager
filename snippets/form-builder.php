@@ -132,7 +132,7 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
   <!-- GDPR Checkbox -->
   <?php if ($contentWrapper->gdpr_checkbox()->toBool()): ?>
     <div class="<?= FormHelper::getClassName('field', $config, 'checkbox') ?>">
-      <input type="checkbox" class="<?= FormHelper::getClassName('input', $config) ?> <?= FormHelper::getClassName('input', $config) ?>--checkbox" id="gdpr" name="gdpr" <?= array_key_exists('gdpr', $data) ? 'checked' : '' ?> required>
+      <input type="checkbox" tabindex="0" class="<?= FormHelper::getClassName('input', $config) ?> <?= FormHelper::getClassName('input', $config) ?>--checkbox" id="gdpr" name="gdpr" <?= array_key_exists('gdpr', $data) ? 'checked' : '' ?> required>
       <?php
        $gdprText = $contentWrapper->gdpr_text()->kt()->permalinksToUrls();
       ?>
@@ -142,8 +142,8 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
 
   <!-- Form Actions (Buttons) -->
   <div class="<?= FormHelper::getClassName('form', $config, 'actions') ?>">
-    <button type="reset" class="<?= FormHelper::getClassName('button', $config, 'secondary') ?>"><?= $resetButtonText ?></button>
-    <input type="submit" class="<?= FormHelper::getClassName('button', $config, 'primary') ?>" name="submit" value="<?= $sendButtonText ?>" />
+    <button type="reset" tabindex="0" class="<?= FormHelper::getClassName('button', $config, 'secondary') ?>"><?= $resetButtonText ?></button>
+    <input type="submit" tabindex="0" class="<?= FormHelper::getClassName('button', $config, 'primary') ?>" name="submit" value="<?= $sendButtonText ?>" />
 </div>
 
   <input type="hidden" name="csrf" value="<?= csrf() ?>">

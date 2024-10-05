@@ -49,7 +49,7 @@ $formFieldClass = FormHelper::getClassName('field', $config);
     display: flex;
     flex-direction: column;
     padding: 0.5rem 0 1rem;
-    gap: 1rem;
+    gap: 0.5rem;
     text-align: center;
 
     * {

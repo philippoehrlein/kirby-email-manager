@@ -1,7 +1,7 @@
 <?php
 foreach ($fieldConfig['options'] as $optionValue => $optionLabel):
   $attributes = [
-    'type' => $type,
+    'type' => 'radio',
     'id' => $fieldKey . '_' . $optionValue,
     'name' => $fieldKey,
     'class' => $inputClass,
@@ -9,12 +9,16 @@ foreach ($fieldConfig['options'] as $optionValue => $optionLabel):
     'required' => $fieldConfig['required'] ?? false
   ];
 
-  if ($optionValue === ($value ?? '')) {
+  if ($fieldConfig['required'] && empty($value)) {
+    $value = array_key_first($fieldConfig['options']);
+  }
+  
+  if ($optionValue === $value) {
     $attributes['checked'] = true;
   }
 ?>
   <div class="radio-option">
-    <input <?= Html::attr($attributes) ?>>
+    <input <?= Html::attr($attributes) ?> tabindex="0">
     <label for="<?= $fieldKey . '_' . $optionValue ?>">
       <?= is_array($optionLabel) ? ($optionLabel[$languageCode] ?? $optionValue) : $optionLabel ?>
     </label>

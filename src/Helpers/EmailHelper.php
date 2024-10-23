@@ -32,12 +32,15 @@ class EmailHelper {
 
         $senderName = self::getEmailSender($templateConfig, $languageCode);
         $senderEmail = self::getFromEmail($templateConfig, $data, $kirby);
+
+        $formSenderName = self::getFormSender($templateConfig, $languageCode);
+        $formSenderEmail = self::createNoReplyEmail($kirby);
         // error_log('Attachments: ' . print_r($attachments, true));
 
         try {
             $kirby->email([
                 'template' => $templatePath, 
-                'from'     => [$senderEmail => $senderName],
+                'from'     => [$formSenderEmail => $formSenderName],
                 'replyTo'  => $senderEmail,
                 'to'       => $to,
                 'subject'  => $subject,
@@ -69,8 +72,6 @@ class EmailHelper {
             $confirmationTemplatePath = $selectedTemplate . '/' . $confirmationTemplate;
         
             $confirmationSubject = self::getConfirmationSubject($templateConfig, $languageCode);
-            $confirmationSenderName = self::getConfirmationSender($templateConfig, $languageCode);
-            $confirmationSenderEmail = self::createNoReplyEmail($kirby);
             error_log("Original footer content: " . $contentWrapper->email_legal_footer()->kt()->value());
             $footerContent = UrlHelper::convertLinksToAbsolute($contentWrapper->email_legal_footer()->kt()->value(), $kirby) ?? null;
             
@@ -83,7 +84,7 @@ class EmailHelper {
             
             $kirby->email([
                 'template' => $confirmationTemplatePath,
-                'from'     => [$confirmationSenderEmail => $confirmationSenderName],
+                'from'     => [$formSenderEmail => $formSenderName],
                 'to'       => $data['email'],
                 'subject'  => $confirmationSubject,
                 'data'     => [
@@ -203,7 +204,7 @@ class EmailHelper {
         
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             // Wenn immer noch keine gültige E-Mail, verwende einen Fallback
-            $email = 'no-reply@example.com';
+            $email = 'no-reply@kolk17.de';
         }
         
         return $email;
@@ -242,9 +243,7 @@ class EmailHelper {
      * @param string $languageCode The language code.
      * @return string The confirmation sender.
      */
-    public static function getConfirmationSender($templateConfig, $languageCode) {
-        return $templateConfig['confirmation_sender'][$languageCode] 
-            ?? $templateConfig['confirmation_sender']['en'] 
-            ?? 'No Reply';
+    public static function getFormSender($templateConfig, $languageCode) {
+        return "no-reply@kolk17.de";
     }
 }

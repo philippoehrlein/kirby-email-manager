@@ -202,11 +202,6 @@ class EmailHelper {
             $email = 'no-reply@' . $host;
         }
         
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            // Wenn immer noch keine gültige E-Mail, verwende einen Fallback
-            $email = 'no-reply@kolk17.de';
-        }
-        
         return $email;
     }
 
@@ -250,6 +245,8 @@ class EmailHelper {
      * @return string The confirmation sender.
      */
     public static function getFormSender($templateConfig, $languageCode) {
-        return "no-reply@kolk17.de";
+        return $templateConfig['confirmation_sender'][$languageCode] 
+            ?? $templateConfig['confirmation_sender']['en'] 
+            ?? 'No Reply';
     }
 }

@@ -145,14 +145,17 @@ class FormHandler
 
             LogHelper::logInfo("Submission time: $submissionTime, Current time: $currentTime, Difference: $timeDifference");
 
-            if ($timeDifference < 10) { 
+            $minTime = $this->templateConfig['form_submission']['min_time'] ?? 10;
+            $maxTime = $this->templateConfig['form_submission']['max_time'] ?? 7200;
+
+            if ($timeDifference < $minTime) { 
                 $alert['type'] = 'warning';
                 $alert['message'] = $this->translations['error_messages']['submission_time_too_fast'] ?? 'Das Formular wurde zu schnell übermittelt. Bitte versuchen Sie es erneut.';
                 return [
                     'alert' => $alert,
                     'data' => $data
                 ];
-            } elseif ($timeDifference > 7200) {
+            } elseif ($timeDifference > $maxTime) {
                 $alert['type'] = 'warning';
                 $alert['message'] = $this->translations['error_messages']['submission_time_warning'] ?? 'Die Übermittlungszeit ist abgelaufen. Bitte überprüfen Sie Ihre Eingaben und senden Sie das Formular erneut.';
                 return [
@@ -223,7 +226,6 @@ class FormHandler
                 LogHelper::logError($e);
             }
         }
-
         return ['alert' => $alert, 'data' => $data ?? []];
     }
 }

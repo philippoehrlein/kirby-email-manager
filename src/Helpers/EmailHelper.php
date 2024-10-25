@@ -32,12 +32,14 @@ class EmailHelper {
 
         $senderName = self::getEmailSender($templateConfig, $languageCode);
         $senderEmail = self::getFromEmail($templateConfig, $data, $kirby);
+
+        $formEmail = self::createNoReplyEmail($kirby);
         // error_log('Attachments: ' . print_r($attachments, true));
 
         try {
             $kirby->email([
                 'template' => $templatePath, 
-                'from'     => [$senderEmail => $senderName],
+                'from'     => $formEmail,
                 'replyTo'  => $senderEmail,
                 'to'       => $to,
                 'subject'  => $subject,
@@ -70,7 +72,7 @@ class EmailHelper {
         
             $confirmationSubject = self::getConfirmationSubject($templateConfig, $languageCode);
             $confirmationSenderName = self::getConfirmationSender($templateConfig, $languageCode);
-            $confirmationSenderEmail = self::createNoReplyEmail($kirby);
+            
             error_log("Original footer content: " . $contentWrapper->email_legal_footer()->kt()->value());
             $footerContent = UrlHelper::convertLinksToAbsolute($contentWrapper->email_legal_footer()->kt()->value(), $kirby) ?? null;
             
@@ -83,7 +85,7 @@ class EmailHelper {
             
             $kirby->email([
                 'template' => $confirmationTemplatePath,
-                'from'     => [$confirmationSenderEmail => $confirmationSenderName],
+                'from'     => [$formEmail => $confirmationSenderName],
                 'to'       => $data['email'],
                 'subject'  => $confirmationSubject,
                 'data'     => [
@@ -217,6 +219,12 @@ class EmailHelper {
      * @return string The email sender name.
      */
     public static function getEmailSender($templateConfig, $languageCode) {
+        foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
+            if (isset($fieldConfig['is_from_name_field']) && $fieldConfig['is_from_name_field'] === true && !empty($data[$fieldKey])) {
+                return $data[$fieldKey];
+            }
+        }
+
         return $templateConfig['email_sender'][$languageCode] 
             ?? $templateConfig['email_sender']['en'] 
             ?? 'Contact Form';

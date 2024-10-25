@@ -55,7 +55,8 @@ return [
         'invalid_phone' => 'Por favor, introduzca un número de teléfono válido.',
         'csrf_error' => 'Token CSRF no válido.',
         'submission_time_error' => 'Tiempo de envío no válido.',
-        'submission_time_warning' => 'El tiempo de envío es caducado. Por favor, compruebe su entrada y envíe el formulario de nuevo.'
+        'submission_time_warning' => 'El tiempo de envío es caducado. Por favor, compruebe su entrada y envíe el formulario de nuevo.',
+        'submission_time_too_fast' => 'El formulario se envió demasiado rápido. Por favor, inténtelo de nuevo.'
     ],
 
     // Textos de los botones

@@ -145,7 +145,14 @@ class FormHandler
 
             LogHelper::logInfo("Submission time: $submissionTime, Current time: $currentTime, Difference: $timeDifference");
 
-            if ($timeDifference > 7200) {
+            if ($timeDifference < 10) { 
+                $alert['type'] = 'warning';
+                $alert['message'] = $this->translations['error_messages']['submission_time_too_fast'] ?? 'Das Formular wurde zu schnell übermittelt. Bitte versuchen Sie es erneut.';
+                return [
+                    'alert' => $alert,
+                    'data' => $data
+                ];
+            } elseif ($timeDifference > 7200) {
                 $alert['type'] = 'warning';
                 $alert['message'] = $this->translations['error_messages']['submission_time_warning'] ?? 'Die Übermittlungszeit ist abgelaufen. Bitte überprüfen Sie Ihre Eingaben und senden Sie das Formular erneut.';
                 return [

@@ -55,7 +55,8 @@ return [
       'invalid_phone' => 'Please enter a valid phone number.',
       'csrf_error' => 'Invalid CSRF token.',
       'submission_time_error' => 'Invalid submission time.',
-      'submission_time_warning' => 'The submission time is expired. Please check your input and send the form again.'
+      'submission_time_warning' => 'The submission time is expired. Please check your input and send the form again.',
+      'submission_time_too_fast' => 'The form was submitted too quickly. Please try again.'
   ],
 
   // Button texts

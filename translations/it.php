@@ -55,7 +55,8 @@ return [
         'invalid_phone' => 'Per favore, inserisci un numero di telefono valido.',
         'csrf_error' => 'Token CSRF non valido.',
         'submission_time_error' => 'Tempo di invio non valido.',
-        'submission_time_warning' => 'Il tempo di invio è scaduto. Per favore, controlla i tuoi input e invia il modulo di nuovo.'
+        'submission_time_warning' => 'Il tempo di invio è scaduto. Per favore, controlla i tuoi input e invia il modulo di nuovo.',
+        'submission_time_too_fast' => 'Il modulo è stato inviato troppo rapidamente. Per favore, riprova.'
     ],
 
     // Testi dei pulsanti

@@ -55,7 +55,8 @@ return [
         'invalid_phone' => 'Veuillez saisir un numéro de téléphone valide.',
         'csrf_error' => 'Jeton CSRF non valide.',
         'submission_time_error' => 'Heure de soumission non valide.',
-        'submission_time_warning' => 'La durée de soumission est expirée. Veuillez vérifier vos entrées et renvoyer le formulaire.'
+        'submission_time_warning' => 'La durée de soumission est expirée. Veuillez vérifier vos entrées et renvoyer le formulaire.',
+        'submission_time_too_fast' => 'Le formulaire a été envoyé trop rapidement. Veuillez réessayer.'
     ],
 
     // Textes des boutons

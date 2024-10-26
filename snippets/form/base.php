@@ -46,7 +46,7 @@ $requiredClass = $isRequired ? 'is-required' : '';
     </p>
   <?php endif; ?>
   
-  <?php if (isset($alert['errors'][$fieldKey])): ?>
-    <p class="<?= FormHelper::getClassName('error', $config) ?>"><?= $alert['errors'][$fieldKey] ?></p>
+  <?php if (isset($error)): ?>
+    <p class="<?= FormHelper::getClassName('error', $config) ?>"><?= $error ?></p>
   <?php endif ?>
 </div>

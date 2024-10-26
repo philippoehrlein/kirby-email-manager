@@ -72,7 +72,6 @@ class EmailHelper {
             $confirmationTemplatePath = $selectedTemplate . '/' . $confirmationTemplate;
         
             $confirmationSubject = self::getConfirmationSubject($templateConfig, $languageCode);
-            error_log("Original footer content: " . $contentWrapper->email_legal_footer()->kt()->value());
             $footerContent = UrlHelper::convertLinksToAbsolute($contentWrapper->email_legal_footer()->kt()->value(), $kirby) ?? null;
             
 

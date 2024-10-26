@@ -77,13 +77,17 @@ class ValidationHelper {
             case 'tel':
                 $errors = array_merge($errors, self::validateRequired($fieldKey, $fieldConfig, $data, $translations, $languageCode));
                 $telValue = $data[$fieldKey] ?? null;
-                $pattern = $fieldConfig['pattern'] ?? '^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$'; 
-        
+                $defaultPattern = '^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$';
+                $pattern = $fieldConfig['pattern'] ?? $defaultPattern; 
+
                 // Pattern validation (if a value is provided)
-                if (!empty($telValue) && !preg_match("/$pattern/", $telValue)) {
-                    $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
-                        ?? $translations['error_messages']['invalid_phone'] 
-                        ?? 'Please enter a valid phone number.';
+                if (!empty($telValue)) {
+                    $isValid = preg_match("/$pattern/", $telValue);
+                    if (!$isValid) {
+                        $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
+                            ?? $translations['error_messages']['invalid_phone'] 
+                            ?? 'Bitte geben Sie eine gültige Telefonnummer ein.';
+                    }
                 }
                 break;
             }

@@ -45,10 +45,6 @@ $defaultButtonTexts = [
 $sendButtonText = $buttonTexts['send'][$languageCode] ?? $defaultButtonTexts['send'];
 $resetButtonText = $buttonTexts['reset'][$languageCode] ?? $defaultButtonTexts['reset'];
 
-// Fetch any alert or validation error data passed from the handler
-
-$alert = $formHandler['alert'] ?? [];
-$data = $formHandler['data'] ?? [];
 
 $pluginConfig = kirby()->option('philippoehrlein.kirby-email-manager.classConfig', []);
 $config = [
@@ -60,21 +56,21 @@ $config = [
 
 $successMessage = $alert['successMessage'] ?? null;
 $keepForm = $templateConfig['keep_form'] ?? false;
+$fieldErrors = $alert['errors'] ?? [];
 
 snippet('email-manager/styles/honeypot');
 snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
-
 ?>
 
 
-<form method="post" enctype="multipart/form-data" action="<?= $page->url() ?>" class="<?= FormHelper::getClassName('form', $config) ?>">
-    <?php if (isset($alert['message']) && $alert['type'] === 'error'): ?>
-        <p class="<?= FormHelper::getClassName('error', $config, 'error') ?>"><?= $alert['message'] ?></p>
-    <?php elseif (isset($alert['message']) && $alert['type'] === 'warning'): ?>
-        <p class="<?= FormHelper::getClassName('error', $config, 'warning') ?>"><?= $alert['message'] ?></p>
-    <?php endif ?>
+<form id="contactForm" method="post" enctype="multipart/form-data" action="<?= $page->url() ?>" class="<?= FormHelper::getClassName('form', $config) ?>">
+  <?php if (isset($alert['message']) && $alert['type'] === 'error'): ?>
+      <p class="<?= FormHelper::getClassName('error', $config, 'error') ?>"><?= $alert['message'] ?></p>
+  <?php elseif (isset($alert['message']) && $alert['type'] === 'warning'): ?>
+      <p class="<?= FormHelper::getClassName('error', $config, 'warning') ?>"><?= $alert['message'] ?></p>
+  <?php endif ?>
 
-    <div class="honeypot" aria-hidden="true">
+  <div class="honeypot" aria-hidden="true">
     <label for="website" tabindex="-1">
       <span class="visually-hidden">Bitte nicht ausfüllen (Spamschutz)</span>
     </label>
@@ -124,7 +120,8 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
         'value' => $value,
         'placeholder' => $fieldConfig['placeholder'][$languageCode] ?? '',
         'config' => $config,
-        'languageCode' => $languageCode
+        'languageCode' => $languageCode,
+        'error' => $fieldErrors[$fieldKey] ?? null
       ] )?>
   <?php endforeach ?>
   </div>
@@ -144,7 +141,7 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
   <div class="<?= FormHelper::getClassName('form', $config, 'actions') ?>">
     <button type="reset" tabindex="0" class="<?= FormHelper::getClassName('button', $config, 'secondary') ?>"><?= $resetButtonText ?></button>
     <input type="submit" tabindex="0" class="<?= FormHelper::getClassName('button', $config, 'primary') ?>" name="submit" value="<?= $sendButtonText ?>" />
-</div>
+  </div>
 
   <input type="hidden" name="csrf" value="<?= csrf() ?>">
   

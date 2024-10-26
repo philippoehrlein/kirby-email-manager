@@ -18,3 +18,4 @@ if (!empty($fieldConfig['pattern'])) {
 ?>
 
 <input <?= Html::attr($attributes) ?> />
+<?php echo "<!-- Debug: " . htmlspecialchars(print_r($attributes, true)) . " -->"; ?>

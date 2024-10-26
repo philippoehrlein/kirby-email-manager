@@ -132,9 +132,8 @@ class FormHandler
                 }
             }
 
-            // error_log('Attachments: ' . print_r($attachments, true));
             
-            if (!csrf($data['csrf'] ?? '')) {
+            if (csrf(get('csrf')) !== true) {
                 LogHelper::logError('CSRF-Token-Fehler: ' . $data['csrf']);
                 throw new Exception($this->translations['error_messages']['csrf_error'] ?? 'Invalid CSRF token.');
             }
@@ -142,8 +141,6 @@ class FormHandler
             $submissionTime = (int)($data['timestamp'] ?? 0);
             $currentTime = time();
             $timeDifference = abs($currentTime - $submissionTime);
-
-            LogHelper::logInfo("Submission time: $submissionTime, Current time: $currentTime, Difference: $timeDifference");
 
             $minTime = $this->templateConfig['form_submission']['min_time'] ?? 10;
             $maxTime = $this->templateConfig['form_submission']['max_time'] ?? 7200;
@@ -197,9 +194,6 @@ class FormHandler
                 } else {
                     try {
                         
-                        // Sende die Hauptmail
-                        error_log('Attachments vor sendEmail: ' . print_r($attachments, true));
-
                         EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $emailContent, $data, $this->languageCode, $attachments);
                         
                         // Sende die Bestätigungsmail, falls konfiguriert

@@ -30,7 +30,7 @@ return [
     'send_to_more_success_title_label' => 'Erfolgstitel',
     'send_to_more_success_text_label' => 'Erfolgstext',
     'email_legal_headline_label' => 'Rechtliches',
-
+    'honeypot_label' => 'Bitte nicht ausfüllen (Spamschutz)',
 
     // Nested error messages
     'error_messages' => [
@@ -57,7 +57,21 @@ return [
         'csrf_error' => 'Ungültiges CSRF-Token.',
         'submission_time_error' => 'Ungültige Übermittlungszeit.',
         'submission_time_warning' => 'Die Übermittlungszeit ist abgelaufen. Bitte überprüfen Sie Ihre Eingaben und senden Sie das Formular erneut.',
-        'submission_time_too_fast' => 'Das Formular wurde zu schnell übermittelt. Bitte versuchen Sie es erneut.'
+        'submission_time_too_fast' => 'Das Formular wurde zu schnell übermittelt. Bitte versuchen Sie es erneut.',
+        'template_not_found' => 'Die ausgewählte E-Mail-Vorlagenkonfiguration wurde nicht gefunden.',
+        'config_file_not_found' => 'Konfigurations-Datei nicht gefunden: ',
+        'template_config_empty' => 'Die Vorlagenkonfiguration ist leer.',
+        'template_fields_missing' => 'Der Vorlagenkonfiguration fehlt der "fields"-Schlüssel oder es ist kein Array.',
+        'no_template' => 'Keine E-Mail-Vorlage ausgewählt.',
+        'template_not_found' => 'Ausgewählte E-Mail-Vorlagenkonfiguration nicht gefunden.',
+        'file_move_error' => 'Fehler beim Verschieben der Datei. PHP-Fehler: ',
+        'csrf_error' => 'Ungültiges CSRF-Token.',
+        'missing_required_key' => 'Fehlender erforderlicher Schlüssel "{key}" in der Vorlagenkonfiguration.',
+        'field_missing_property' => 'Fehlende Eigenschaft "{property}" für Feld "{fieldKey}" in der Vorlagenkonfiguration.',
+        'confirmation_template_not_found' => 'Bestätigungse-Mail-Vorlage nicht gefunden: ',
+        'time_step' => 'Bitte wählen Sie eine Zeit im %d-Minuten-Takt',
+        'time_before_min' => 'Die Zeit muss nach %s liegen.',
+        'time_after_max' => 'Die Zeit muss vor %s liegen.'
     ],
 
     // Button texts

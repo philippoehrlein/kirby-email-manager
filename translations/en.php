@@ -30,6 +30,7 @@ return [
   'send_to_more_success_title_label' => 'Success Title',
   'send_to_more_success_text_label' => 'Success Text',
   'email_legal_headline_label' => 'Legal',
+  'honeypot_label' => 'Please do not fill in (Spam protection)',
 
   // Nested error messages
   'error_messages' => [
@@ -56,7 +57,21 @@ return [
       'csrf_error' => 'Invalid CSRF token.',
       'submission_time_error' => 'Invalid submission time.',
       'submission_time_warning' => 'The submission time is expired. Please check your input and send the form again.',
-      'submission_time_too_fast' => 'The form was submitted too quickly. Please try again.'
+      'submission_time_too_fast' => 'The form was submitted too quickly. Please try again.',
+      'template_not_found' => 'The selected email template configuration was not found.',
+      'config_file_not_found' => 'Configuration file not found: ',
+      'template_config_empty' => 'The template configuration is empty.',
+      'template_fields_missing' => 'The template configuration is missing the "fields" key or it is not an array.',
+      'no_template' => 'No email template selected.',
+      'template_not_found' => 'Selected email template configuration not found.',
+      'file_move_error' => 'Error moving file. PHP error: ',
+      'csrf_error' => 'Invalid CSRF token.',
+      'missing_required_key' => 'Missing required key "{key}" in template configuration.',
+      'field_missing_property' => 'Missing "{property}" for field "{fieldKey}" in template configuration.',
+      'confirmation_template_not_found' => 'Confirmation email template not found: ',
+      'time_step' => 'Please select a time in the %d-minute interval',
+      'time_before_min' => 'The time must be after %s.',
+      'time_after_max' => 'The time must be before %s.'
   ],
 
   // Button texts

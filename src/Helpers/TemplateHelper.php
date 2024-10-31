@@ -4,6 +4,7 @@ namespace KirbyEmailManager\Helpers;
 
 use Kirby\Data\Data;
 use Kirby\Filesystem\Dir;
+use KirbyEmailManager\Helpers\LanguageHelper;
 
 class TemplateHelper
 {
@@ -45,17 +46,16 @@ class TemplateHelper
         return $templates;
     }
 
-    private static function getTemplateName(array $config, string $folder): string
+    public static function getTemplateName($config, $folder) 
     {
-        if (isset($config['name'])) {
-            $currentLang = kirby()->language()->code();
-            if (is_array($config['name'])) {
-                return $config['name'][$currentLang] ?? $config['name']['en'] ?? reset($config['name']);
-            } elseif (is_string($config['name'])) {
-                return $config['name'];
-            }
+        if (!isset($config['name'])) {
+            return ucfirst($folder) . ' Template';
         }
 
-        return ucfirst($folder) . ' Template';
+        return LanguageHelper::getTranslatedValue(
+            $config,
+            'name',
+            ucfirst($folder) . ' Template'
+        );
     }
 }

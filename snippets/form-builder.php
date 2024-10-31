@@ -1,12 +1,12 @@
 <?php
 use Kirby\Data\Data;
 use KirbyEmailManager\Helpers\FormHelper;
-use KirbyEmailManager\Helpers\SecurityHelper; 
+use KirbyEmailManager\Helpers\SecurityHelper;
+use KirbyEmailManager\Helpers\LanguageHelper;
 
 // Form-Builder: Generates the form layout and structure
+$languageCode = LanguageHelper::getCurrentLanguageCode();
 
-// Get the selected language code
-$languageCode = kirby()->language()->code() ?? 'en';
 
 // Load the selected template from the panel
 $selectedTemplateId = $contentWrapper->email_templates()->value();
@@ -14,36 +14,39 @@ $templates = kirby()->option('philippoehrlein.kirby-email-manager.templates');
 $templateConfig = $templates[$selectedTemplateId] ?? [];
 
 if (empty($templateConfig)) {
-    throw new Exception('Selected email template configuration not found.');
+    throw new Exception(t('error_messages.template_not_found', 'Selected email template configuration not found.'));
 }
 
 $configPath = kirby()->root('site') . '/templates/emails/' . $selectedTemplateId . '/config.yml';
 
 if (!file_exists($configPath)) {
-    throw new Exception('Configuration file not found: ' . $configPath);
+    throw new Exception(t('error_messages.config_file_not_found', 'Configuration file not found: ') . $configPath);
 }
 
 $templateConfig = Data::read($configPath);
 
 if (empty($templateConfig)) {
-    throw new Exception('Template configuration is empty.');
+    throw new Exception(t('error_messages.template_config_empty', 'Template configuration is empty.'));
 }
 
 if (!isset($templateConfig['fields']) || !is_array($templateConfig['fields'])) {
-    throw new Exception('Template configuration is missing the "fields" key or it is not an array.');
+    throw new Exception(t('error_messages.template_fields_missing', 'Template configuration is missing the "fields" key or it is not an array.'));
 }
 
-$buttonTexts = $templateConfig['button_texts'] ?? [];
-$buttonTranslations = t('button_texts');
-$defaultButtonTexts = [
-  'send' => $templateConfig['button_texts']['send'][$languageCode] 
-            ?? ($buttonTranslations['send'] ?? 'Senden'),
-  'reset' => $templateConfig['button_texts']['reset'][$languageCode] 
-            ?? ($buttonTranslations['reset'] ?? 'Zurücksetzen'),
-];
-// Button text either from template config or fallback
-$sendButtonText = $buttonTexts['send'][$languageCode] ?? $defaultButtonTexts['send'];
-$resetButtonText = $buttonTexts['reset'][$languageCode] ?? $defaultButtonTexts['reset'];
+$resetButton = $templateConfig['buttons']['reset'] ?? ['show' => true];
+$resetButtonShow = $resetButton['show'] ?? true;
+
+$sendButtonText = LanguageHelper::getTranslatedValue(
+    $templateConfig['buttons']['send']['text'] ?? [],
+    $languageCode,
+    'Send'
+);
+
+$resetButtonText = LanguageHelper::getTranslatedValue(
+    $templateConfig['buttons']['reset']['text'] ?? [],
+    $languageCode,
+    'Reset'
+);
 
 
 $pluginConfig = kirby()->option('philippoehrlein.kirby-email-manager.classConfig', []);
@@ -72,7 +75,7 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
 
   <div class="honeypot" aria-hidden="true">
     <label for="website" tabindex="-1">
-      <span class="visually-hidden">Bitte nicht ausfüllen (Spamschutz)</span>
+      <span class="visually-hidden"><?= t('honeypot_label') ?></span>
     </label>
     <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
   </div>
@@ -139,7 +142,9 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
 
   <!-- Form Actions (Buttons) -->
   <div class="<?= FormHelper::getClassName('form', $config, 'actions') ?>">
-    <button type="reset" tabindex="0" class="<?= FormHelper::getClassName('button', $config, 'secondary') ?>"><?= $resetButtonText ?></button>
+    <?php if ($resetButtonShow): ?>
+      <button type="reset" tabindex="0" class="<?= FormHelper::getClassName('button', $config, 'secondary') ?>"><?= $resetButtonText ?></button>
+    <?php endif; ?>
     <input type="submit" tabindex="0" class="<?= FormHelper::getClassName('button', $config, 'primary') ?>" name="submit" value="<?= $sendButtonText ?>" />
   </div>
 

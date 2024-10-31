@@ -1,24 +1,21 @@
 <?php
 use KirbyEmailManager\Helpers\FormHelper;
+
 foreach ($fieldConfig['options'] as $optionValue => $optionLabel):
   $attributes = [
-    'type' => 'radio',
+    'type' => 'checkbox',
     'id' => $fieldKey . '_' . $optionValue,
-    'name' => $fieldKey,
+    'name' => $fieldKey . '[]',
     'class' => $inputClass,
     'value' => $optionValue,
     'required' => $fieldConfig['required'] ?? false,
-    ];
-
-  if ($fieldConfig['required'] && empty($value)) {
-    $value = array_key_first($fieldConfig['options']);
-  }
+  ];
   
-  if ($optionValue === $value) {
+  if (is_array($value) && in_array($optionValue, $value)) {
     $attributes['checked'] = true;
   }
 ?>
-  <div <?= FormHelper::getClassName('radio-option', $config) ?>>
+  <div <?= FormHelper::getClassName('checkbox-option', $config) ?>>
     <input <?= Html::attr($attributes) ?> tabindex="0">
     <label for="<?= $fieldKey . '_' . $optionValue ?>">
       <?= is_array($optionLabel) ? ($optionLabel[$languageCode] ?? $optionValue) : $optionLabel ?>

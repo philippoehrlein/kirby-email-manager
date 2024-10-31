@@ -1,6 +1,7 @@
 <?php
 namespace KirbyEmailManager\Helpers;
 use KirbyEmailManager\Helpers\UrlHelper;
+use KirbyEmailManager\Helpers\LanguageHelper;
 /**
  * Helper class for email-related operations.
  * Author: Philipp Oehrlein
@@ -22,7 +23,7 @@ class EmailHelper {
         $preferredLanguage = $templateConfig['preferred_language'] ?? $languageCode;
 
         $to = self::getReceiverEmail($contentWrapper, $data);
-        $subject = self::getEmailSubject($contentWrapper, $data, $templateConfig, $languageCode);
+        $subject = self::getEmailSubject($contentWrapper, $data, $templateConfig);
         $selectedTemplate = $contentWrapper->email_templates();
 
         $templatePath = $kirby->root('site') . '/templates/emails/' . $selectedTemplate;
@@ -35,7 +36,6 @@ class EmailHelper {
 
         $formSenderName = self::getFormSender($templateConfig, $languageCode);
         $formSenderEmail = self::createNoReplyEmail($kirby);
-        // error_log('Attachments: ' . print_r($attachments, true));
 
         try {
             $kirby->email([
@@ -66,20 +66,13 @@ class EmailHelper {
             $confirmationTemplatePath = $kirby->root('site') . '/templates/emails/' . $selectedTemplate;
         
             if (!file_exists($confirmationTemplatePath . '/' . $confirmationTextTemplate)) {
-                throw new Exception('Confirmation email template not found: ' . $confirmationTemplatePath . '/[' . $confirmationTextTemplate . ']');
+                throw new Exception(t('error_messages.confirmation_template_not_found', 'Confirmation email template not found: ') . $confirmationTemplatePath . '/[' . $confirmationTextTemplate . ']');
             }
         
             $confirmationTemplatePath = $selectedTemplate . '/' . $confirmationTemplate;
         
             $confirmationSubject = self::getConfirmationSubject($templateConfig, $languageCode);
             $footerContent = UrlHelper::convertLinksToAbsolute($contentWrapper->email_legal_footer()->kt()->value(), $kirby) ?? null;
-            
-
-            // if (strpos($footerContent, 'x-webdoc://') !== false) {
-            //     error_log("Fehler: x-webdoc Link gefunden im konvertierten Footer: " . $footerContent);
-            // } else {
-            //     error_log("Erfolg: Keine x-webdoc Links im konvertierten Footer.");
-            // }
             
             $kirby->email([
                 'template' => $confirmationTemplatePath,
@@ -130,19 +123,26 @@ class EmailHelper {
      * @param string $languageCode The language code.
      * @return string The email subject.
      */
-    public static function getEmailSubject($contentWrapper, $data, $templateConfig, $languageCode) {
+    public static function getEmailSubject($contentWrapper, $data, $templateConfig) {
         if ($contentWrapper->send_to_more()->toBool() && isset($data['topic'])) {
-            $subject = $templateConfig['email_subject']['topic'] ?? $templateConfig['email_subject']['default'] ?? 'Kontaktformular Nachricht: :topic';
+            $subject = LanguageHelper::getTranslatedValue(
+                $templateConfig['email_subject'], 
+                'topic', 
+                'Contact form message: :topic'
+            );
         } else {
-            $subject = $templateConfig['email_subject']['default'] ?? 'Kontaktformular Nachricht';
+            $subject = LanguageHelper::getTranslatedValue(
+                $templateConfig['email_subject'], 
+                'default', 
+                'Contact form message'
+            );
         }
     
         $replacements = [
             ':topic' => $data['topic'] ?? '',
-            ':langCode' => strtoupper($languageCode)
+            ':langCode' => strtoupper(LanguageHelper::getCurrentLanguageCode())
         ];
     
-        // Nur die Platzhalter ersetzen, die tatsächlich im Betreff vorhanden sind
         foreach ($replacements as $placeholder => $value) {
             if (strpos($subject, $placeholder) !== false) {
                 $subject = str_replace($placeholder, $value, $subject);
@@ -182,17 +182,17 @@ class EmailHelper {
      * @return string The no-reply email address.
      */
     public static function createNoReplyEmail($kirby) {
-        // Versuche zuerst, die E-Mail-Adresse aus der Konfiguration zu holen
+        // Try to get the email address from the configuration first
         $email = option('email.noreply');
         
         if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            // Wenn keine gültige E-Mail in der Konfiguration, versuche sie aus der URL zu erstellen
+            // If no valid email address is configured, try to create it from the site URL
             $host = parse_url($kirby->url(), PHP_URL_HOST);
             
-            // Entferne Port-Informationen, falls vorhanden
+            // Remove port information if present
             $host = preg_replace('/:\d+$/', '', $host);
             
-            // Entferne die Subdomain, falls vorhanden
+            // Remove the subdomain if present
             $hostParts = explode('.', $host);
             if (count($hostParts) > 2) {
                 $host = implode('.', array_slice($hostParts, -2));
@@ -218,9 +218,11 @@ class EmailHelper {
             }
         }
 
-        return $templateConfig['email_sender'][$languageCode] 
-            ?? $templateConfig['email_sender']['en'] 
-            ?? 'Contact Form';
+        return LanguageHelper::getTranslatedValue(
+            $templateConfig, 
+            'email_sender', 
+            'Contact Form'
+        );
     }
 
     /**
@@ -231,9 +233,11 @@ class EmailHelper {
      * @return string The confirmation subject.
      */
     public static function getConfirmationSubject($templateConfig, $languageCode) {
-        return $templateConfig['confirmation_subject'][$languageCode] 
-            ?? $templateConfig['confirmation_subject']['en'] 
-            ?? 'Confirmation of your inquiry';
+        return LanguageHelper::getTranslatedValue(
+            $templateConfig,
+            'confirmation_subject',
+            'Confirmation of your inquiry'
+        );
     }
     
     /**
@@ -244,8 +248,10 @@ class EmailHelper {
      * @return string The confirmation sender.
      */
     public static function getFormSender($templateConfig, $languageCode) {
-        return $templateConfig['confirmation_sender'][$languageCode] 
-            ?? $templateConfig['confirmation_sender']['en'] 
-            ?? 'No Reply';
+        return LanguageHelper::getTranslatedValue(
+            $templateConfig,
+            'confirmation_sender',
+            'No Reply'
+        );
     }
 }

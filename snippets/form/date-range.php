@@ -1,7 +1,9 @@
 <?php
+use KirbyEmailManager\Helpers\FormHelper;
+
 $attributes = [
-  'type' => $type,
-  'class' => $base_class . ' ' . $modifier,
+  'type' => 'date',
+  'class' => $inputClass,
   'required' => $fieldConfig['required'] ?? false
 ];
 
@@ -16,21 +18,19 @@ if (isset($fieldConfig['max'])) {
 $startAttributes = array_merge($attributes, [
   'id' => $fieldKey . '_start',
   'name' => $fieldKey . '_start',
-  'placeholder' => $placeholder . ' (Start)',
-  'value' => $value['start'] ?? '',
-  'class' => $inputClass
+  'placeholder' => $fieldConfig['placeholder_start'] ?? '',
+  'value' => $value['start'] ?? ''
 ]);
 
 $endAttributes = array_merge($attributes, [
   'id' => $fieldKey . '_end',
-  'name' => $fieldKey . '_end',
-  'placeholder' => $placeholder . ' (End)',
-  'value' => $value['end'] ?? '',
-  'class' => $inputClass
+  'name' => $fieldKey . '_end', 
+  'placeholder' => $fieldConfig['placeholder_end'] ?? '',
+  'value' => $value['end'] ?? ''
 ]);
 ?>
 
-<div class="daterange-wrapper">
+<div class="<?= FormHelper::getClassName('daterange-wrapper', $config) ?>">
   <input <?= Html::attr($startAttributes) ?> />
   <input <?= Html::attr($endAttributes) ?> />
 </div>

@@ -30,6 +30,7 @@ return [
     'send_to_more_success_title_label' => 'Titre de succès',
     'send_to_more_success_text_label' => 'Texte de succès',
     'email_legal_headline_label' => 'Légal',
+    'honeypot_label' => 'Veuillez ne pas remplir (Protection contre le spam)',
 
     // Messages d'erreur imbriqués
     'error_messages' => [
@@ -56,7 +57,21 @@ return [
         'csrf_error' => 'Jeton CSRF non valide.',
         'submission_time_error' => 'Heure de soumission non valide.',
         'submission_time_warning' => 'La durée de soumission est expirée. Veuillez vérifier vos entrées et renvoyer le formulaire.',
-        'submission_time_too_fast' => 'Le formulaire a été envoyé trop rapidement. Veuillez réessayer.'
+        'submission_time_too_fast' => 'Le formulaire a été envoyé trop rapidement. Veuillez réessayer.',
+        'template_not_found' => 'La configuration de la modèle d\'email sélectionnée n\'a pas été trouvée.',
+        'config_file_not_found' => 'Fichier de configuration non trouvé: ',
+        'template_config_empty' => 'La configuration du modèle est vide.',
+        'template_fields_missing' => 'La configuration du modèle manque la clé "fields" ou ce n\'est pas un tableau.',
+        'no_template' => 'Aucune modèle d\'email sélectionné.',
+        'template_not_found' => 'La configuration du modèle d\'email sélectionnée n\'a pas été trouvée.',
+        'file_move_error' => 'Erreur lors du déplacement du fichier. Erreur PHP: ',
+        'csrf_error' => 'Token CSRF non valide.',
+        'missing_required_key' => 'Clé manquante requise "{key}" dans la configuration du modèle.',
+        'field_missing_property' => 'Propriété manquante "{property}" pour le champ "{fieldKey}" dans la configuration du modèle.',
+        'confirmation_template_not_found' => 'Modèle d\'email de confirmation non trouvé: ',
+        'time_step' => 'Veuillez sélectionner une heure dans l\'intervalle de %d minutes',
+        'time_before_min' => 'La heure doit être après %s.',
+        'time_after_max' => 'La heure doit être avant %s.'
     ],
 
     // Textes des boutons

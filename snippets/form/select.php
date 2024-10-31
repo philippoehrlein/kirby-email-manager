@@ -1,9 +1,9 @@
 <?php
-$attributes = [
+$attributes = array_merge($commonAttributes, [
   'id' => $fieldKey,
   'name' => $fieldKey,
-  'class' => $inputClass,
-];
+  'class' => $inputClass
+]);
 
 if (isset($fieldConfig['required']) && $fieldConfig['required'] === true) {
   $attributes['required'] = true;

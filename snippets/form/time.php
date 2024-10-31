@@ -1,15 +1,14 @@
 <?php
-$defaultPattern = '^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$';
-
 $attributes = array_merge($commonAttributes, [
-  'type' => 'tel',
+  'type' => 'time',
   'id' => $fieldKey,
   'name' => $fieldKey,
   'class' => $inputClass,
   'value' => $value,
-  'placeholder' => $placeholder,
   'required' => $fieldConfig['required'] ?? false,
-  'pattern' => $fieldConfig['pattern'] ?? $defaultPattern,
+  'min' => $fieldConfig['min'] ?? null,
+  'max' => $fieldConfig['max'] ?? null,
+  'step' => $fieldConfig['step'] ?? null,
 ]);
 ?>
 

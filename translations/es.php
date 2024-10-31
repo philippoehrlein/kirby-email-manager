@@ -30,6 +30,7 @@ return [
     'send_to_more_success_title_label' => 'Título de éxito',
     'send_to_more_success_text_label' => 'Texto de éxito',
     'email_legal_headline_label' => 'Legal',
+    'honeypot_label' => 'Por favor, no complete (Protección contra spam)',
 
     // Mensajes de error anidados
     'error_messages' => [
@@ -56,7 +57,21 @@ return [
         'csrf_error' => 'Token CSRF no válido.',
         'submission_time_error' => 'Tiempo de envío no válido.',
         'submission_time_warning' => 'El tiempo de envío es caducado. Por favor, compruebe su entrada y envíe el formulario de nuevo.',
-        'submission_time_too_fast' => 'El formulario se envió demasiado rápido. Por favor, inténtelo de nuevo.'
+        'submission_time_too_fast' => 'El formulario se envió demasiado rápido. Por favor, inténtelo de nuevo.',
+        'template_not_found' => 'La configuración de la plantilla de correo electrónico seleccionada no se ha encontrado.',
+        'config_file_not_found' => 'Archivo de configuración no encontrado: ',
+        'template_config_empty' => 'La configuración de la plantilla está vacía.',
+        'template_fields_missing' => 'La configuración de la plantilla falta el "fields" key o no es un array.',
+        'no_template' => 'No se ha seleccionado ninguna plantilla de correo electrónico.',
+        'template_not_found' => 'La configuración de la plantilla de correo electrónico seleccionada no se ha encontrado.',
+        'file_move_error' => 'Error al mover el archivo. Error de PHP: ',
+        'csrf_error' => 'Token CSRF no válido.',
+        'missing_required_key' => 'Falta el clave requerida "{key}" en la configuración de la plantilla.',
+        'field_missing_property' => 'Falta la propiedad "{property}" para el campo "{fieldKey}" en la configuración de la plantilla.',
+        'confirmation_template_not_found' => 'Plantilla de correo electrónico de confirmación no encontrada: ',
+        'time_step' => 'Por favor, seleccione una hora en el intervalo de %d minutos',
+        'time_before_min' => 'La hora debe ser después de %s.',
+        'time_after_max' => 'La hora debe ser antes de %s.'
     ],
 
     // Textos de los botones

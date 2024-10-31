@@ -30,6 +30,7 @@ return [
     'send_to_more_success_title_label' => 'Titolo di successo',
     'send_to_more_success_text_label' => 'Testo di successo',
     'email_legal_headline_label' => 'Legale',
+    'honeypot_label' => 'Per favore, non compilare (Protezione da spam)',
 
     // Messaggi di errore annidati
     'error_messages' => [
@@ -56,7 +57,21 @@ return [
         'csrf_error' => 'Token CSRF non valido.',
         'submission_time_error' => 'Tempo di invio non valido.',
         'submission_time_warning' => 'Il tempo di invio è scaduto. Per favore, controlla i tuoi input e invia il modulo di nuovo.',
-        'submission_time_too_fast' => 'Il modulo è stato inviato troppo rapidamente. Per favore, riprova.'
+        'submission_time_too_fast' => 'Il modulo è stato inviato troppo rapidamente. Per favore, riprova.',
+        'template_not_found' => 'La configurazione del modello di email selezionato non è stata trovata.',
+        'config_file_not_found' => 'File di configurazione non trovato: ',
+        'template_config_empty' => 'La configurazione del modello è vuota.',
+        'template_fields_missing' => 'La configurazione del modello manca la chiave "fields" o non è un array.',
+        'no_template' => 'Nessun modello di email selezionato.',
+        'template_not_found' => 'La configurazione del modello di email selezionato non è stata trovata.',
+        'file_move_error' => 'Errore durante il movimento del file. Errore PHP: ',
+        'csrf_error' => 'Token CSRF non valido.',
+        'missing_required_key' => 'Chiave richiesta mancante "{key}" nella configurazione del modello.',
+        'field_missing_property' => 'Proprietà mancante "{property}" per il campo "{fieldKey}" nella configurazione del modello.',
+        'confirmation_template_not_found' => 'Modello di email di conferma non trovato: ',
+        'time_step' => 'Seleziona un orario nell\'intervallo di %d minuti',
+        'time_before_min' => 'L\'orario deve essere dopo le %s.',
+        'time_after_max' => 'L\'orario deve essere prima delle %s.'
     ],
 
     // Testi dei pulsanti

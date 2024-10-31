@@ -1,18 +1,19 @@
 <?php
 namespace KirbyEmailManager\PageMethods;
 
+use KirbyEmailManager\Helpers\LanguageHelper;
+use KirbyEmailManager\Helpers\EmailHelper;
 use Kirby\Data\Data;
+use Exception;
+
 use Kirby\Toolkit\V;
 use Kirby\Filesystem\F;
 
-use Kirby\Exception\Exception;
-use KirbyEmailManager\Helpers\EmailHelper;
 use KirbyEmailManager\Helpers\ExceptionHelper;
 use KirbyEmailManager\Helpers\ValidationHelper;
 use KirbyEmailManager\Helpers\LogHelper;
 use KirbyEmailManager\Helpers\ConfigHelper;
 use KirbyEmailManager\Helpers\SuccessMessageHelper;
-use KirbyEmailManager\PageMethods\ContentWrapper;
 
 
 /**
@@ -39,12 +40,12 @@ class FormHandler
         $this->kirby = $kirby;
         $this->page = $page;
         $this->contentWrapper = $contentWrapper;
-        $this->languageCode = $kirby->language()->code() ?? 'en';
+        $this->languageCode = LanguageHelper::getCurrentLanguageCode();
         
-        // Lade das Template-Konfiguration
+        // Load template configuration
         $this->loadTemplateConfig();
         
-        // // Lade die Übersetzungen
+        // Load translations
         $this->loadTranslations();
     }
     
@@ -58,23 +59,23 @@ class FormHandler
         $selectedTemplateId = $this->contentWrapper->email_templates()->value();
         
         if (empty($selectedTemplateId)) {
-            throw new Exception('No email template selected.');
+            throw new Exception(t('error_messages.no_template', 'No email template selected.'));
         }
 
         $templates = $this->kirby->option('philippoehrlein.kirby-email-manager.templates');
         $this->templateConfig = $templates[$selectedTemplateId] ?? [];
 
         if (empty($this->templateConfig)) {
-            throw new Exception('Selected email template configuration not found in FormHandler.');
+            throw new Exception(t('error_messages.template_not_found', 'Selected email template configuration not found.'));
         }
 
         $configPath = $this->kirby->root('site') . '/templates/emails/' . $selectedTemplateId . '/config.yml';
         if (!file_exists($configPath)) {
-            throw new Exception('Konfigurations-Datei nicht gefunden: ' . $configPath);
+            throw new Exception(t('error_messages.config_file_not_found', 'Configuration file not found: ') . $configPath);
         }
         $this->templateConfig = Data::read($configPath);
 
-        // Fügen Sie den Template-Pfad zur Konfiguration hinzu
+        // Add template path to configuration
         $this->templateConfig['template_path'] = 'emails/' . $selectedTemplateId;
 
         ConfigHelper::validateTemplateConfig($this->templateConfig);
@@ -126,7 +127,7 @@ class FormHandler
                         if (move_uploaded_file($tmpName, $targetPath)) {
                             $attachments[] = $targetPath;
                         } else {
-                            error_log('Fehler beim Verschieben der Datei. PHP-Fehler: ' . error_get_last()['message']);
+                            error_log(t('error_messages.file_move_error', 'Error moving file. PHP error: ') . error_get_last()['message']);
                         }
                     }
                 }
@@ -134,8 +135,8 @@ class FormHandler
 
             
             if (csrf(get('csrf')) !== true) {
-                LogHelper::logError('CSRF-Token-Fehler: ' . $data['csrf']);
-                throw new Exception($this->translations['error_messages']['csrf_error'] ?? 'Invalid CSRF token.');
+                LogHelper::logError(t('error_messages.csrf_error', 'Invalid CSRF token.'));
+                throw new Exception(t('error_messages.csrf_error', 'Invalid CSRF token.'));
             }
     
             $submissionTime = (int)($data['timestamp'] ?? 0);
@@ -147,14 +148,14 @@ class FormHandler
 
             if ($timeDifference < $minTime) { 
                 $alert['type'] = 'warning';
-                $alert['message'] = $this->translations['error_messages']['submission_time_too_fast'] ?? 'Das Formular wurde zu schnell übermittelt. Bitte versuchen Sie es erneut.';
+                $alert['message'] = $this->translations['error_messages']['submission_time_too_fast'] ?? 'Form was submitted too quickly. Please try again.';
                 return [
                     'alert' => $alert,
                     'data' => $data
                 ];
             } elseif ($timeDifference > $maxTime) {
                 $alert['type'] = 'warning';
-                $alert['message'] = $this->translations['error_messages']['submission_time_warning'] ?? 'Die Übermittlungszeit ist abgelaufen. Bitte überprüfen Sie Ihre Eingaben und senden Sie das Formular erneut.';
+                $alert['message'] = $this->translations['error_messages']['submission_time_warning'] ?? 'Submission time has expired. Please check your inputs and submit the form again.';
                 return [
                     'alert' => $alert,
                     'data' => $data
@@ -164,7 +165,7 @@ class FormHandler
             try {
                 $errors = [];
                 $emailContent = [];
-                $subject = $this->translations['default_subject'] ?? 'Kontaktformular';
+                $subject = $this->translations['default_subject'] ?? 'Contact form';
 
                 foreach ($this->templateConfig['fields'] as $fieldKey => $fieldConfig) {
                     if ($fieldConfig['type'] === 'file') {
@@ -176,9 +177,10 @@ class FormHandler
                         $errors = array_merge($errors, $fieldErrors);
                     }
 
-                    $emailContent[$fieldConfig['label'][$this->languageCode]] = is_array($data[$fieldKey]) 
-                    ? implode(', ', array_map('htmlspecialchars', $data[$fieldKey])) 
-                    : htmlspecialchars($data[$fieldKey] ?? $this->translations['not_specified']);
+                    $label = LanguageHelper::getTranslatedValue($fieldConfig, 'label', $fieldKey);
+                    $emailContent[$label] = is_array($data[$fieldKey]) 
+                        ? implode(', ', array_map('htmlspecialchars', $data[$fieldKey])) 
+                        : htmlspecialchars($data[$fieldKey] ?? $this->translations['not_specified']);
 
                     
                 }
@@ -196,7 +198,7 @@ class FormHandler
                         
                         EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $emailContent, $data, $this->languageCode, $attachments);
                         
-                        // Sende die Bestätigungsmail, falls konfiguriert
+                        // Send confirmation email if configured
                         if ($this->contentWrapper->send_confirmation_email()->toBool()) {
                             EmailHelper::sendConfirmationEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $data, $this->languageCode);
                         }

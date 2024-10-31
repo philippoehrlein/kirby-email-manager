@@ -1,12 +1,12 @@
 <?php
-$attributes = [
+$attributes = array_merge($commonAttributes, [
   'id' => $fieldKey,
   'name' => $fieldKey,
   'class' => $inputClass,
   'placeholder' => $placeholder,
   'required' => $fieldConfig['required'] ?? false,
-  'rows' => $fieldConfig['rows'] ?? 6
-];
+  'rows' => $fieldConfig['rows'] ?? 6,
+]);
 
 $resizeStyle = $fieldConfig['resizable'] ?? 'none';
 $attributes['style'] = "resize: $resizeStyle;";

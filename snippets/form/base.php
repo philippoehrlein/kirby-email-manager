@@ -1,7 +1,7 @@
 <?php
 use KirbyEmailManager\Helpers\FormHelper;
+use KirbyEmailManager\Helpers\FieldAttributeHelper;
 
-// Annahme: $config wird von form-builder.php übergeben
 $config = $config ?? [];
 
 $fieldClass = FormHelper::getClassName('field', $config, $fieldConfig['type']);
@@ -25,6 +25,15 @@ $spanStyle = FormHelper::generateSpanStyles($span);
 $isRequired = $fieldConfig['required'] ?? false;
 $requiredClass = $isRequired ? 'is-required' : '';
 
+$commonAttributes = [];
+if(isset($fieldConfig['title'])) {
+  $commonAttributes['title'] = $fieldConfig['title'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
+}
+
+if(isset($fieldConfig['aria-label'])) {
+  $commonAttributes['aria-label'] = $fieldConfig['aria-label'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
+}
+
 ?>
 
 <div class="<?= $fieldClass ?>" style="<?= $spanStyle ?>">
@@ -37,7 +46,9 @@ $requiredClass = $isRequired ? 'is-required' : '';
     'value' => $value,
     'placeholder' => $placeholder,
     'languageCode' => $languageCode,
-    'inputClass' => $inputClass
+    'inputClass' => $inputClass,
+    'config' => $config,
+    'commonAttributes' => $commonAttributes
   ]); ?>
 
   <?php if (isset($fieldConfig['helper_text'][$languageCode])): ?>

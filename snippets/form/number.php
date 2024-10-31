@@ -1,13 +1,13 @@
 <?php
-$attributes = [
+$attributes = array_merge($commonAttributes, [
   'type' => $type,
   'id' => $fieldKey,
   'name' => $fieldKey,
   'class' => $inputClass,
   'value' => $value,
   'placeholder' => $placeholder,
-  'required' => $fieldConfig['required'] ?? false
-];
+  'required' => $fieldConfig['required'] ?? false,
+]);
 
 if (isset($fieldConfig['min'])) {
   $attributes['min'] = $fieldConfig['min'];

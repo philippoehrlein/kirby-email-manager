@@ -1,12 +1,12 @@
 <?php
-$attributes = [
+$attributes = array_merge($commonAttributes, [
   'type' => $type,
   'id' => $fieldKey,
   'name' => $fieldKey,
   'class' => $inputClass,
   'placeholder' => $placeholder,
-  'required' => $fieldConfig['required'] ?? false
-];
+  'required' => $fieldConfig['required'] ?? false,
+]);
 
 if (!empty($fieldConfig['validate'])) {
   if (strpos($fieldConfig['validate'], 'minLength:') === 0) {

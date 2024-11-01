@@ -31,6 +31,7 @@ return [
   'send_to_more_success_text_label' => 'Success Text',
   'email_legal_headline_label' => 'Legal',
   'honeypot_label' => 'Please do not fill in (Spam protection)',
+  'not_specified' => 'Not specified',
 
   // Nested error messages
   'error_messages' => [

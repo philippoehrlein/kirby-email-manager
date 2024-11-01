@@ -34,6 +34,15 @@ if(isset($fieldConfig['aria-label'])) {
   $commonAttributes['aria-label'] = $fieldConfig['aria-label'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
 }
 
+$attributes = FieldAttributeHelper::getFieldAttributes(
+  $fieldConfig['type'],
+  FieldAttributeHelper::getBaseAttributes($fieldKey, $fieldConfig, $inputClass, $commonAttributes),
+  $fieldConfig,
+  $value,
+  $placeholder,
+  $languageCode
+);
+
 ?>
 
 <div class="<?= $fieldClass ?>" style="<?= $spanStyle ?>">
@@ -41,14 +50,10 @@ if(isset($fieldConfig['aria-label'])) {
     <?= $fieldConfig['label'][$languageCode] ?>
   </label>
   <?php snippet('email-manager/form/' . $fieldConfig['type'], [
-    'fieldKey' => $fieldKey,
+    'attributes' => $attributes,
     'fieldConfig' => $fieldConfig,
-    'value' => $value,
-    'placeholder' => $placeholder,
     'languageCode' => $languageCode,
-    'inputClass' => $inputClass,
-    'config' => $config,
-    'commonAttributes' => $commonAttributes
+    'config' => $config
   ]); ?>
 
   <?php if (isset($fieldConfig['helper_text'][$languageCode])): ?>

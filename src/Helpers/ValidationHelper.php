@@ -40,28 +40,70 @@ class ValidationHelper {
                 break;
         
             case 'date':
-                $errors = array_merge($errors, self::validateRequired($fieldKey, $fieldConfig, $data, $translations, $languageCode));
-                $dateValue = $data[$fieldKey] ?? null;
-        
-                // Date format check
-                if (!empty($dateValue) && !v::date($dateValue, 'Y-m-d')) {
-                    $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
-                        ?? $translations['error_messages']['invalid_date'];
-                }
-        
-                // Min/Max date validation
-                if (!empty($fieldConfig['min']) && $dateValue < $fieldConfig['min']) {
-                    $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
-                        ?? $translations['error_messages']['min_date'] 
-                        ?? 'Date is earlier than allowed.';
-                }
-        
-                if (!empty($fieldConfig['max']) && $dateValue > $fieldConfig['max']) {
-                    $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
-                        ?? $translations['error_messages']['max_date'] 
-                        ?? 'Date is later than allowed.';
+                error_log("Validierung für Datum '$fieldKey'");
+            
+                // Eingabewert für das Datum
+                $dateValue = $data[$fieldKey] ?? null; 
+                error_log("Eingabewert für 'date': " . ($dateValue !== null ? $dateValue : 'null'));
+            
+                // Berechne die Min- und Max-Daten basierend auf der Konfiguration
+                $minDateConfig = $fieldConfig['min'] ?? null; // Min aus der Konfiguration
+                $maxDateConfig = $fieldConfig['max'] ?? null; // Max aus der Konfiguration
+            
+                // Tatsächliche Min- und Max-Daten berechnen, wenn sie angegeben sind
+                $minDate = null;
+                if ($minDateConfig) {
+                    if (preg_match('/^([+-]?\d+)(months?|days?)$/', $minDateConfig, $matches)) {
+                        $num = (int)$matches[1];
+                        $unit = $matches[2];
+                        $minDate = date('Y-m-d', strtotime("$num $unit"));
+                    } elseif ($minDateConfig === 'today') {
+                        $minDate = date('Y-m-d');
                     }
-                    break;
+                }
+            
+                $maxDate = null;
+                if ($maxDateConfig) {
+                    if (preg_match('/^([+-]?\d+)(months?|days?)$/', $maxDateConfig, $matches)) {
+                        $num = (int)$matches[1];
+                        $unit = $matches[2];
+                        $maxDate = date('Y-m-d', strtotime("$num $unit"));
+                    } elseif ($maxDateConfig === 'today') {
+                        $maxDate = date('Y-m-d');
+                    }
+                }
+            
+                // Überprüfung der Min- und Max-Daten
+                error_log("Min-Datum: " . ($minDate ?? 'nicht angegeben'));
+                error_log("Max-Datum: " . ($maxDate ?? 'nicht angegeben'));
+            
+                // Validierung des Eingabewertes
+                if ($dateValue !== null) {
+                    // Prüfen des Datumsformats
+                    if (!v::date($dateValue)) {
+                        $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
+                            ?? $translations['error_messages']['invalid_date'];
+                        error_log("Ungültiges Datum: $dateValue");
+                    } else {
+                        error_log("Validierung für Datum '$fieldKey': Eingabewert = $dateValue, Min = $minDate, Max = $maxDate");
+            
+                        // Min/Max-Validierung, nur durchführen, wenn min oder max definiert sind
+                        if ($minDate && $dateValue < $minDate) {
+                            $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
+                                ?? $translations['error_messages']['min_date'] 
+                                ?? 'Datum liegt vor dem zulässigen Bereich.';
+                            error_log("Fehler: Datum liegt vor dem zulässigen Bereich. Eingabewert: $dateValue");
+                        }
+            
+                        if ($maxDate && $dateValue > $maxDate) {
+                            $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] 
+                                ?? $translations['error_messages']['max_date'] 
+                                ?? 'Datum liegt nach dem zulässigen Bereich.';
+                            error_log("Fehler: Datum liegt nach dem zulässigen Bereich. Eingabewert: $dateValue");
+                        }
+                    }
+                }
+                break;
         
             case 'select':
                 $errors = array_merge($errors, self::validateRequired($fieldKey, $fieldConfig, $data, $translations, $languageCode));

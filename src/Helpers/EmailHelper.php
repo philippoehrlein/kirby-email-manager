@@ -2,6 +2,9 @@
 namespace KirbyEmailManager\Helpers;
 use KirbyEmailManager\Helpers\UrlHelper;
 use KirbyEmailManager\Helpers\LanguageHelper;
+use Kirby\Cms\Field;
+use KirbyEmailManager\EmailTemplate;
+
 /**
  * Helper class for email-related operations.
  * Author: Philipp Oehrlein
@@ -37,21 +40,28 @@ class EmailHelper {
         $formSenderName = self::getFormSender($templateConfig, $languageCode);
         $formSenderEmail = self::createNoReplyEmail($kirby);
 
+        $footerContent = null;
+        if ($contentWrapper && method_exists($contentWrapper, 'email_legal_footer')) {
+            $footer = $contentWrapper->email_legal_footer();
+            if ($footer && $footer->exists() && $footer->isNotEmpty()) {
+                $footerContent = UrlHelper::convertLinksToAbsolute($footer->kt()->value(), $kirby);
+            }
+        }
+
+        $emailTemplate = new EmailTemplate($page, $data, $selectedTemplate);
+
         try {
             $kirby->email([
-                'template' => $templatePath, 
+                'template' => $templatePath,
                 'from'     => [$formSenderEmail => $formSenderName],
                 'replyTo'  => $senderEmail,
                 'to'       => $to,
                 'subject'  => $subject,
                 'attachments' => $attachments,
                 'data'     => [
-                    'formData' => $data,
-                    'kirby'   => $kirby,
-                    'site'    => $kirby->site(),
-                    'page'    => $page,
-                    'config'  => $templateConfig,
-                    'languageCode' => $preferredLanguage
+                    'email' => $emailTemplate->content(),
+                    'form' => $emailTemplate->form(),
+                    'languageCode' => $languageCode
                 ]
             ]);
         } catch (Exception $e) {
@@ -80,13 +90,9 @@ class EmailHelper {
                 'to'       => $data['email'],
                 'subject'  => $confirmationSubject,
                 'data'     => [
-                    'formData' => $data,
-                    'kirby'   => $kirby,
-                    'site'    => $kirby->site(),
-                    'page'    => $page,
-                    'config'  => $templateConfig,
-                    'languageCode' => $languageCode,
-                    'footer' => $footerContent
+                    'email' => $emailTemplate->content(),
+                    'form' => $emailTemplate->form(),
+                    'languageCode' => $languageCode
                 ]
             ]);
         }
@@ -124,31 +130,29 @@ class EmailHelper {
      * @return string The email subject.
      */
     public static function getEmailSubject($contentWrapper, $data, $templateConfig) {
+        $languageCode = LanguageHelper::getCurrentLanguageCode();
+        
+        // Wenn send_to_more aktiviert ist und ein Thema ausgewählt wurde
         if ($contentWrapper->send_to_more()->toBool() && isset($data['topic'])) {
-            $subject = LanguageHelper::getTranslatedValue(
-                $templateConfig['email_subject'], 
-                'topic', 
-                'Contact form message: :topic'
-            );
-        } else {
-            $subject = LanguageHelper::getTranslatedValue(
-                $templateConfig['email_subject'], 
-                'default', 
-                'Contact form message'
-            );
-        }
-    
-        $replacements = [
-            ':topic' => $data['topic'] ?? '',
-            ':langCode' => strtoupper(LanguageHelper::getCurrentLanguageCode())
-        ];
-    
-        foreach ($replacements as $placeholder => $value) {
-            if (strpos($subject, $placeholder) !== false) {
-                $subject = str_replace($placeholder, $value, $subject);
+            // Benutze die topic_subject Übersetzung mit dem ausgewählten Thema
+            $translations = require kirby()->root('plugins') . '/kirby-email-manager/translations/' . $languageCode . '.php';
+            $subject = $translations['topic_subject'];
+            
+            // Hole das übersetzte Topic-Label
+            if (isset($templateConfig['fields']['topic']['options'][$data['topic']])) {
+                $topicLabel = LanguageHelper::getTranslatedValue(
+                    $templateConfig['fields']['topic']['options'][$data['topic']], 
+                    null,
+                    $languageCode
+                );
+                $subject = str_replace(':topic', $topicLabel, $subject);
             }
+        } else {
+            // Standard E-Mail-Betreff aus den Übersetzungen
+            $translations = require kirby()->root('plugins') . '/kirby-email-manager/translations/' . $languageCode . '.php';
+            $subject = $translations['email_subject'];
         }
-    
+
         return $subject;
     }
 

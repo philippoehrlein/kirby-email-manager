@@ -165,7 +165,28 @@ class FormHandler
             try {
                 $errors = [];
                 $emailContent = [];
-                $subject = $this->translations['default_subject'] ?? 'Contact form';
+                $subject = LanguageHelper::getTranslatedValue(
+                    $this->templateConfig['emails']['subject']['default'] ?? [], 
+                    null, 
+                    $this->languageCode
+                ) ?? $this->translations['email_subject'];
+
+                if (isset($data['topic'])) {
+                    $topicSubject = LanguageHelper::getTranslatedValue(
+                        $this->templateConfig['emails']['subject']['topic'] ?? [], 
+                        null, 
+                        $this->languageCode
+                    ) ?? $this->translations['topic_subject'];
+                    
+                    if ($topicSubject) {
+                        $topicLabel = LanguageHelper::getTranslatedValue(
+                            $this->templateConfig['fields']['topic']['options'][$data['topic']], 
+                            null, 
+                            $this->languageCode
+                        );
+                        $subject = str_replace(':topic', $topicLabel, $topicSubject);
+                    }
+                }
 
                 foreach ($this->templateConfig['fields'] as $fieldKey => $fieldConfig) {
                     if ($fieldConfig['type'] === 'file') {
@@ -178,9 +199,18 @@ class FormHandler
                     }
 
                     $label = LanguageHelper::getTranslatedValue($fieldConfig, 'label', $fieldKey);
-                    $emailContent[$label] = is_array($data[$fieldKey]) 
-                        ? implode(', ', array_map('htmlspecialchars', $data[$fieldKey])) 
-                        : htmlspecialchars($data[$fieldKey] ?? $this->translations['not_specified']);
+                    $emailContent[$label] = match(true) {
+                        $fieldConfig['type'] === 'date-range' && isset($data[$fieldKey]) && is_array($data[$fieldKey]) => 
+                            sprintf(
+                                '%s - %s',
+                                htmlspecialchars($data[$fieldKey]['start'] ?? $this->translations['not_specified']),
+                                htmlspecialchars($data[$fieldKey]['end'] ?? $this->translations['not_specified'])
+                            ),
+                        isset($data[$fieldKey]) && is_array($data[$fieldKey]) => 
+                            implode(', ', array_map('htmlspecialchars', $data[$fieldKey])),
+                        default => 
+                            htmlspecialchars($data[$fieldKey] ?? $this->translations['not_specified'])
+                    };
 
                     
                 }
@@ -196,7 +226,7 @@ class FormHandler
                 } else {
                     try {
                         
-                        EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $emailContent, $data, $this->languageCode, $attachments);
+                        EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $emailContent, $data, $this->languageCode, $attachments, $subject);
                         
                         // Send confirmation email if configured
                         if ($this->contentWrapper->send_confirmation_email()->toBool()) {

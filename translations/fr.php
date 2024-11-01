@@ -31,6 +31,8 @@ return [
     'send_to_more_success_text_label' => 'Texte de succès',
     'email_legal_headline_label' => 'Légal',
     'honeypot_label' => 'Veuillez ne pas remplir (Protection contre le spam)',
+    'not_specified' => 'Non spécifié',
+
 
     // Messages d'erreur imbriqués
     'error_messages' => [
@@ -71,7 +73,7 @@ return [
         'confirmation_template_not_found' => 'Modèle d\'email de confirmation non trouvé: ',
         'time_step' => 'Veuillez sélectionner une heure dans l\'intervalle de %d minutes',
         'time_before_min' => 'La heure doit être après %s.',
-        'time_after_max' => 'La heure doit être avant %s.'
+        'time_after_max' => 'La heure doit être avant %s.',
     ],
 
     // Textes des boutons

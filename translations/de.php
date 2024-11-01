@@ -31,6 +31,7 @@ return [
     'send_to_more_success_text_label' => 'Erfolgstext',
     'email_legal_headline_label' => 'Rechtliches',
     'honeypot_label' => 'Bitte nicht ausfüllen (Spamschutz)',
+    'not_specified' => 'Nicht angegeben',
 
     // Nested error messages
     'error_messages' => [

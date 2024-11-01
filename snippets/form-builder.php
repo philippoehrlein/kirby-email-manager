@@ -115,7 +115,10 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
   <div class="<?= FormHelper::getClassName('grid', $config) ?>">
   <?php foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig): ?>
     <?php
-    $value = SecurityHelper::escapeHtml($data[$fieldKey] ?? '');
+    $rawValue = $data[$fieldKey] ?? '';
+    $value = is_array($rawValue) 
+      ? array_map([SecurityHelper::class, 'escapeHtml'], $rawValue)
+      : SecurityHelper::escapeHtml($rawValue);
     
     snippet('email-manager/form/base', [
         'fieldKey' => $fieldKey,

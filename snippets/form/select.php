@@ -1,20 +1,5 @@
-<?php
-$attributes = array_merge($commonAttributes, [
-  'id' => $fieldKey,
-  'name' => $fieldKey,
-  'class' => $inputClass
-]);
-
-if (isset($fieldConfig['required']) && $fieldConfig['required'] === true) {
-  $attributes['required'] = true;
-}
-
-$isRequired = isset($fieldConfig['required']) && $fieldConfig['required'] === true;
-
-?>
-
 <select <?= Html::attr($attributes) ?>>
-  <?php if (!$isRequired): ?>
+  <?php if (!$fieldConfig['required']): ?>
     <option value=""></option>
   <?php endif; ?>
 

@@ -10,12 +10,12 @@ class SecurityHelper
      * @param string $input The input string to escape.
      * @return string The escaped string.
      */
-    public static function escapeHtml($input)
+    public static function escapeHtml($string): string 
     {
-        if($input === null) {
-            return '';
+        if (is_string($string)) {
+            return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
         }
-        return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+        return '';
     }
 
     /**

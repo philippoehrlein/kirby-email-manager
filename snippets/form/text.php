@@ -1,1 +1,1 @@
-<input <?= Html::attr($attributes) ?> />
+<input type="text" <?= $field->attr() ?>>

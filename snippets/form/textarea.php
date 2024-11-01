@@ -1,1 +1,1 @@
-<textarea <?= Html::attr($attributes) ?>><?= $attributes['value'] ?? '' ?></textarea>
+<textarea <?= $field->attr() ?>><?= $field->value() ?></textarea>

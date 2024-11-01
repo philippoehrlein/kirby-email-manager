@@ -1,1 +1,1 @@
-<input <?= Html::attr($attributes) ?> />
+<input type="date" <?= $field->attr() ?>>

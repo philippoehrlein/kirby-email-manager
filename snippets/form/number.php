@@ -1,1 +1,1 @@
-<input <?= Html::attr($attributes) ?> />
+<input type="tel" <?= $field->attr() ?>>

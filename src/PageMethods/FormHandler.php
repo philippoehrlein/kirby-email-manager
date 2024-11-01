@@ -118,16 +118,29 @@ class FormHandler
             $attachments = [];
             foreach ($uploads as $fieldName => $uploadField) {
                 foreach ($uploadField as $upload) {
-                    if ($upload['error'] === UPLOAD_ERR_OK) {
-                        $tmpName = $upload['tmp_name'];
-                        $originalName = $upload['name'];
-                        $safeFileName = F::safeName($originalName);
-                        $targetPath = $tmpName . '_' . $safeFileName;
+                    if (isset($_FILES['attachment'])) {
+                        $upload = $_FILES['attachment'];
+                        
+                        // Prüfen ob es ein Array ist und einen error-Index hat
+                        if (is_array($upload) && isset($upload['error'])) {
+                            if ($upload['error'] === UPLOAD_ERR_OK) {
+                                $tmpName = $upload['tmp_name'];
+                                $originalName = $upload['name'];
+                                $safeFileName = F::safeName($originalName);
+                                $targetPath = $tmpName . '_' . $safeFileName;
 
-                        if (move_uploaded_file($tmpName, $targetPath)) {
-                            $attachments[] = $targetPath;
-                        } else {
-                            error_log(t('error_messages.file_move_error', 'Error moving file. PHP error: ') . error_get_last()['message']);
+                                if (move_uploaded_file($tmpName, $targetPath)) {
+                                    $attachments[] = $targetPath;
+                                } else {
+                                    error_log(t('error_messages.file_move_error', 'Error moving file. PHP error: ') . error_get_last()['message']);
+                                }
+                            } elseif ($upload['error'] !== UPLOAD_ERR_NO_FILE) {
+                                // Andere Upload-Fehler behandeln
+                                $errors['attachment'] = match($upload['error']) {
+                                    UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => $this->translations['error_messages']['file_too_large'],
+                                    default => $this->translations['error_messages']['file_upload_error']
+                                };
+                            }
                         }
                     }
                 }

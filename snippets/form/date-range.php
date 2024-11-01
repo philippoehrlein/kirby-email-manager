@@ -1,6 +1,4 @@
-<?php use KirbyEmailManager\Helpers\FormHelper; ?>
-
-<div class="<?= FormHelper::getClassName('daterange-wrapper', $config) ?>">
-  <input <?= Html::attr($attributes['start']) ?> />
-  <input <?= Html::attr($attributes['end']) ?> />
+<div class="<?= $field->className() ?>">
+    <input type="date" <?= $field->attr() ?> name="<?= $field->name() ?>[start]" value="<?= $field->value('start') ?>" />
+    <input type="date" <?= $field->attr() ?> name="<?= $field->name() ?>[end]" value="<?= $field->value('end') ?>" />
 </div>

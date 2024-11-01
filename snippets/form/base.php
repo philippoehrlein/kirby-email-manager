@@ -1,68 +1,68 @@
 <?php
 use KirbyEmailManager\Helpers\FormHelper;
-use KirbyEmailManager\Helpers\FieldAttributeHelper;
+use KirbyEmailManager\Helpers\FieldHelper;
 
 $config = $config ?? [];
 
-$fieldClass = FormHelper::getClassName('field', $config, $fieldConfig['type']);
-$labelClass = FormHelper::getClassName('label', $config);
-$inputClass = FormHelper::getClassName('input', $config);
+// Set up CSS classes based on configuration
+$fieldClass = FieldHelper::getFieldClassName('field', $config, $fieldConfig['type']);
+$labelClass = FieldHelper::getFieldClassName('label', $config);
+$inputClass = FieldHelper::getFieldClassName('input', $config);
 
-$inputClass = FormHelper::getClassName('input', $config);
-
-if ($fieldConfig['type'] === 'text' || $fieldConfig['type'] === 'email' || $fieldConfig['type'] === 'tel') {
-    $inputClass .= ' ' . FormHelper::getClassName('input', $config, $fieldConfig['type']);
-} elseif ($fieldConfig['type'] === 'select' || $fieldConfig['type'] === 'textarea') {
-    $inputClass = FormHelper::getClassName($fieldConfig['type'], $config);
-}
-if ($fieldConfig['type'] === 'textarea') {
-    $inputClass .= ' ' . FormHelper::getClassName('input', $config);
+// Spezifische Klassen für Textfelder hinzufügen
+if (in_array($fieldConfig['type'], ['text', 'email', 'tel'])) {
+    $inputClass .= ' ' . FieldHelper::getFieldClassName('input', $config, $fieldConfig['type']);
+} elseif (in_array($fieldConfig['type'], ['select', 'textarea'])) {
+    $inputClass = FieldHelper::getFieldClassName($fieldConfig['type'], $config);
 }
 
+// Layout und Span-Styles definieren
 $span = FormHelper::getResponsiveSpan($fieldConfig['width'] ?? '1/1');
 $spanStyle = FormHelper::generateSpanStyles($span);
 
+// Pflichtfeld-Klasse hinzufügen
 $isRequired = $fieldConfig['required'] ?? false;
 $requiredClass = $isRequired ? 'is-required' : '';
 
+// Zusätzliche Attribute vorbereiten
 $commonAttributes = [];
-if(isset($fieldConfig['title'])) {
-  $commonAttributes['title'] = $fieldConfig['title'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
+if (isset($fieldConfig['title'])) {
+    $commonAttributes['title'] = $fieldConfig['title'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
+}
+if (isset($fieldConfig['aria-label'])) {
+    $commonAttributes['aria-label'] = $fieldConfig['aria-label'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
 }
 
-if(isset($fieldConfig['aria-label'])) {
-  $commonAttributes['aria-label'] = $fieldConfig['aria-label'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
-}
-
-$attributes = FieldAttributeHelper::getFieldAttributes(
-  $fieldConfig['type'],
-  FieldAttributeHelper::getBaseAttributes($fieldKey, $fieldConfig, $inputClass, $commonAttributes),
-  $fieldConfig,
-  $value,
-  $placeholder,
-  $languageCode
+// Attribute generieren
+$attributes = FieldHelper::prepareFieldAttributes(
+    $fieldConfig,
+    $fieldKey,
+    $inputClass,
+    $value,
+    $placeholder,
+    $languageCode,
+    $commonAttributes
 );
-
 ?>
 
 <div class="<?= $fieldClass ?>" style="<?= $spanStyle ?>">
   <label for="<?= $fieldKey ?>" class="<?= $labelClass . ' ' . $requiredClass ?>">
     <?= $fieldConfig['label'][$languageCode] ?>
   </label>
+
   <?php snippet('email-manager/form/' . $fieldConfig['type'], [
-    'attributes' => $attributes,
-    'fieldConfig' => $fieldConfig,
-    'languageCode' => $languageCode,
-    'config' => $config
+    'field' => $attributes,
+    'value' => $value,
+    'options' => $attributes->options ?? []
   ]); ?>
 
   <?php if (isset($fieldConfig['helper_text'][$languageCode])): ?>
-    <p class="<?= FormHelper::getClassName('helper-text', $config) ?>">
+    <p class="<?= FieldHelper::getFieldClassName('helper-text', $config) ?>">
       <?= $fieldConfig['helper_text'][$languageCode] ?>
     </p>
   <?php endif; ?>
-  
+
   <?php if (isset($error)): ?>
-    <p class="<?= FormHelper::getClassName('error', $config) ?>"><?= $error ?></p>
+    <p class="<?= FieldHelper::getFieldClassName('error', $config) ?>"><?= $error ?></p>
   <?php endif ?>
 </div>

@@ -1,14 +1,6 @@
-<?php
-use KirbyEmailManager\Helpers\FormHelper;
-
-foreach ($fieldConfig['options'] as $optionValue => $optionLabel):
-  $attributes['id'] = $attributes['id'] . '_' . $optionValue;
-  $attributes['value'] = $optionValue;
-?>
-  <div <?= FormHelper::getClassName('radio-option', $config) ?>>
-    <input <?= Html::attr($attributes) ?> tabindex="0">
-    <label for="<?= $attributes['id'] ?>">
-      <?= is_array($optionLabel) ? ($optionLabel[$languageCode] ?? $optionValue) : $optionLabel ?>
-    </label>
-  </div>
+<?php foreach ($options as $key => $label): ?>
+    <div class="radio-option">
+        <input type="radio" id="<?= $key ?>" name="<?= $field->name() ?>" value="<?= $key ?>" <?= $field->value() === $key ? 'checked' : '' ?>>
+        <label for="<?= $key ?>"><?= $label ?></label>
+    </div>
 <?php endforeach; ?>

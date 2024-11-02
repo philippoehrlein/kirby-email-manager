@@ -2,8 +2,8 @@
 namespace KirbyEmailManager\Helpers;
 use KirbyEmailManager\Helpers\UrlHelper;
 use KirbyEmailManager\Helpers\LanguageHelper;
-use Kirby\Cms\Field;
 use KirbyEmailManager\EmailTemplate;
+use Exception;
 
 /**
  * Helper class for email-related operations.
@@ -15,16 +15,16 @@ class EmailHelper {
      * Sends an email based on the provided configuration and data.
      *
      * @param \Kirby\Cms\App $kirby The Kirby application instance.
+     * @param \Kirby\Cms\ContentWrapper $contentWrapper The content wrapper instance.
      * @param \Kirby\Cms\Page $page The current page instance.
      * @param array $templateConfig The configuration for the email template.
-     * @param string $emailContent The content of the email.
      * @param array $data The form data.
-     * @param string $languageCode The language code.  
+     * @param string $languageCode The language code.
+     * @param array $attachments Array of file paths to attach to the email.
+     * @param string $subject The email subject line.
      * @throws \Exception If there's an error sending the email.
      */
-    public static function sendEmail($kirby, $contentWrapper, $page, $templateConfig, $emailContent, $data, $languageCode, $attachments) {
-        $preferredLanguage = $templateConfig['preferred_language'] ?? $languageCode;
-
+    public static function sendEmail($kirby, $contentWrapper, $page, $templateConfig, $data, $languageCode, $attachments, $subject) {
         $to = self::getReceiverEmail($contentWrapper, $data);
         $subject = self::getEmailSubject($contentWrapper, $data, $templateConfig);
         $selectedTemplate = $contentWrapper->email_templates();
@@ -34,21 +34,21 @@ class EmailHelper {
         $receiverTemplate = $templateConfig['templates']['receiver'] ?? '';
         $templatePath = $selectedTemplate . '/' . $receiverTemplate;
 
-        $senderName = self::getEmailSender($templateConfig, $languageCode);
+        $senderName = self::getEmailSender($templateConfig, $data);
         $senderEmail = self::getFromEmail($templateConfig, $data, $kirby);
 
-        $formSenderName = self::getFormSender($templateConfig, $languageCode);
+        $formSenderName = self::getFormSender($templateConfig);
         $formSenderEmail = self::createNoReplyEmail($kirby);
 
         $footerContent = null;
-        if ($contentWrapper && method_exists($contentWrapper, 'email_legal_footer')) {
+        if ($contentWrapper) {
             $footer = $contentWrapper->email_legal_footer();
-            if ($footer && $footer->exists() && $footer->isNotEmpty()) {
-                $footerContent = UrlHelper::convertLinksToAbsolute($footer->kt()->value(), $kirby);
+            if (!empty($footer)) {
+                $footerContent = UrlHelper::convertLinksToAbsolute($footer, $kirby);
             }
         }
 
-        $emailTemplate = new EmailTemplate($page, $data, $selectedTemplate);
+        $emailTemplate = new EmailTemplate($page, $data, $footerContent, $selectedTemplate);
 
         try {
             $kirby->email([
@@ -64,7 +64,9 @@ class EmailHelper {
                     'languageCode' => $languageCode
                 ]
             ]);
+            
         } catch (Exception $e) {
+            error_log('Fehler beim Senden der E-Mail: ' . $e->getMessage());
             throw $e;
         }
 
@@ -81,8 +83,7 @@ class EmailHelper {
         
             $confirmationTemplatePath = $selectedTemplate . '/' . $confirmationTemplate;
         
-            $confirmationSubject = self::getConfirmationSubject($templateConfig, $languageCode);
-            $footerContent = UrlHelper::convertLinksToAbsolute($contentWrapper->email_legal_footer()->kt()->value(), $kirby) ?? null;
+            $confirmationSubject = self::getConfirmationSubject($templateConfig);
             
             $kirby->email([
                 'template' => $confirmationTemplatePath,
@@ -121,12 +122,11 @@ class EmailHelper {
     }
 
     /**
-     * Retrieves the email subject based on the page, data, template configuration, and language code.
+     * Retrieves the email subject based on the content wrapper, form data and template configuration.
      *
-     * @param \Kirby\Cms\Page $page The current page instance.
+     * @param \Kirby\Cms\Content $contentWrapper The content wrapper instance.
      * @param array $data The form data.
      * @param array $templateConfig The configuration for the email template.
-     * @param string $languageCode The language code.
      * @return string The email subject.
      */
     public static function getEmailSubject($contentWrapper, $data, $templateConfig) {
@@ -209,13 +209,13 @@ class EmailHelper {
     }
 
     /**
-     * Retrieves the email sender name based on the template configuration and language code.
+     * Retrieves the email sender name based on the template configuration and form data.
      *
      * @param array $templateConfig The configuration for the email template.
-     * @param string $languageCode The language code.
+     * @param array $data The form data.
      * @return string The email sender name.
      */
-    public static function getEmailSender($templateConfig, $languageCode) {
+    public static function getEmailSender($templateConfig, $data) {
         foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
             if (isset($fieldConfig['is_from_name_field']) && $fieldConfig['is_from_name_field'] === true && !empty($data[$fieldKey])) {
                 return $data[$fieldKey];
@@ -230,13 +230,12 @@ class EmailHelper {
     }
 
     /**
-     * Retrieves the confirmation subject based on the template configuration and language code.
+     * Retrieves the confirmation subject based on the template configuration.
      *
      * @param array $templateConfig The configuration for the email template.
-     * @param string $languageCode The language code.
      * @return string The confirmation subject.
      */
-    public static function getConfirmationSubject($templateConfig, $languageCode) {
+    public static function getConfirmationSubject($templateConfig) {
         return LanguageHelper::getTranslatedValue(
             $templateConfig,
             'confirmation_subject',
@@ -245,13 +244,12 @@ class EmailHelper {
     }
     
     /**
-     * Retrieves the confirmation sender based on the template configuration and language code.
+     * Retrieves the confirmation sender based on the template configuration.
      *
      * @param array $templateConfig The configuration for the email template.
-     * @param string $languageCode The language code.
      * @return string The confirmation sender.
      */
-    public static function getFormSender($templateConfig, $languageCode) {
+    public static function getFormSender($templateConfig) {
         return LanguageHelper::getTranslatedValue(
             $templateConfig,
             'confirmation_sender',

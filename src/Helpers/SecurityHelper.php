@@ -2,6 +2,14 @@
 
 namespace KirbyEmailManager\Helpers;
 
+/**
+ * SecurityHelper class for managing security-related functions
+ * 
+ * This class provides methods to escape HTML, sanitize filenames, validate email addresses, and generate CSRF tokens.
+ * 
+ * @author Philipp Oehrlein
+ * @version 1.0.0
+ */
 class SecurityHelper
 {
     /**

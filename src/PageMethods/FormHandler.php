@@ -6,7 +6,6 @@ use KirbyEmailManager\Helpers\EmailHelper;
 use Kirby\Data\Data;
 use Exception;
 
-use Kirby\Toolkit\V;
 use Kirby\Filesystem\F;
 
 use KirbyEmailManager\Helpers\ExceptionHelper;
@@ -75,7 +74,6 @@ class FormHandler
         }
         $this->templateConfig = Data::read($configPath);
 
-        // Add template path to configuration
         $this->templateConfig['template_path'] = 'emails/' . $selectedTemplateId;
 
         ConfigHelper::validateTemplateConfig($this->templateConfig);
@@ -102,7 +100,7 @@ class FormHandler
         $session = $this->kirby->session();
         $data = $this->kirby->request()->data();
 
-        if (!empty($data['website'])) {
+        if (!empty($data['website_hp_'])) {
             go($this->page->url());
             exit;
         }
@@ -117,11 +115,10 @@ class FormHandler
 
             $attachments = [];
             foreach ($uploads as $fieldName => $uploadField) {
-                foreach ($uploadField as $upload) {
-                    if (isset($_FILES['attachment'])) {
-                        $upload = $_FILES['attachment'];
-                        
-                        // Prüfen ob es ein Array ist und einen error-Index hat
+                if (isset($this->templateConfig['fields'][$fieldName]) && 
+                    $this->templateConfig['fields'][$fieldName]['type'] === 'file') {
+                    
+                    foreach ($uploadField as $upload) {
                         if (is_array($upload) && isset($upload['error'])) {
                             if ($upload['error'] === UPLOAD_ERR_OK) {
                                 $tmpName = $upload['tmp_name'];
@@ -132,14 +129,8 @@ class FormHandler
                                 if (move_uploaded_file($tmpName, $targetPath)) {
                                     $attachments[] = $targetPath;
                                 } else {
-                                    error_log(t('error_messages.file_move_error', 'Error moving file. PHP error: ') . error_get_last()['message']);
+                                    error_log('Error moving file: ' . error_get_last()['message']);
                                 }
-                            } elseif ($upload['error'] !== UPLOAD_ERR_NO_FILE) {
-                                // Andere Upload-Fehler behandeln
-                                $errors['attachment'] = match($upload['error']) {
-                                    UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => $this->translations['error_messages']['file_too_large'],
-                                    default => $this->translations['error_messages']['file_upload_error']
-                                };
                             }
                         }
                     }
@@ -233,18 +224,13 @@ class FormHandler
                 }
 
                 if (!empty($errors)) {
+                    error_log('ERROR');
                     $alert['type'] = 'error';
                     $alert['message'] = $this->translations['error_messages']['validation_error'];
                     $alert['errors'] = $errors;
                 } else {
                     try {
-                        
-                        EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $emailContent, $data, $this->languageCode, $attachments, $subject);
-                        
-                        // Send confirmation email if configured
-                        if ($this->contentWrapper->send_confirmation_email()->toBool()) {
-                            EmailHelper::sendConfirmationEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $data, $this->languageCode);
-                        }
+                        EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $data, $this->languageCode, $attachments, $subject);
 
                         $alert['type'] = 'success';
                         $alert['message'] = $this->translations['form_success'];

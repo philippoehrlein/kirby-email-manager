@@ -1,5 +1,5 @@
 <style>
-.honeypot {
+.hp_field__sp {
   position: absolute !important;
   width: 1px !important;
   height: 1px !important;

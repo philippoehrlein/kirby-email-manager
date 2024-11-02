@@ -1,16 +1,13 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-use KirbyEmailManager\Helpers\EmailHelper;
-use KirbyEmailManager\Helpers\ExceptionHelper;
 use KirbyEmailManager\Helpers\PathHelper;
 use KirbyEmailManager\Helpers\SessionHelper;
-use KirbyEmailManager\Helpers\TemplateHelper;
 use KirbyEmailManager\Helpers\TranslationHelper;
-use KirbyEmailManager\Helpers\ValidationHelper;
 use KirbyEmailManager\Hooks\SystemHooks;
-use KirbyEmailManager\PageMethods\FormHandler;
-use KirbyEmailManager\PageMethods\ContentWrapper;
+
+use Kirby\Cms\App as Kirby;
+
 Kirby::plugin('philippoehrlein/kirby-email-manager', [
     'blueprints' => [
         'email-manager' => PathHelper::blueprintDir() . 'tabs/email-manager.yml',

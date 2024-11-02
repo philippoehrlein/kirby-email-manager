@@ -72,7 +72,12 @@ return [
         'confirmation_template_not_found' => 'Bestätigungse-Mail-Vorlage nicht gefunden: ',
         'time_step' => 'Bitte wählen Sie eine Zeit im %d-Minuten-Takt',
         'time_before_min' => 'Die Zeit muss nach %s liegen.',
-        'time_after_max' => 'Die Zeit muss vor %s liegen.'
+        'time_after_max' => 'Die Zeit muss vor %s liegen.',
+        'number_too_small' => 'Die Zahl muss größer als :min sein.',
+        'number_too_large' => 'Die Zahl muss kleiner als :max sein.',
+        'invalid_number' => 'Bitte geben Sie eine gültige Zahl ein.',
+        'invalid_url' => 'Bitte geben Sie eine gültige URL ein.',
+        'file_upload_error' => 'Fehler beim Hochladen der Datei. PHP-Fehler: '
     ],
 
     // Button texts

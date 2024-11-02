@@ -1,10 +1,19 @@
 <?php
 namespace KirbyEmailManager\Hooks;
 
-use KirbyEmailManager\Helpers\TemplateHelper;
-
+/**
+ * SystemHooks class for managing system hooks
+ * 
+ * This class provides methods to load plugins after the Kirby instance is created.
+ * 
+ * @author Philipp Oehrlein
+ * @version 1.0.0
+ */
 class SystemHooks
 {
+    /**
+     * Loads plugins after the Kirby instance is created.
+     */
     public static function loadPluginsAfter()
     {
         kirby()->extend([
@@ -14,6 +23,9 @@ class SystemHooks
         ]);
     }
 
+    /**
+     * Extends the translations with custom translations.
+     */
     public static function extendTranslations()
     {
         $kirby = kirby();

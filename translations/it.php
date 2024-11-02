@@ -72,7 +72,12 @@ return [
         'confirmation_template_not_found' => 'Modello di email di conferma non trovato: ',
         'time_step' => 'Seleziona un orario nell\'intervallo di %d minuti',
         'time_before_min' => 'L\'orario deve essere dopo le %s.',
-        'time_after_max' => 'L\'orario deve essere prima delle %s.'
+        'time_after_max' => 'L\'orario deve essere prima delle %s.',
+        'number_too_small' => 'Il numero deve essere maggiore di :min.',
+        'number_too_large' => 'Il numero deve essere minore di :max.',
+        'invalid_number' => 'Per favore, inserisci un numero valido.',
+        'invalid_url' => 'Per favore, inserisci un URL valido.',
+        'file_upload_error' => 'Errore durante il caricamento del file. Errore PHP: '
     ],
 
     // Testi dei pulsanti

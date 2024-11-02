@@ -72,7 +72,12 @@ return [
       'confirmation_template_not_found' => 'Confirmation email template not found: ',
       'time_step' => 'Please select a time in the %d-minute interval',
       'time_before_min' => 'The time must be after %s.',
-      'time_after_max' => 'The time must be before %s.'
+      'time_after_max' => 'The time must be before %s.',
+      'number_too_small' => 'The number must be greater than :min.',
+      'number_too_large' => 'The number must be less than :max.',
+      'invalid_number' => 'Please enter a valid number.',
+      'invalid_url' => 'Please enter a valid URL.',
+      'file_upload_error' => 'Error uploading file. PHP error: '
   ],
 
   // Button texts

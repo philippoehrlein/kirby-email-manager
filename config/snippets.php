@@ -1,4 +1,11 @@
 <?php
+/**
+ * This file is responsible for registering and loading snippets for the Kirby Email Manager plugin.
+ * It scans the snippets directory and creates an array mapping snippet names to their file paths.
+ * 
+ * @package KirbyEmailManager
+ * @author Philipp Oehrlein
+ */
 namespace KirbyEmailManager\Config;
 
 use RecursiveIteratorIterator;
@@ -6,7 +13,6 @@ use RecursiveDirectoryIterator;
 
 function getSnippets(): array
 {
-    // SNIPPETS_DIR hier direkt definieren, falls noch nicht definiert
     if (!defined('SNIPPETS_DIR')) {
         define('SNIPPETS_DIR', __DIR__ . '/../snippets');
     }

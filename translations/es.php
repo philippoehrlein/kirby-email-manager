@@ -72,7 +72,12 @@ return [
         'confirmation_template_not_found' => 'Plantilla de correo electrónico de confirmación no encontrada: ',
         'time_step' => 'Por favor, seleccione una hora en el intervalo de %d minutos',
         'time_before_min' => 'La hora debe ser después de %s.',
-        'time_after_max' => 'La hora debe ser antes de %s.'
+        'time_after_max' => 'La hora debe ser antes de %s.',
+        'number_too_small' => 'El número debe ser mayor que :min.',
+        'number_too_large' => 'El número debe ser menor que :max.',
+        'invalid_number' => 'Por favor, introduzca un número válido.',
+        'invalid_url' => 'Por favor, introduzca una URL válida.',
+        'file_upload_error' => 'Error al subir el archivo. Error de PHP: '
     ],
 
     // Textos de los botones

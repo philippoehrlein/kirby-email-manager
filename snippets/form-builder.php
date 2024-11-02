@@ -73,11 +73,11 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
       <p class="<?= FormHelper::getClassName('error', $config, 'warning') ?>"><?= $alert['message'] ?></p>
   <?php endif ?>
 
-  <div class="honeypot" aria-hidden="true">
-    <label for="website" tabindex="-1">
+  <div class="hp_field__sp" aria-hidden="true">
+    <label for="website_hp_" tabindex="-1">
       <span class="visually-hidden"><?= t('honeypot_label') ?></span>
     </label>
-    <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+    <input type="text" name="website_hp_" id="website_hp_" tabindex="-1" autocomplete="off">
   </div>
 
   <input type="hidden" name="timestamp" value="<?= time() ?>">

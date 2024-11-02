@@ -1,9 +1,27 @@
 <?php
+/**
+ * Helper class for managing form field attributes
+ * 
+ * This class provides methods to generate and manage HTML attributes
+ * for form fields like inputs, selects etc.
+ * 
+ * @author Philipp Oehrlein
+ * @version 1.0.0
+ */
 
 namespace KirbyEmailManager\Helpers;
 
 class FieldAttributeHelper
 {
+  /**
+   * Retrieves the base attributes for a form field.
+   *
+   * @param string $fieldKey The key of the field.
+   * @param array $fieldConfig The configuration for the field.
+   * @param string $inputClass The class for the input element.
+   * @param array $commonAttributes Additional common attributes.
+   * @return array The base attributes for the field.
+   */
   public static function getBaseAttributes(
     string $fieldKey,
     array $fieldConfig,
@@ -18,13 +36,22 @@ class FieldAttributeHelper
     ]);
   }
   
+  /**
+   * Retrieves the attributes for a form field based on its type.
+   *
+   * @param string $type The type of the field.
+   * @param array $baseAttributes The base attributes for the field.
+   * @param array $fieldConfig The configuration for the field.
+   * @param mixed $value The value of the field.
+   * @param string $placeholder The placeholder for the field.
+   * @return array The attributes for the field.
+   */
   public static function getFieldAttributes(
     string $type,
     array $baseAttributes,
     array $fieldConfig,
     $value = null,
     ?string $placeholder = null,
-    ?string $languageCode = null
   ): array {
     $attributes = $baseAttributes;
     
@@ -101,6 +128,7 @@ class FieldAttributeHelper
         if ($fieldConfig['required'] && empty($value)) {
           $value = array_key_first($fieldConfig['options']);
         }
+        $attributes['value'] = $value;
         if (isset($attributes['value']) && $value === $attributes['value']) {
           $attributes['checked'] = true;
         }
@@ -109,6 +137,7 @@ class FieldAttributeHelper
       case 'checkbox':
         $attributes['type'] = 'checkbox';
         $attributes['name'] .= '[]';
+        $attributes['value'] = $value;
         if (isset($attributes['value']) && is_array($value) && in_array($attributes['value'], $value)) {
           $attributes['checked'] = true;
         }
@@ -125,10 +154,9 @@ class FieldAttributeHelper
         if (isset($fieldConfig['min'])) $attributes['min'] = $fieldConfig['min'];
         if (isset($fieldConfig['max'])) $attributes['max'] = $fieldConfig['max'];
         
-        // Start-Attribute
         $attributes['start'] = [
-          'id' => $attributes['id'] . '_start',
-          'name' => $attributes['name'] . '_start',
+          'id' => $attributes['id'] . '[start]',
+          'name' => $attributes['name'] . '[start]',
           'value' => $value['start'] ?? '',
           'type' => 'date',
           'class' => $attributes['class'],
@@ -137,10 +165,9 @@ class FieldAttributeHelper
           'max' => $attributes['max'] ?? null
         ];
         
-        // End-Attribute
         $attributes['end'] = [
-          'id' => $attributes['id'] . '_end',
-          'name' => $attributes['name'] . '_end',
+          'id' => $attributes['id'] . '[end]',
+          'name' => $attributes['name'] . '[end]',
           'value' => $value['end'] ?? '',
           'type' => 'date',
           'class' => $attributes['class'],
@@ -157,11 +184,7 @@ class FieldAttributeHelper
         $resizeStyle = $fieldConfig['resizable'] ?? 'none';
         $attributes['style'] = "resize: $resizeStyle;";
         
-        if (!empty($fieldConfig['validate'])) {
-          if (strpos($fieldConfig['validate'], 'minLength:') === 0) {
-            $attributes['minlength'] = intval(substr($fieldConfig['validate'], 10));
-          }
-        }
+        $attributes['value'] = $value;
         break;
     }
     

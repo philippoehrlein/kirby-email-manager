@@ -6,8 +6,21 @@ use Kirby\Data\Data;
 use Kirby\Filesystem\Dir;
 use KirbyEmailManager\Helpers\LanguageHelper;
 
+/**
+ * TemplateHelper class for managing email templates
+ * 
+ * This class provides methods to retrieve email templates.
+ * 
+ * @author Philipp Oehrlein
+ * @version 1.0.0
+ */
 class TemplateHelper
 {
+    /**
+     * Retrieves the email templates.
+     * 
+     * @return array The email templates.
+     */
     public static function getEmailTemplates(): array
     {
         $templateDir = kirby()->root('site') . '/templates/emails';
@@ -46,6 +59,13 @@ class TemplateHelper
         return $templates;
     }
 
+    /**
+     * Retrieves the template name based on the configuration and folder.
+     * 
+     * @param array $config The configuration array.
+     * @param string $folder The folder name.
+     * @return string The template name.
+     */
     public static function getTemplateName($config, $folder) 
     {
         if (!isset($config['name'])) {

@@ -74,6 +74,11 @@ return [
         'time_step' => 'Veuillez sélectionner une heure dans l\'intervalle de %d minutes',
         'time_before_min' => 'La heure doit être après %s.',
         'time_after_max' => 'La heure doit être avant %s.',
+        'number_too_small' => 'Le nombre doit être plus grand que :min.',
+        'number_too_large' => 'Le nombre doit être plus petit que :max.',
+        'invalid_number' => 'Veuillez saisir un nombre valide.',
+        'invalid_url' => 'Veuillez saisir une URL valide.',
+        'file_upload_error' => 'Erreur lors du téléchargement du fichier. Erreur PHP: '
     ],
 
     // Textes des boutons

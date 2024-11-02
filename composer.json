@@ -7,7 +7,7 @@
   "homepage": "https://github.com/philippoehrlein/kirby-email-manager",
   "authors": [
     {
-      "name": "Philip Poehrlein",
+      "name": "Philipp Oehrlein",
       "email": "github@philippoehrlein.com"
     }
   ],
@@ -15,11 +15,17 @@
     "php": ">=8.1.0"
   },
   "require-dev": {
-    "getkirby/cms": "^4.0"
+    "getkirby/cms": "^4.0",
+    "phpunit/phpunit": "^9.5"
   },
   "autoload": {
       "psr-4": {
           "KirbyEmailManager\\": "src/"
+      }
+  },
+  "autoload-dev": {
+      "psr-4": {
+          "KirbyEmailManager\\Tests\\": "tests/"
       }
   },
   "extra": {
@@ -29,5 +35,9 @@
     "allow-plugins": {
       "getkirby/composer-installer": true
     }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "test:coverage": "phpunit --coverage-html tests/coverage"
   }
 }

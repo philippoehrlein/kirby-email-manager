@@ -21,7 +21,6 @@ Thumbs.db
 *.log
 *.tmp
 
-
 # Composer
 composer.phar
 
@@ -35,3 +34,7 @@ composer.phar
 
 # Lokale Konfigurationsdateien
 config.local.php
+
+# Test Coverage
+/tests/coverage/
+.phpunit.result.cache

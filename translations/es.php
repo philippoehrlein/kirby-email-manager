@@ -1,88 +1,115 @@
 <?php
 
 return [
-    'email_tab_label' => 'Administrador de correos electrónicos',
-    'email_templates_headline' => 'Plantillas de correo electrónico',
-    'email_templates_label' => 'Plantilla de correo electrónico',
-    'send_to_more_label' => '¿Enviar correos electrónicos a diferentes direcciones según el asunto?',
-    'send_to_one' => 'No, solo una dirección de correo electrónico',
-    'send_to_many' => 'Sí, enviar a varias direcciones de correo electrónico',
-    'send_to_label' => 'Dirección de correo electrónico',
-    'send_to_structure_label' => 'Gestionar direcciones de correo electrónico',
-    'send_to_structure_help' => 'Agrega aquí las opciones de asunto y las direcciones de correo electrónico correspondientes.',
-    'topic_label' => 'Asunto',
-    'topic_subject' => 'Mensaje del formulario de contacto: :topic',
-    'email_label' => 'Dirección de correo electrónico',
-    'gdpr_checkbox_label' => '¿Es necesario el consentimiento de protección de datos?',
-    'gdpr_checkbox_help' => 'Si está seleccionado, se mostrará la casilla de consentimiento de protección de datos en el formulario.',
-    'gdpr_text_label' => 'Texto para la casilla de consentimiento de protección de datos',
-    'form_ready' => 'Formulario listo para la entrada.',
-    'field_required' => 'Este campo es obligatorio.',
-    'invalid_email' => 'Por favor, introduzca una dirección de correo electrónico válida.',
-    'form_invalid' => 'El formulario no se ha rellenado correctamente.',
-    'form_success' => 'Formulario enviado con éxito.',
-    'error_occurred' => 'Ocurrió un error: ',
-    'not_specified' => 'No especificado',
-    'email_subject' => 'Formulario de contacto',
-    'send_to_success_title_label' => 'Título de éxito',
-    'send_to_success_text_label' => 'Texto de éxito',
-    'send_to_more_success_message_label' => 'Mensaje de éxito',
-    'send_to_more_success_title_label' => 'Título de éxito',
-    'send_to_more_success_text_label' => 'Texto de éxito',
-    'email_legal_headline_label' => 'Legal',
-    'honeypot_label' => 'Por favor, no complete (Protección contra spam)',
-    'not_specified' => 'No especificado',
-
-    // Mensajes de error anidados
-    'error_messages' => [
-        'validation_error' => 'Por favor, complete todos los campos obligatorios correctamente.',
-        'required' => 'Este campo es obligatorio.',
-        'invalid_email' => 'Por favor, introduzca una dirección de correo electrónico válida.',
-        'invalid_name' => 'Por favor, introduzca un nombre válido.',
-        'message_too_short' => 'Su mensaje debe tener al menos :minLength caracteres.',
-        'gdpr_required' => 'Por favor, acepte la política de protección de datos.',
-        'invalid_date' => 'Por favor, introduzca una fecha válida.',
-        'invalid_date_range' => 'Por favor, introduzca un rango de fechas válido.',
-        'date_before_min' => 'La fecha debe ser posterior a :min.',
-        'date_after_max' => 'La fecha debe ser anterior a :max.',
-        'file_too_large' => 'El archivo es demasiado grande. El tamaño máximo es de :maxSize MB.',
-        'invalid_file_type' => 'Tipo de archivo no válido. Los tipos permitidos son: :allowedTypes.',
-        'min_date' => 'La fecha es anterior a la permitida.',
-        'max_date' => 'La fecha es posterior a la permitida.',
-        'invalid_range' => 'La fecha de finalización debe ser posterior a la fecha de inicio.',
-        'date_before_min' => 'La fecha de inicio es anterior a la permitida.',
-        'date_after_max' => 'La fecha de finalización es posterior a la permitida.',
-        'invalid_option' => 'Opción seleccionada no válida.',
-        'min_length_password' => 'La contraseña debe tener al menos :minLength caracteres.',
-        'invalid_phone' => 'Por favor, introduzca un número de teléfono válido.',
-        'csrf_error' => 'Token CSRF no válido.',
-        'submission_time_error' => 'Tiempo de envío no válido.',
-        'submission_time_warning' => 'El tiempo de envío es caducado. Por favor, compruebe su entrada y envíe el formulario de nuevo.',
-        'submission_time_too_fast' => 'El formulario se envió demasiado rápido. Por favor, inténtelo de nuevo.',
-        'template_not_found' => 'La configuración de la plantilla de correo electrónico seleccionada no se ha encontrado.',
-        'config_file_not_found' => 'Archivo de configuración no encontrado: ',
-        'template_config_empty' => 'La configuración de la plantilla está vacía.',
-        'template_fields_missing' => 'La configuración de la plantilla falta el "fields" key o no es un array.',
-        'no_template' => 'No se ha seleccionado ninguna plantilla de correo electrónico.',
-        'template_not_found' => 'La configuración de la plantilla de correo electrónico seleccionada no se ha encontrado.',
-        'file_move_error' => 'Error al mover el archivo. Error de PHP: ',
-        'csrf_error' => 'Token CSRF no válido.',
-        'missing_required_key' => 'Falta el clave requerida "{key}" en la configuración de la plantilla.',
-        'field_missing_property' => 'Falta la propiedad "{property}" para el campo "{fieldKey}" en la configuración de la plantilla.',
-        'confirmation_template_not_found' => 'Plantilla de correo electrónico de confirmación no encontrada: ',
-        'time_step' => 'Por favor, seleccione una hora en el intervalo de %d minutos',
-        'time_before_min' => 'La hora debe ser después de %s.',
-        'time_after_max' => 'La hora debe ser antes de %s.',
-        'number_too_small' => 'El número debe ser mayor que :min.',
-        'number_too_large' => 'El número debe ser menor que :max.',
-        'invalid_number' => 'Por favor, introduzca un número válido.',
-        'invalid_url' => 'Por favor, introduzca una URL válida.',
-        'file_upload_error' => 'Error al subir el archivo. Error de PHP: '
+    'form' => [
+        'status' => [
+            'ready' => 'Formulario listo para la entrada.',
+            'invalid' => 'Formulario no rellenado correctamente.',
+            'success' => 'Formulario enviado con éxito.'
+        ],
+        'honeypot' => [
+            'label' => 'Por favor, no complete (Protección contra spam)'
+        ]
     ],
-
-    // Textos de los botones
-    'button_texts' => [
-        'send' => 'Enviar',
-        'reset' => 'Restablecer'
-    ]
+    'validation' => [
+        'fields' => [
+            'required' => 'Este campo es obligatorio.',
+            'email' => 'Por favor, introduzca una dirección de correo electrónico válida.',
+            'name' => 'Por favor, introduzca un nombre válido.',
+            'message' => [
+                'too_short' => 'Su mensaje debe tener al menos :minLength caracteres.'
+            ],
+            'gdpr' => 'Por favor, acepte la política de protección de datos.',
+            'date' => [
+                'invalid' => 'Por favor, introduzca una fecha válida.',
+                'invalid_range' => 'Por favor, introduzca un rango de fechas válido.',
+                'before_min' => 'La fecha debe ser posterior a :min.',
+                'after_max' => 'La fecha debe ser anterior a :max.',
+                'min' => 'La fecha es anterior a la permitida.',
+                'max' => 'La fecha es posterior a la permitida.',
+                'invalid_range' => 'La fecha de finalización debe ser posterior a la fecha de inicio.'
+            ],
+            'file' => [
+                'too_large' => 'El archivo es demasiado grande. El tamaño máximo es de :maxSize MB.',
+                'invalid_type' => 'Tipo de archivo no válido. Los tipos permitidos son: :allowedTypes.',
+                'move_error' => 'Error al mover el archivo. Error PHP: ',
+                'upload_error' => 'Error al subir el archivo. Error PHP: ',
+                'too_large_ini' => 'El archivo excede el tamaño permitido en la configuración PHP.',
+                'too_large_form' => 'El archivo excede el tamaño permitido en el formulario.',
+                'partial_upload' => 'El archivo solo se subió parcialmente.',
+                'no_upload' => 'No se subió ningún archivo.',
+                'missing_temp' => 'Falta la carpeta temporal.',
+                'write_error' => 'Error al guardar el archivo.',
+                'upload_stopped' => 'La subida del archivo fue detenida por una extensión.',
+                'unknown_error' => 'Ocurrió un error desconocido durante la subida.',
+                'malicious' => 'El archivo puede contener código malicioso.'
+            ],
+            'password' => [
+                'min_length' => 'La contraseña debe tener al menos :minLength caracteres.'
+            ],
+            'phone' => 'Por favor, introduzca un número de teléfono válido.',
+            'option' => 'Opción seleccionada no válida.',
+            'time' => [
+                'step' => 'Por favor, seleccione un tiempo en intervalos de :interval minutos',
+                'before_min' => 'La hora debe ser posterior a :min.',
+                'after_max' => 'La hora debe ser anterior a :max.'
+            ],
+            'number' => [
+                'too_small' => 'El número debe ser mayor que :min.',
+                'too_large' => 'El número debe ser menor que :max.',
+                'invalid' => 'Por favor, introduzca un número válido.'
+            ],
+            'url' => 'Por favor, introduzca una URL válida.'
+        ],
+        'system' => [
+            'csrf' => 'Token CSRF no válido.',
+            'submission_time' => [
+                'error' => 'Tiempo de envío no válido.',
+                'warning' => 'El tiempo de envío ha expirado. Por favor, revise sus entradas y envíe el formulario nuevamente.',
+                'too_fast' => 'El formulario se envió demasiado rápido. Por favor, inténtelo de nuevo.'
+            ]
+        ],
+        'template' => [
+            'not_found' => 'No se encontró la configuración de plantilla de correo electrónico seleccionada.',
+            'not_specified' => 'No especificado',
+            'config_not_found' => 'Archivo de configuración no encontrado: ',
+            'empty' => 'La configuración de la plantilla está vacía.',
+            'fields_missing' => 'Falta la clave "fields" en la configuración de la plantilla o no es un array.',
+            'no_template' => 'No se seleccionó plantilla de correo electrónico.',
+            'confirmation_not_found' => 'No se encontró la plantilla de correo de confirmación: ',
+            'missing_key' => 'Falta la clave requerida ":key" en la configuración de la plantilla.',
+            'missing_property' => 'Falta la propiedad ":property" para el campo ":fieldKey" en la configuración de la plantilla.',
+            'validation_error' => 'Por favor, complete todos los campos requeridos correctamente.'
+        ]
+    ],
+    'buttons' => [
+        'send' => [
+            'label' => 'Enviar'
+        ],
+        'reset' => [
+            'label' => 'Restablecer'
+        ]
+    ],
+    'panel.tab' => 'Gestor de Correo',
+    'panel.templates.headline' => 'Plantillas de Correo',
+    'panel.templates.label' => 'Plantilla de Correo',
+    'panel.email.send_to_more_label' => '¿Enviar correo a diferentes direcciones según el asunto?',
+    'panel.email.send_to_one' => 'No, solo una dirección de correo',
+    'panel.email.send_to_many' => 'Sí, enviar a múltiples direcciones de correo',
+    'panel.email.send_to_label' => 'Dirección de Correo',
+    'panel.email.send_to_structure_label' => 'Gestionar Direcciones de Correo',
+    'panel.email.send_to_structure_help' => 'Añade aquí las opciones de asunto y las direcciones de correo correspondientes.',
+    'panel.email.topic_label' => 'Asunto',
+    'panel.email.topic_subject' => 'Mensaje del Formulario de Contacto: :topic',
+    'panel.email.email_label' => 'Dirección de Correo',
+    'panel.email.subject' => 'Mensaje del Formulario de Contacto',
+    'panel.gdpr.checkbox_label' => '¿Requiere casilla de verificación RGPD?',
+    'panel.gdpr.checkbox_help' => 'Si se selecciona, se mostrará la casilla de verificación RGPD en el formulario.',
+    'panel.gdpr.text_label' => 'Texto para la casilla de verificación RGPD',
+    'panel.success.title_label' => 'Título de Éxito',
+    'panel.success.text_label' => 'Texto de Éxito',
+    'panel.success.message_label' => 'Mensaje de Éxito',
+    'panel.legal.headline' => 'Legal',
+    'panel.legal.footer_label' => 'Pie de Correo',
+    'panel.legal.footer_help' => 'Pie legal opcional que se muestra en los correos de confirmación.',
 ];

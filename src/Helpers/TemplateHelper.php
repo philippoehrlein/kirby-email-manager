@@ -11,7 +11,6 @@ use KirbyEmailManager\Helpers\LanguageHelper;
  * 
  * This class provides methods to retrieve email templates.
  * 
- * @author Philipp Oehrlein
  * @version 1.0.0
  */
 class TemplateHelper
@@ -68,14 +67,13 @@ class TemplateHelper
      */
     public static function getTemplateName($config, $folder) 
     {
-        if (!isset($config['name'])) {
-            return ucfirst($folder) . ' Template';
-        }
+        // Setzt die aktuelle Sprache
+        $language = kirby()->languageCode();
+        
+        // Erstellt eine Instanz von LanguageHelper und übergibt die Template-Config
+        $languageHelper = new LanguageHelper($language, $config);
 
-        return LanguageHelper::getTranslatedValue(
-            $config,
-            'name',
-            ucfirst($folder) . ' Template'
-        );
+        // Holt den Namen aus der Konfiguration oder nutzt den Fallback
+        return $languageHelper->get('name', ['folder' => ucfirst($folder)]) ?? ucfirst($folder) . ' Template';
     }
 }

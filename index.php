@@ -8,6 +8,8 @@ use KirbyEmailManager\Hooks\SystemHooks;
 
 use Kirby\Cms\App as Kirby;
 
+$translations = TranslationHelper::loadTranslations(PathHelper::translationDir());
+
 Kirby::plugin('philippoehrlein/kirby-email-manager', [
     'blueprints' => [
         'email-manager' => PathHelper::blueprintDir() . 'tabs/email-manager.yml',
@@ -40,7 +42,7 @@ Kirby::plugin('philippoehrlein/kirby-email-manager', [
 
     'options' => require PathHelper::configDir() . 'main.php',
 
-    'translations' => TranslationHelper::loadTranslations(PathHelper::translationDir()),
+    'translations' => $translations,
     
     'hooks' => [
         'system.loadPlugins:after' => function () {

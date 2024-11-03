@@ -10,14 +10,17 @@ class ExceptionHelper {
    * Handles an exception and returns an error message.
    *
    * @param \Exception $e The exception to handle.
-   * @param array $translations The translations array.
+   * @param LanguageHelper $languageHelper The language helper.
    * @return array The error message.
    */
-  public static function handleException($e, $translations) {
+  public static function handleException($e, LanguageHelper $languageHelper) {
     error_log('Error: ' . $e->getMessage());
+    
+    $errorMessage = $languageHelper->get('error_messages.error_occurred') ?? 'Ein Fehler ist aufgetreten: ';
+    
     return [
-        'type' => 'error',
-        'message' => $translations['error_occurred'] . (is_array($e->getMessage()) ? json_encode($e->getMessage()) : $e->getMessage())
+      'type' => 'error',
+      'message' => $errorMessage . (is_array($e->getMessage()) ? json_encode($e->getMessage()) : $e->getMessage())
     ];
   }
 }

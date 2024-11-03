@@ -130,26 +130,42 @@ class ValidationHelper
           return $errors;
 
         case 'file':
-          $fileData = $data[$fieldKey] ?? null;
-          if ($fileData && is_array($fileData)) {
-              $allowedTypes = $fieldConfig['allowed_types'] ?? [];
-              if (!empty($allowedTypes)) {
-                  $extension = strtolower(pathinfo($fileData['name'], PATHINFO_EXTENSION));
-                  if (!in_array($extension, $allowedTypes)) {
-                      $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode]
-                          ?? $translations['error_messages']['invalid_file_type'];
-                  }
+          if (!empty($data[$fieldKey]) && is_array($data[$fieldKey])) {
+            $file = $data[$fieldKey];
+            
+            // Prüfe Dateigröße
+            $maxSize = isset($fieldConfig['max_size']) ? (int)$fieldConfig['max_size'] : 5242880;
+            if ($file['size'] > $maxSize) {
+              $errors[$fieldKey] = str_replace(
+                ':maxSize',
+                round($maxSize / 1048576, 2),
+                $fieldConfig['error_message'][$languageCode] ?? $translations['error_messages']['file_too_large']
+              );
+              return $errors;
+            }
+
+            // Prüfe Dateityp
+            $allowedTypes = $fieldConfig['allowed_types'] ?? [];
+            $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (!empty($allowedTypes) && !in_array($fileExtension, $allowedTypes)) {
+              $errors[$fieldKey] = str_replace(
+                ':allowedTypes',
+                implode(', ', $allowedTypes),
+                $fieldConfig['error_message'][$languageCode] ?? $translations['error_messages']['invalid_file_type']
+              );
+              return $errors;
+            }
+
+            // Prüfe MIME-Type
+            if (!empty($fieldConfig['allowed_mimes'])) {
+              $finfo = new \finfo(FILEINFO_MIME_TYPE);
+              $mimeType = $finfo->file($file['tmp_name']);
+              if (!in_array($mimeType, $fieldConfig['allowed_mimes'])) {
+                $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode] ?? 
+                                     $translations['error_messages']['invalid_file_type'];
+                return $errors;
               }
-        
-              $maxSize = $fieldConfig['max_size'] ?? 5242880; // 5MB default
-              if ($fileData['size'] > $maxSize) {
-                  $errors[$fieldKey] = $fieldConfig['error_message'][$languageCode]
-                      ?? $translations['error_messages']['file_too_large'];
-              }
-          } else {
-              if (!empty($fieldConfig['required'])) {
-                  $errors[$fieldKey] = $translations['error_messages']['required'];
-              }
+            }
           }
           return $errors;
 

@@ -1,88 +1,115 @@
 <?php
 
 return [
-  'email_tab_label' => 'E-Mail Manager',
-  'email_templates_headline' => 'Email Templates',
-  'email_templates_label' => 'Email Template',
-  'send_to_more_label' => 'Send email based on subject to multiple addresses?',
-  'send_to_one' => 'No, only one email address',
-  'send_to_many' => 'Yes, send to multiple email addresses',
-  'send_to_label' => 'Email Address',
-  'send_to_structure_label' => 'Manage Email Addresses',
-  'send_to_structure_help' => 'Add the subject options and the corresponding email addresses here.',
-  'topic_label' => 'Subject',
-  'topic_subject' => 'Contact Form Message: :topic',
-  'email_label' => 'Email Address',
-  'gdpr_checkbox_label' => 'Is GDPR checkbox required?',
-  'gdpr_checkbox_help' => 'If selected, a GDPR checkbox will be displayed in the form.',
-  'gdpr_text_label' => 'Text for the GDPR checkbox',
-  'form_ready' => 'Form ready for input.',
-  'field_required' => 'This field is required.',
-  'invalid_email' => 'Please enter a valid email address.',
-  'form_invalid' => 'Form not filled out correctly.',
-  'form_success' => 'Form successfully submitted.',
-  'error_occurred' => 'An error occurred: ',
-  'not_specified' => 'Not specified',
-  'email_subject' => 'Contact Form Message',
-  'send_to_success_title_label' => 'Success Title',
-  'send_to_success_text_label' => 'Success Text',
-  'send_to_more_success_message_label' => 'Success Message',
-  'send_to_more_success_title_label' => 'Success Title',
-  'send_to_more_success_text_label' => 'Success Text',
-  'email_legal_headline_label' => 'Legal',
-  'honeypot_label' => 'Please do not fill in (Spam protection)',
-  'not_specified' => 'Not specified',
-
-  // Nested error messages
-  'error_messages' => [
-      'validation_error' => 'Please fill in all required fields correctly.',
-      'required' => 'This field is required.',
-      'invalid_email' => 'Please enter a valid email address.',
-      'invalid_name' => 'Please enter a valid name.',
-      'message_too_short' => 'Your message must be at least :minLength characters long.',
-      'gdpr_required' => 'Please agree to the privacy policy.',
-      'invalid_date' => 'Please enter a valid date.',
-      'invalid_date_range' => 'Please enter a valid date range.',
-      'date_before_min' => 'The date must be after :min.',
-      'date_after_max' => 'The date must be before :max.',
-      'file_too_large' => 'The file is too large. Maximum size is :maxSize MB.',
-      'invalid_file_type' => 'Invalid file type. Allowed types are: :allowedTypes.',
-      'min_date' => 'Date is earlier than allowed.',
-      'max_date' => 'Date is later than allowed.',
-      'invalid_range' => 'End date must be later than the start date.',
-      'date_before_min' => 'Start date is earlier than allowed.',
-      'date_after_max' => 'End date is later than allowed.',
-      'invalid_option' => 'Invalid option selected.',
-      'min_length_password' => 'Password must be at least :minLength characters long.',
-      'invalid_phone' => 'Please enter a valid phone number.',
-      'csrf_error' => 'Invalid CSRF token.',
-      'submission_time_error' => 'Invalid submission time.',
-      'submission_time_warning' => 'The submission time is expired. Please check your input and send the form again.',
-      'submission_time_too_fast' => 'The form was submitted too quickly. Please try again.',
-      'template_not_found' => 'The selected email template configuration was not found.',
-      'config_file_not_found' => 'Configuration file not found: ',
-      'template_config_empty' => 'The template configuration is empty.',
-      'template_fields_missing' => 'The template configuration is missing the "fields" key or it is not an array.',
-      'no_template' => 'No email template selected.',
-      'template_not_found' => 'Selected email template configuration not found.',
-      'file_move_error' => 'Error moving file. PHP error: ',
-      'csrf_error' => 'Invalid CSRF token.',
-      'missing_required_key' => 'Missing required key "{key}" in template configuration.',
-      'field_missing_property' => 'Missing "{property}" for field "{fieldKey}" in template configuration.',
-      'confirmation_template_not_found' => 'Confirmation email template not found: ',
-      'time_step' => 'Please select a time in the %d-minute interval',
-      'time_before_min' => 'The time must be after %s.',
-      'time_after_max' => 'The time must be before %s.',
-      'number_too_small' => 'The number must be greater than :min.',
-      'number_too_large' => 'The number must be less than :max.',
-      'invalid_number' => 'Please enter a valid number.',
-      'invalid_url' => 'Please enter a valid URL.',
-      'file_upload_error' => 'Error uploading file. PHP error: '
-  ],
-
-  // Button texts
-  'button_texts' => [
-      'send' => 'Send',
-      'reset' => 'Reset'
-  ]
+    'form' => [
+        'status' => [
+            'ready' => 'Form ready for input.',
+            'invalid' => 'Form not filled out correctly.',
+            'success' => 'Form successfully submitted.'
+        ],
+        'honeypot' => [
+            'label' => 'Please do not fill in (Spam protection)'
+        ]
+    ],
+    'validation' => [
+        'fields' => [
+            'required' => 'This field is required.',
+            'email' => 'Please enter a valid email address.',
+            'name' => 'Please enter a valid name.',
+            'message' => [
+                'too_short' => 'Your message must be at least :minLength characters long.'
+            ],
+            'gdpr' => 'Please agree to the privacy policy.',
+            'date' => [
+                'invalid' => 'Please enter a valid date.',
+                'invalid_range' => 'Please enter a valid date range.',
+                'before_min' => 'The date must be after :min.',
+                'after_max' => 'The date must be before :max.',
+                'min' => 'Date is earlier than allowed.',
+                'max' => 'Date is later than allowed.',
+                'invalid_range' => 'End date must be later than start date.'
+            ],
+            'file' => [
+                'too_large' => 'The file is too large. Maximum size is :maxSize MB.',
+                'invalid_type' => 'Invalid file type. Allowed types are: :allowedTypes.',
+                'move_error' => 'Error moving file. PHP error: ',
+                'upload_error' => 'Error uploading file. PHP error: ',
+                'too_large_ini' => 'The file exceeds the allowed size in the PHP configuration.',
+                'too_large_form' => 'The file exceeds the allowed size in the form.',
+                'partial_upload' => 'The file was only partially uploaded.',
+                'no_upload' => 'No file was uploaded.',
+                'missing_temp' => 'The temporary folder is missing.',
+                'write_error' => 'Error saving the file.',
+                'upload_stopped' => 'The file upload was stopped by an extension.',
+                'unknown_error' => 'An unknown error occurred during upload.',
+                'malicious' => 'The file may contain malicious code.'
+            ],
+            'password' => [
+                'min_length' => 'The password must be at least :minLength characters long.'
+            ],
+            'phone' => 'Please enter a valid phone number.',
+            'option' => 'Invalid option selected.',
+            'time' => [
+                'step' => 'Please select a time in :interval minute intervals',
+                'before_min' => 'The time must be after :min.',
+                'after_max' => 'The time must be before :max.'
+            ],
+            'number' => [
+                'too_small' => 'The number must be greater than :min.',
+                'too_large' => 'The number must be less than :max.',
+                'invalid' => 'Please enter a valid number.'
+            ],
+            'url' => 'Please enter a valid URL.'
+        ],
+        'system' => [
+            'csrf' => 'Invalid CSRF token.',
+            'submission_time' => [
+                'error' => 'Invalid submission time.',
+                'warning' => 'The submission time has expired. Please check your inputs and submit the form again.',
+                'too_fast' => 'The form was submitted too quickly. Please try again.'
+            ]
+        ],
+        'template' => [
+            'not_found' => 'The selected email template configuration was not found.',
+            'not_specified' => 'Not specified',
+            'config_not_found' => 'Configuration file not found: ',
+            'empty' => 'The template configuration is empty.',
+            'fields_missing' => 'The template configuration is missing the "fields" key or it is not an array.',
+            'no_template' => 'No email template selected.',
+            'confirmation_not_found' => 'Confirmation email template not found: ',
+            'missing_key' => 'Missing required key ":key" in template configuration.',
+            'missing_property' => 'Missing property ":property" for field ":fieldKey" in template configuration.',
+            'validation_error' => 'Please fill in all required fields correctly.'
+        ]
+    ],
+    'buttons' => [
+        'send' => [
+            'label' => 'Send!!!'
+        ],
+        'reset' => [
+            'label' => 'Reset'
+        ]
+    ],
+    'panel.tab' => 'Email Manager',
+    'panel.templates.headline' => 'Email Templates',
+    'panel.templates.label' => 'Email Template',
+    'panel.email.send_to_more_label' => 'Send email to different email addresses based on subject?',
+    'panel.email.send_to_one' => 'No, only one email address',
+    'panel.email.send_to_many' => 'Yes, send to multiple email addresses',
+    'panel.email.send_to_label' => 'Email Address',
+    'panel.email.send_to_structure_label' => 'Manage Email Addresses',
+    'panel.email.send_to_structure_help' => 'Add subject options and corresponding email addresses here.',
+    'panel.email.topic_label' => 'Subject',
+    'panel.email.topic_subject' => 'Contact Form Message: :topic',
+    'panel.email.email_label' => 'Email Address',
+    'panel.email.subject' => 'Contact Form Message',
+    'panel.gdpr.checkbox_label' => 'GDPR Checkbox Required?',
+    'panel.gdpr.checkbox_help' => 'If selected, the GDPR checkbox will be displayed in the form.',
+    'panel.gdpr.text_label' => 'Text for GDPR Checkbox',
+    'panel.success.title_label' => 'Success Title',
+    'panel.success.text_label' => 'Success Text',
+    'panel.success.message_label' => 'Success Message',
+    'panel.legal.headline' => 'Legal',
+    'panel.legal.footer_label' => 'Email Footer',
+    'panel.legal.footer_help' => 'Optional legal footer displayed in confirmation emails.',
 ];

@@ -1,10 +1,10 @@
 type: tabs
-label: email_templates_headline
+label: panel.templates.headline
 icon: server
 
 fields:
   email_templates:
-    label: email_templates_label
+    label: panel.templates.label
     type: select
     options: query
     required: true
@@ -15,34 +15,34 @@ fields:
 
   send_to_more:
     type: toggle
-    label: send_to_more_label
+    label: panel.email.send_to_more_label
     text: 
-      - send_to_one
-      - send_to_many
+      - panel.email.send_to_one
+      - panel.email.send_to_many
 
   send_to:
-    label: send_to_label
+    label: panel.email.send_to_label
     type: email
     when:
       send_to_more: false
     required: true
 
   send_to_success_title:
-    label: send_to_success_title_label
+    label: panel.success.title_label
     type: text
     when:
       send_to_more: false
     required: true
 
   send_to_success_text:
-    label: send_to_success_text_label
+    label: panel.success.text_label
     type: writer
     when:
       send_to_more: false
     required: true
 
   send_to_structure:
-    label: send_to_structure_label
+    label: panel.email.send_to_structure_label
     type: structure
     when:
       send_to_more: true
@@ -53,25 +53,25 @@ fields:
         width: 1/2
     fields:
       topic:
-        label: topic_label
+        label: panel.email.topic_label
         type: text
         required: true
       email:
-        label: email_label
+        label: panel.email.email_label
         type: email
         required: true
       success:
         type: structure
         max: 1
-        label: send_to_more_success_message_label
+        label: panel.success.message_label
         fields:
           title:
-            label: send_to_more_success_title_label
+            label: panel.success.title_label
             type: text
             required: true
           text:
-            label: send_to_more_success_text_label
+            label: panel.success.text_label
             type: writer
             required: true
-    help: send_to_structure_help
+    help: panel.email.send_to_structure_help
     required: true

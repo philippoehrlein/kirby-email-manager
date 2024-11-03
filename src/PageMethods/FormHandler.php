@@ -27,6 +27,7 @@ class FormHandler
     protected $languageCode;
     protected $templateConfig;
     protected $translations;
+    protected $languageHelper;
     protected $page;
     /**
      * Constructor for FormHandler.
@@ -39,13 +40,14 @@ class FormHandler
         $this->kirby = $kirby;
         $this->page = $page;
         $this->contentWrapper = $contentWrapper;
-        $this->languageCode = LanguageHelper::getCurrentLanguageCode();
         
-        // Load template configuration
+        // Config laden und validieren
         $this->loadTemplateConfig();
+        ConfigHelper::validateTemplateConfig($this->templateConfig);
         
-        // Load translations
-        $this->loadTranslations();
+        // LanguageHelper nur einmal initialisieren
+        $this->languageHelper = new LanguageHelper(null, $this->templateConfig);
+        $this->languageCode = $this->languageHelper->getLanguage();
     }
     
     /**
@@ -58,38 +60,31 @@ class FormHandler
         $selectedTemplateId = $this->contentWrapper->email_templates()->value();
         
         if (empty($selectedTemplateId)) {
-            throw new Exception(t('error_messages.no_template', 'No email template selected.'));
+            throw new Exception($this->languageHelper->get('error_messages.no_template'));
         }
 
+        // Plugin-Config und YML-Config zusammenführen
         $templates = $this->kirby->option('philippoehrlein.kirby-email-manager.templates');
-        $this->templateConfig = $templates[$selectedTemplateId] ?? [];
-
-        if (empty($this->templateConfig)) {
-            throw new Exception(t('error_messages.template_not_found', 'Selected email template configuration not found.'));
-        }
-
+        $pluginConfig = $templates[$selectedTemplateId] ?? [];
+        
         $configPath = $this->kirby->root('site') . '/templates/emails/' . $selectedTemplateId . '/config.yml';
         if (!file_exists($configPath)) {
-            throw new Exception(t('error_messages.config_file_not_found', 'Configuration file not found: ') . $configPath);
+            throw new Exception($this->languageHelper->get('error_messages.config_file_not_found') . $configPath);
         }
-        $this->templateConfig = Data::read($configPath);
 
-        $this->templateConfig['template_path'] = 'emails/' . $selectedTemplateId;
+        $ymlConfig = Data::read($configPath) ?? [];
+        $this->templateConfig = array_merge($pluginConfig, $ymlConfig);
+    }
 
-        ConfigHelper::validateTemplateConfig($this->templateConfig);
+    /**
+     * Returns the template configuration.
+     *
+     * @return array The template configuration.
+     */
+    public function getTemplateConfig() {
+        return $this->templateConfig;
     }
     
-    /**
-     * Loads the translations.
-     *
-     * @throws \Kirby\Exception\Exception If the translations are not found.
-     */
-    protected function loadTranslations()
-    {
-        $translationsPath = $this->kirby->root('plugins') . '/kirby-email-manager/translations/' . $this->languageCode . '.php';
-        $this->translations = Data::read($translationsPath);
-    }
-
     /**
      * Handles the form submission.
      *
@@ -107,7 +102,7 @@ class FormHandler
         
         $alert = [
             'type' => 'info',
-            'message' => $this->translations['form_ready']
+            'message' => 'Form ready'
         ];
 
         if ($this->kirby->request()->is('POST') && get('submit')) {
@@ -139,8 +134,16 @@ class FormHandler
 
             
             if (csrf(get('csrf')) !== true) {
-                LogHelper::logError(t('error_messages.csrf_error', 'Invalid CSRF token.'));
-                throw new Exception(t('error_messages.csrf_error', 'Invalid CSRF token.'));
+                $csrfError = $this->languageHelper->get('validation.system.csrf');
+                LogHelper::logError($csrfError);
+                
+                return [
+                    'alert' => [
+                        'type' => 'error',
+                        'message' => $csrfError
+                    ],
+                    'data' => $data
+                ];
             }
     
             $submissionTime = (int)($data['timestamp'] ?? 0);
@@ -152,14 +155,14 @@ class FormHandler
 
             if ($timeDifference < $minTime) { 
                 $alert['type'] = 'warning';
-                $alert['message'] = $this->translations['error_messages']['submission_time_too_fast'] ?? 'Form was submitted too quickly. Please try again.';
+                $alert['message'] = $this->languageHelper->get('validation.system.submission_time.too_fast');
                 return [
                     'alert' => $alert,
                     'data' => $data
                 ];
             } elseif ($timeDifference > $maxTime) {
                 $alert['type'] = 'warning';
-                $alert['message'] = $this->translations['error_messages']['submission_time_warning'] ?? 'Submission time has expired. Please check your inputs and submit the form again.';
+                $alert['message'] = $this->languageHelper->get('validation.system.submission_time.warning');
                 return [
                     'alert' => $alert,
                     'data' => $data
@@ -169,27 +172,11 @@ class FormHandler
             try {
                 $errors = [];
                 $emailContent = [];
-                $subject = LanguageHelper::getTranslatedValue(
-                    $this->templateConfig['emails']['subject']['default'] ?? [], 
-                    null, 
-                    $this->languageCode
-                ) ?? $this->translations['email_subject'];
 
-                if (isset($data['topic'])) {
-                    $topicSubject = LanguageHelper::getTranslatedValue(
-                        $this->templateConfig['emails']['subject']['topic'] ?? [], 
-                        null, 
-                        $this->languageCode
-                    ) ?? $this->translations['topic_subject'];
-                    
-                    if ($topicSubject) {
-                        $topicLabel = LanguageHelper::getTranslatedValue(
-                            $this->templateConfig['fields']['topic']['options'][$data['topic']], 
-                            null, 
-                            $this->languageCode
-                        );
-                        $subject = str_replace(':topic', $topicLabel, $topicSubject);
-                    }
+                if(isset($data['topic'])) {
+                    $subject = $this->languageHelper->get('emails.subject.topic', ['topic' => $data['topic']]);
+                } else {
+                    $subject = $this->languageHelper->get('emails.subject.default');
                 }
 
                 foreach ($this->templateConfig['fields'] as $fieldKey => $fieldConfig) {
@@ -201,39 +188,39 @@ class FormHandler
                     if (!empty($fieldErrors)) {
                         $errors = array_merge($errors, $fieldErrors);
                     }
-
-                    $label = LanguageHelper::getTranslatedValue($fieldConfig, 'label', $fieldKey);
+                    
+                    $label = $this->languageHelper->get('fields.' . $fieldKey . '.label');
                     $emailContent[$label] = match(true) {
                         $fieldConfig['type'] === 'date-range' && isset($data[$fieldKey]) && is_array($data[$fieldKey]) => 
                             sprintf(
                                 '%s - %s',
-                                htmlspecialchars($data[$fieldKey]['start'] ?? $this->translations['not_specified']),
-                                htmlspecialchars($data[$fieldKey]['end'] ?? $this->translations['not_specified'])
+                                htmlspecialchars($data[$fieldKey]['start'] ?? $this->languageHelper->get('validation.template.not_specified')),
+                                htmlspecialchars($data[$fieldKey]['end'] ?? $this->languageHelper->get('validation.template.not_specified'))
                             ),
                         isset($data[$fieldKey]) && is_array($data[$fieldKey]) => 
                             implode(', ', array_map('htmlspecialchars', $data[$fieldKey])),
                         default => 
-                            htmlspecialchars($data[$fieldKey] ?? $this->translations['not_specified'])
+                            htmlspecialchars($data[$fieldKey] ?? $this->languageHelper->get('validation.template.not_specified'))
                     };
 
                     
                 }
 
                 if ($this->contentWrapper->gdpr_checkbox()->toBool() && empty($data['gdpr'])) {
-                    $errors['gdpr'] = $this->translations['error_messages']['gdpr_required'] ?? 'GDPR consent is required.';
+                    $errors['gdpr'] = $this->languageHelper->get('validation.system.gdpr_required');
                 }
 
                 if (!empty($errors)) {
                     error_log('ERROR');
                     $alert['type'] = 'error';
-                    $alert['message'] = $this->translations['error_messages']['validation_error'];
+                    $alert['message'] = $this->languageHelper->get('validation.template.validation_error');
                     $alert['errors'] = $errors;
                 } else {
                     try {
                         EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $data, $this->languageCode, $attachments, $subject);
 
                         $alert['type'] = 'success';
-                        $alert['message'] = $this->translations['form_success'];
+                        $alert['message'] = $this->languageHelper->get('form.success');
                         
                         $successMessage = SuccessMessageHelper::getSuccessMessage($this->contentWrapper, $data, $this->languageCode);
                         $session->set('form.success', $successMessage);
@@ -242,12 +229,12 @@ class FormHandler
                         exit;
 
                     } catch (Exception $e) {
-                        $alert = ExceptionHelper::handleException($e, $this->translations);
+                        $alert = ExceptionHelper::handleException($e, $this->languageHelper);
                         LogHelper::logError($e);
                     }
                 }
             } catch (Exception $e) {
-                $alert = ExceptionHelper::handleException($e, $this->translations);
+                $alert = ExceptionHelper::handleException($e, $this->languageHelper);
                 LogHelper::logError($e);
             }
         }

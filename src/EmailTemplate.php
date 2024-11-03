@@ -22,6 +22,7 @@ class EmailTemplate
     protected $config;
     protected $formData;
     protected $languageCode;
+    protected $languageHelper;
     protected $templateId;
     protected $footerContent;
     protected Content $content;
@@ -35,14 +36,17 @@ class EmailTemplate
      * @param array $formData The form data.
      * @param string $footerContent The footer content.
      * @param string $templateId The template ID.
+     * @param array $templateConfig The template configuration.
      */
-    public function __construct($page, array $formData, $footerContent, string $templateId)
+    public function __construct($page, array $formData, $footerContent, string $templateId, array $templateConfig)
     {
+        
+        $this->languageHelper = new LanguageHelper(null, $templateConfig);
         $this->page = $page;
         $this->formData = $formData;
         $this->footerContent = $footerContent;
         $this->templateId = $templateId;
-        $this->languageCode = LanguageHelper::getCurrentLanguageCode();
+        $this->languageCode = $this->languageHelper->getLanguage();
         
         $this->loadConfig();
         
@@ -78,13 +82,9 @@ class EmailTemplate
      * @param mixed $default The default value.
      * @return mixed The value.
      */
-    protected function getConfigValue(string $key, $default = null)
+    protected function getConfigValue(string $key)
     {
-        return LanguageHelper::getTranslatedValue(
-            $this->config['emails']['content'][$key] ?? [],
-            $this->languageCode,
-            $default
-        );
+        return $this->languageHelper->get($key);
     }
 
     /**
@@ -110,8 +110,8 @@ class EmailTemplate
         $formData = [];
 
         if (isset($this->config['emails']['content'])) {
-            foreach ($this->config['emails']['content'] as $key => $translations) {
-                $contentData[$key] = $this->createField($key, $this->getConfigValue($key), $this->page);
+            foreach ($this->config['emails']['content'] as $key => $value) {
+                $contentData[$key] = $this->createField($key, $this->languageHelper->get('emails.content.' . $key), $this->page);
             }
         }
 

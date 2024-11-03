@@ -11,6 +11,25 @@ use Exception;
  * Version: 1.0.0
  */
 class EmailHelper {
+
+    protected static ?LanguageHelper $languageHelper = null;
+
+    /**
+     * Initializes the language helper.
+     *
+     * @param array $templateConfig The template configuration.
+     * @param string|null $languageCode The language code.
+     * @return LanguageHelper The language helper instance.
+     */
+    protected static function initLanguageHelper($templateConfig, $languageCode = null): LanguageHelper 
+    {
+        if (self::$languageHelper === null) {
+            $languageCode = $languageCode ?? kirby()->languageCode() ?? 'en';
+            self::$languageHelper = new LanguageHelper($languageCode, $templateConfig);
+        }
+        return self::$languageHelper;
+    }
+
     /**
      * Sends an email based on the provided configuration and data.
      *
@@ -25,6 +44,8 @@ class EmailHelper {
      * @throws \Exception If there's an error sending the email.
      */
     public static function sendEmail($kirby, $contentWrapper, $page, $templateConfig, $data, $languageCode, $attachments, $subject) {
+        self::initLanguageHelper($templateConfig, $languageCode);
+
         $to = self::getReceiverEmail($contentWrapper, $data);
         $subject = self::getEmailSubject($contentWrapper, $data, $templateConfig);
         $selectedTemplate = $contentWrapper->email_templates();
@@ -48,7 +69,7 @@ class EmailHelper {
             }
         }
 
-        $emailTemplate = new EmailTemplate($page, $data, $footerContent, $selectedTemplate);
+        $emailTemplate = new EmailTemplate($page, $data, $footerContent, $selectedTemplate, $templateConfig);
 
         try {
             $kirby->email([
@@ -130,27 +151,15 @@ class EmailHelper {
      * @return string The email subject.
      */
     public static function getEmailSubject($contentWrapper, $data, $templateConfig) {
-        $languageCode = LanguageHelper::getCurrentLanguageCode();
+        $languageHelper = self::initLanguageHelper($templateConfig);
         
         // Wenn send_to_more aktiviert ist und ein Thema ausgewählt wurde
         if ($contentWrapper->send_to_more()->toBool() && isset($data['topic'])) {
-            // Benutze die topic_subject Übersetzung mit dem ausgewählten Thema
-            $translations = require kirby()->root('plugins') . '/kirby-email-manager/translations/' . $languageCode . '.php';
-            $subject = $translations['topic_subject'];
-            
-            // Hole das übersetzte Topic-Label
-            if (isset($templateConfig['fields']['topic']['options'][$data['topic']])) {
-                $topicLabel = LanguageHelper::getTranslatedValue(
-                    $templateConfig['fields']['topic']['options'][$data['topic']], 
-                    null,
-                    $languageCode
-                );
-                $subject = str_replace(':topic', $topicLabel, $subject);
-            }
+            $templateSubject = $languageHelper->get('emails.subject.topic');
+            $subject = str_replace(':topic', $data['topic'], $templateSubject);
         } else {
-            // Standard E-Mail-Betreff aus den Übersetzungen
-            $translations = require kirby()->root('plugins') . '/kirby-email-manager/translations/' . $languageCode . '.php';
-            $subject = $translations['email_subject'];
+            // Standard E-Mail-Betreff
+            $subject = $languageHelper->get('emails.subject.default');
         }
 
         return $subject;
@@ -222,11 +231,7 @@ class EmailHelper {
             }
         }
 
-        return LanguageHelper::getTranslatedValue(
-            $templateConfig, 
-            'email_sender', 
-            'Contact Form'
-        );
+        return self::initLanguageHelper($templateConfig)->get('emails.sender');
     }
 
     /**
@@ -236,11 +241,7 @@ class EmailHelper {
      * @return string The confirmation subject.
      */
     public static function getConfirmationSubject($templateConfig) {
-        return LanguageHelper::getTranslatedValue(
-            $templateConfig,
-            'confirmation_subject',
-            'Confirmation of your inquiry'
-        );
+        return self::initLanguageHelper($templateConfig)->get('emails.confirmation.subject');
     }
     
     /**
@@ -250,10 +251,6 @@ class EmailHelper {
      * @return string The confirmation sender.
      */
     public static function getFormSender($templateConfig) {
-        return LanguageHelper::getTranslatedValue(
-            $templateConfig,
-            'confirmation_sender',
-            'No Reply'
-        );
+        return self::initLanguageHelper($templateConfig)->get('emails.confirmation.sender');
     }
 }

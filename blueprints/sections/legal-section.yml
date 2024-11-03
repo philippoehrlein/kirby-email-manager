@@ -1,22 +1,22 @@
 type: fields
 fields:
   email_legal_headline:
-    label: email_legal_headline_label
+    label: panel.legal.headline
     type: headline
 
   gdpr_checkbox:
-    label: gdpr_checkbox_label
+    label: panel.gdpr.checkbox_label
     type: toggle
     default: false
-    help: gdpr_checkbox_help
+    help: panel.gdpr.checkbox_help
 
   gdpr_text:
-    label: gdpr_text_label
+    label: panel.gdpr.text_label
     type: writer
     when:
       gdpr_checkbox: true
   
   email_legal_footer:
-    label: 'Email Footer'
+    label: panel.legal.footer_label
     type: writer
-    help: 'Optionaler rechtlicher Footer, der in Bestätigungsmails angezeigt wird.'
+    help: panel.legal.footer_help

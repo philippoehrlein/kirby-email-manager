@@ -1,60 +1,30 @@
 <?php
-use Kirby\Data\Data;
 use KirbyEmailManager\Helpers\FormHelper;
 use KirbyEmailManager\Helpers\SecurityHelper;
+use KirbyEmailManager\PageMethods\FormHandler;
 use KirbyEmailManager\Helpers\LanguageHelper;
 
 // Form-Builder: Generates the form layout and structure
-$languageCode = LanguageHelper::getCurrentLanguageCode();
 
+// Get config from FormHandler
+$formHandler = new FormHandler($kirby, $page, $contentWrapper);
 
-// Load the selected template from the panel
-$selectedTemplateId = $contentWrapper->email_templates()->value();
-$templates = kirby()->option('philippoehrlein.kirby-email-manager.templates');
-$templateConfig = $templates[$selectedTemplateId] ?? [];
-
-if (empty($templateConfig)) {
-    throw new Exception(t('error_messages.template_not_found', 'Selected email template configuration not found.'));
-}
-
-$configPath = kirby()->root('site') . '/templates/emails/' . $selectedTemplateId . '/config.yml';
-
-if (!file_exists($configPath)) {
-    throw new Exception(t('error_messages.config_file_not_found', 'Configuration file not found: ') . $configPath);
-}
-
-$templateConfig = Data::read($configPath);
-
-if (empty($templateConfig)) {
-    throw new Exception(t('error_messages.template_config_empty', 'Template configuration is empty.'));
-}
-
-if (!isset($templateConfig['fields']) || !is_array($templateConfig['fields'])) {
-    throw new Exception(t('error_messages.template_fields_missing', 'Template configuration is missing the "fields" key or it is not an array.'));
-}
+$templateConfig = $formHandler->getTemplateConfig();
+$languageHelper = new LanguageHelper(null, $templateConfig);
+$languageCode = $languageHelper->getLanguage();
 
 $resetButton = $templateConfig['buttons']['reset'] ?? ['show' => true];
 $resetButtonShow = $resetButton['show'] ?? true;
 
-$sendButtonText = LanguageHelper::getTranslatedValue(
-    $templateConfig['buttons']['send']['text'] ?? [],
-    $languageCode,
-    'Send'
-);
-
-$resetButtonText = LanguageHelper::getTranslatedValue(
-    $templateConfig['buttons']['reset']['text'] ?? [],
-    $languageCode,
-    'Reset'
-);
-
+$sendButtonText = $languageHelper->get('buttons.send.label');
+$resetButtonText = $languageHelper->get('buttons.reset.label');
 
 $pluginConfig = kirby()->option('philippoehrlein.kirby-email-manager.classConfig', []);
 $config = [
-  'classPrefix' => $pluginConfig['classPrefix'] ?? $prefix ?? 'kem-',
-  'classes' => $pluginConfig['classes'] ?? [],
-  'additionalClasses' => $pluginConfig['additionalClasses'] ?? [],
-  'noPrefixElements' => $pluginConfig['noPrefixElements'] ?? []
+    'classPrefix' => $pluginConfig['classPrefix'] ?? $prefix ?? 'kem-',
+    'classes' => $pluginConfig['classes'] ?? [],
+    'additionalClasses' => $pluginConfig['additionalClasses'] ?? [],
+    'noPrefixElements' => $pluginConfig['noPrefixElements'] ?? []
 ];
 
 $successMessage = $alert['successMessage'] ?? null;
@@ -82,10 +52,7 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
 
   <input type="hidden" name="timestamp" value="<?= time() ?>">
 
-  <?php if ($contentWrapper->send_to_more()->toBool()): ?>
-    <div class="<?= FormHelper::getClassName('field', $config, 'select') ?>" style="<?= FormHelper::generateSpanStyles([12]) ?>">
-      <label class="<?= FormHelper::getClassName('label', $config) ?>" for="topic"><?= t('topic_label') ?></label>
-      <?php
+  <?php if ($contentWrapper->send_to_more()->toBool()): 
       $options = [];
       $inputClass = FormHelper::getClassName('select', $config);
 
@@ -95,22 +62,27 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
       foreach ($contentWrapper->send_to_structure()->toStructure() as $item) {
         $options[$item->topic()->value()] = $item->topic()->value();
       }
-      snippet('email-manager/form/select', [
+
+      snippet('email-manager/form/base', [
         'fieldKey' => 'topic',
         'fieldConfig' => [
-          'type' => 'select',
-          'required' => true,
-          'placeholder' => [
-            $languageCode => t('select_topic')
-          ],
-          'options' => $options
+            'type' => 'select',
+            'required' => true,
+            'placeholder' => [
+                $languageCode => t('select_topic')
+            ],
+            'options' => $options,
+            'label' => [
+                $languageCode => t('panel.email.topic_label')
+            ]
         ],
         'value' => $data['topic'] ?? '',
+        'placeholder' => t('select_topic'),
+        'config' => $config,
         'languageCode' => $languageCode,
-        'inputClass' => $inputClass
-      ]) ?>
-    </div>
-  <?php endif ?>
+        'error' => $fieldErrors['topic'] ?? null
+      ]);
+  endif ?>
 
   <div class="<?= FormHelper::getClassName('grid', $config) ?>">
   <?php foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig): ?>

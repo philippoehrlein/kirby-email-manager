@@ -1,89 +1,115 @@
 <?php
 
 return [
-    'email_tab_label' => 'Gestionnaire d\'emails',
-    'email_templates_headline' => 'Modèles d\'email',
-    'email_templates_label' => 'Modèle d\'email',
-    'send_to_more_label' => 'Envoyer des emails à différentes adresses en fonction du sujet ?',
-    'send_to_one' => 'Non, à une seule adresse email',
-    'send_to_many' => 'Oui, envoyer à plusieurs adresses email',
-    'send_to_label' => 'Adresse email',
-    'send_to_structure_label' => 'Gérer les adresses email',
-    'send_to_structure_help' => 'Ajoutez ici les options de sujet et les adresses email correspondantes.',
-    'topic_label' => 'Sujet',
-    'topic_subject' => 'Message du formulaire de contact: :topic',
-    'email_label' => 'Adresse email',
-    'gdpr_checkbox_label' => 'Case d\'acceptation des conditions de confidentialité obligatoire ?',
-    'gdpr_checkbox_help' => 'Si sélectionné, la case d\'acceptation des conditions de confidentialité apparaîtra dans le formulaire.',
-    'gdpr_text_label' => 'Texte pour la case d\'acceptation des conditions de confidentialité',
-    'form_ready' => 'Formulaire prêt pour la saisie.',
-    'field_required' => 'Ce champ est obligatoire.',
-    'invalid_email' => 'Veuillez saisir une adresse email valide.',
-    'form_invalid' => 'Le formulaire n\'a pas été rempli correctement.',
-    'form_success' => 'Formulaire envoyé avec succès.',
-    'error_occurred' => 'Une erreur est survenue : ',
-    'not_specified' => 'Non spécifié',
-    'email_subject' => 'Message du formulaire de contact',
-    'send_to_success_title_label' => 'Titre de succès',
-    'send_to_success_text_label' => 'Texte de succès',
-    'send_to_more_success_message_label' => 'Message de succès',
-    'send_to_more_success_title_label' => 'Titre de succès',
-    'send_to_more_success_text_label' => 'Texte de succès',
-    'email_legal_headline_label' => 'Légal',
-    'honeypot_label' => 'Veuillez ne pas remplir (Protection contre le spam)',
-    'not_specified' => 'Non spécifié',
-
-
-    // Messages d'erreur imbriqués
-    'error_messages' => [
-        'validation_error' => 'Veuillez remplir correctement tous les champs obligatoires.',
-        'required' => 'Ce champ est obligatoire.',
-        'invalid_email' => 'Veuillez saisir une adresse email valide.',
-        'invalid_name' => 'Veuillez saisir un nom valide.',
-        'message_too_short' => 'Votre message doit contenir au moins :minLength caractères.',
-        'gdpr_required' => 'Veuillez accepter les conditions de confidentialité.',
-        'invalid_date' => 'Veuillez saisir une date valide.',
-        'invalid_date_range' => 'Veuillez saisir une plage de dates valide.',
-        'date_before_min' => 'La date doit être postérieure à :min.',
-        'date_after_max' => 'La date doit être antérieure à :max.',
-        'file_too_large' => 'Le fichier est trop volumineux. La taille maximale est de :maxSize Mo.',
-        'invalid_file_type' => 'Type de fichier non valide. Les types autorisés sont : :allowedTypes.',
-        'min_date' => 'La date est antérieure à la limite autorisée.',
-        'max_date' => 'La date est postérieure à la limite autorisée.',
-        'invalid_range' => 'La date de fin doit être postérieure à la date de début.',
-        'date_before_min' => 'La date de début est antérieure à la limite autorisée.',
-        'date_after_max' => 'La date de fin est postérieure à la limite autorisée.',
-        'invalid_option' => 'Option sélectionnée non valide.',
-        'min_length_password' => 'Le mot de passe doit contenir au moins :minLength caractères.',
-        'invalid_phone' => 'Veuillez saisir un numéro de téléphone valide.',
-        'csrf_error' => 'Jeton CSRF non valide.',
-        'submission_time_error' => 'Heure de soumission non valide.',
-        'submission_time_warning' => 'La durée de soumission est expirée. Veuillez vérifier vos entrées et renvoyer le formulaire.',
-        'submission_time_too_fast' => 'Le formulaire a été envoyé trop rapidement. Veuillez réessayer.',
-        'template_not_found' => 'La configuration de la modèle d\'email sélectionnée n\'a pas été trouvée.',
-        'config_file_not_found' => 'Fichier de configuration non trouvé: ',
-        'template_config_empty' => 'La configuration du modèle est vide.',
-        'template_fields_missing' => 'La configuration du modèle manque la clé "fields" ou ce n\'est pas un tableau.',
-        'no_template' => 'Aucune modèle d\'email sélectionné.',
-        'template_not_found' => 'La configuration du modèle d\'email sélectionnée n\'a pas été trouvée.',
-        'file_move_error' => 'Erreur lors du déplacement du fichier. Erreur PHP: ',
-        'csrf_error' => 'Token CSRF non valide.',
-        'missing_required_key' => 'Clé manquante requise "{key}" dans la configuration du modèle.',
-        'field_missing_property' => 'Propriété manquante "{property}" pour le champ "{fieldKey}" dans la configuration du modèle.',
-        'confirmation_template_not_found' => 'Modèle d\'email de confirmation non trouvé: ',
-        'time_step' => 'Veuillez sélectionner une heure dans l\'intervalle de %d minutes',
-        'time_before_min' => 'La heure doit être après %s.',
-        'time_after_max' => 'La heure doit être avant %s.',
-        'number_too_small' => 'Le nombre doit être plus grand que :min.',
-        'number_too_large' => 'Le nombre doit être plus petit que :max.',
-        'invalid_number' => 'Veuillez saisir un nombre valide.',
-        'invalid_url' => 'Veuillez saisir une URL valide.',
-        'file_upload_error' => 'Erreur lors du téléchargement du fichier. Erreur PHP: '
+    'form' => [
+        'status' => [
+            'ready' => 'Formulaire prêt pour la saisie.',
+            'invalid' => 'Le formulaire n\'a pas été rempli correctement.',
+            'success' => 'Formulaire envoyé avec succès.'
+        ],
+        'honeypot' => [
+            'label' => 'Veuillez ne pas remplir (Protection contre le spam)'
+        ]
     ],
-
-    // Textes des boutons
-    'button_texts' => [
-        'send' => 'Envoyer',
-        'reset' => 'Réinitialiser'
-    ]
+    'validation' => [
+        'fields' => [
+            'required' => 'Ce champ est obligatoire.',
+            'email' => 'Veuillez saisir une adresse email valide.',
+            'name' => 'Veuillez saisir un nom valide.',
+            'message' => [
+                'too_short' => 'Votre message doit contenir au moins :minLength caractères.'
+            ],
+            'gdpr' => 'Veuillez accepter les conditions de confidentialité.',
+            'date' => [
+                'invalid' => 'Veuillez saisir une date valide.',
+                'invalid_range' => 'Veuillez saisir une plage de dates valide.',
+                'before_min' => 'La date doit être postérieure à :min.',
+                'after_max' => 'La date doit être antérieure à :max.',
+                'min' => 'La date est antérieure à la limite autorisée.',
+                'max' => 'La date est postérieure à la limite autorisée.',
+                'invalid_range' => 'La date de fin doit être postérieure à la date de début.'
+            ],
+            'file' => [
+                'too_large' => 'Le fichier est trop volumineux. La taille maximale est de :maxSize Mo.',
+                'invalid_type' => 'Type de fichier non valide. Les types autorisés sont : :allowedTypes.',
+                'move_error' => 'Erreur lors du déplacement du fichier. Erreur PHP : ',
+                'upload_error' => 'Erreur lors du téléchargement du fichier. Erreur PHP : ',
+                'too_large_ini' => 'Le fichier dépasse la taille autorisée dans la configuration PHP.',
+                'too_large_form' => 'Le fichier dépasse la taille autorisée dans le formulaire.',
+                'partial_upload' => 'Le fichier n\'a été que partiellement téléchargé.',
+                'no_upload' => 'Aucun fichier n\'a été téléchargé.',
+                'missing_temp' => 'Le dossier temporaire est manquant.',
+                'write_error' => 'Erreur lors de l\'enregistrement du fichier.',
+                'upload_stopped' => 'Le téléchargement du fichier a été arrêté par une extension.',
+                'unknown_error' => 'Une erreur inconnue s\'est produite lors du téléchargement.',
+                'malicious' => 'Le fichier peut contenir du code malveillant.'
+            ],
+            'password' => [
+                'min_length' => 'Le mot de passe doit contenir au moins :minLength caractères.'
+            ],
+            'phone' => 'Veuillez saisir un numéro de téléphone valide.',
+            'option' => 'Option sélectionnée non valide.',
+            'time' => [
+                'step' => 'Veuillez sélectionner une heure par intervalles de :interval minutes',
+                'before_min' => 'L\'heure doit être postérieure à :min.',
+                'after_max' => 'L\'heure doit être antérieure à :max.'
+            ],
+            'number' => [
+                'too_small' => 'Le nombre doit être supérieur à :min.',
+                'too_large' => 'Le nombre doit être inférieur à :max.',
+                'invalid' => 'Veuillez saisir un nombre valide.'
+            ],
+            'url' => 'Veuillez saisir une URL valide.'
+        ],
+        'system' => [
+            'csrf' => 'Jeton CSRF non valide.',
+            'submission_time' => [
+                'error' => 'Heure de soumission non valide.',
+                'warning' => 'Le délai de soumission a expiré. Veuillez vérifier vos entrées et soumettre à nouveau le formulaire.',
+                'too_fast' => 'Le formulaire a été soumis trop rapidement. Veuillez réessayer.'
+            ]
+        ],
+        'template' => [
+            'not_found' => 'La configuration du modèle d\'email sélectionné n\'a pas été trouvée.',
+            'not_specified' => 'Non spécifié',
+            'config_not_found' => 'Fichier de configuration non trouvé : ',
+            'empty' => 'La configuration du modèle est vide.',
+            'fields_missing' => 'La configuration du modèle ne contient pas la clé "fields" ou ce n\'est pas un tableau.',
+            'no_template' => 'Aucun modèle d\'email sélectionné.',
+            'confirmation_not_found' => 'Modèle d\'email de confirmation non trouvé : ',
+            'missing_key' => 'Clé requise ":key" manquante dans la configuration du modèle.',
+            'missing_property' => 'Propriété ":property" manquante pour le champ ":fieldKey" dans la configuration du modèle.',
+            'validation_error' => 'Veuillez remplir tous les champs requis correctement.'
+        ]
+    ],
+    'buttons' => [
+        'send' => [
+            'label' => 'Envoyer'
+        ],
+        'reset' => [
+            'label' => 'Réinitialiser'
+        ]
+    ],
+    'panel.tab' => 'Gestionnaire d\'e-mails',
+    'panel.templates.headline' => 'Modèles d\'e-mails',
+    'panel.templates.label' => 'Modèle d\'e-mail',
+    'panel.email.send_to_more_label' => 'Envoyer l\'e-mail à différentes adresses en fonction du sujet ?',
+    'panel.email.send_to_one' => 'Non, une seule adresse e-mail',
+    'panel.email.send_to_many' => 'Oui, envoyer à plusieurs adresses e-mail',
+    'panel.email.send_to_label' => 'Adresse e-mail',
+    'panel.email.send_to_structure_label' => 'Gérer les adresses e-mail',
+    'panel.email.send_to_structure_help' => 'Ajoutez ici les options de sujet et les adresses e-mail correspondantes.',
+    'panel.email.topic_label' => 'Sujet',
+    'panel.email.topic_subject' => 'Message du formulaire de contact : :topic',
+    'panel.email.email_label' => 'Adresse e-mail',
+    'panel.email.subject' => 'Message du formulaire de contact',
+    'panel.gdpr.checkbox_label' => 'Case à cocher RGPD requise ?',
+    'panel.gdpr.checkbox_help' => 'Si sélectionné, la case à cocher RGPD sera affichée dans le formulaire.',
+    'panel.gdpr.text_label' => 'Texte pour la case à cocher RGPD',
+    'panel.success.title_label' => 'Titre de succès',
+    'panel.success.text_label' => 'Texte de succès',
+    'panel.success.message_label' => 'Message de succès',
+    'panel.legal.headline' => 'Mentions légales',
+    'panel.legal.footer_label' => 'Pied de page de l\'e-mail',
+    'panel.legal.footer_help' => 'Pied de page légal optionnel affiché dans les e-mails de confirmation.',
 ];

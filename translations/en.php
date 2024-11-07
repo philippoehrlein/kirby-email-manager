@@ -16,6 +16,7 @@ return [
             'required' => 'This field is required.',
             'email' => 'Please enter a valid email address.',
             'name' => 'Please enter a valid name.',
+            'too_short' => 'Your input must be at least :minLength characters long.',
             'message' => [
                 'too_short' => 'Your message must be at least :minLength characters long.'
             ],

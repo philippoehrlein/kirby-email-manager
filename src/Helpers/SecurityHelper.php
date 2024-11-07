@@ -21,7 +21,7 @@ class SecurityHelper
     public static function escapeHtml($string): string 
     {
         if (is_string($string)) {
-            return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+            return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8', true);
         }
         return '';
     }
@@ -32,7 +32,7 @@ class SecurityHelper
      * @param string $filename The filename to sanitize.
      * @return string The sanitized filename.
      */
-    public static function sanitizeFilename($filename)
+    public static function sanitizeFilename(?string $filename): string
     {
         if($filename === null) {
             return '';
@@ -66,6 +66,31 @@ class SecurityHelper
             return false;
         }
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+    }
+
+    /**
+     * Validates a URL for security and format.
+     *
+     * @param string $url The URL to validate
+     * @return bool True if the URL is valid and secure, false otherwise
+     */
+    public static function validateUrl($url): bool
+    {
+        if (empty($url)) {
+            return false;
+        }
+
+        $sanitizedUrl = filter_var($url, FILTER_SANITIZE_URL);
+        if (!filter_var($sanitizedUrl, FILTER_VALIDATE_URL)) {
+            return false;
+        }
+        
+        // Erlaubte Protokolle
+        $allowedProtocols = ['http', 'https'];
+        $urlParts = parse_url($sanitizedUrl);
+        
+        return isset($urlParts['scheme']) && 
+            in_array(strtolower($urlParts['scheme']), $allowedProtocols);
     }
 
     /**
@@ -106,19 +131,23 @@ class SecurityHelper
         $sanitizedData = [];
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                if($value === null) {
-                    $sanitizedData[$key] = [];
-                } else {
-                    $sanitizedData[$key] = array_map([self::class, 'sanitize'], $value);
-                }
+                $sanitizedData[$key] = array_map([self::class, 'sanitize'], $value);
             } else {
-                if($value === null) {
-                    $sanitizedData[$key] = '';
-                } else {
-                    $sanitizedData[$key] = self::sanitize($value);
-                }
+                $sanitizedData[$key] = self::sanitize($value);
             }
         }
         return $sanitizedData;
+    }
+
+    /**
+     * Sets security headers.
+     *
+     * @return void
+     */
+    public static function setSecurityHeaders(): void
+    {
+        header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'");
+        header("X-XSS-Protection: 1; mode=block");
+        header("X-Content-Type-Options: nosniff");
     }
 }

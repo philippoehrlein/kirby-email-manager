@@ -1,0 +1,48 @@
+<div class="content">
+    <h1>Willkommen auf unserer Webseite</h1>
+    <p>Dies ist ein sehr langer Text mit verschiedenen HTML-Elementen und potenziell gefährlichem Code.</p>
+    
+    <div class="article">
+        <h2>Artikel 1</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <b>Wichtiger Text</b> und <i>kursiver Text</i>.</p>
+        <p>Hier ist ein <a href="javascript:alert('XSS1')">gefährlicher Link</a> versteckt.</p>
+        <script>document.cookie="session=stolen";</script>
+    </div>
+
+    <div class="section" onmouseover="alert('XSS2')">
+        <h3>Abschnitt mit Event-Handler</h3>
+        <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. & < > " '</p>
+        <img src="x" onerror="alert('XSS3')" />
+    </div>
+
+    <form action="javascript:alert('XSS4')">
+        <input type="text" value="'/><script>alert('XSS5')</script>">
+        <button onclick="eval('alert(\'XSS6\')')">Klick mich</button>
+    </form>
+
+    <div style="background-image: url('javascript:alert(\'XSS7\')')">
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+        <script>eval(String.fromCharCode(97,108,101,114,116,40,39,88,83,83,56,39,41))</script>
+    </div>
+
+    <iframe src="javascript:alert('XSS9')" style="display:none"></iframe>
+    
+    <div class="long-text">
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+        <div onclick="(function(){alert('XSS10')})()">
+            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+        </div>
+        <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
+        <script>
+            setTimeout(function() {
+                alert('XSS11');
+            }, 1000);
+        </script>
+    </div>
+
+    <div class="footer">
+        <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</p>
+        <a href="#" onmouseover="var script = document.createElement('script'); script.src='malicious.js'; document.body.appendChild(script);">Hover für XSS</a>
+    </div>
+</div>

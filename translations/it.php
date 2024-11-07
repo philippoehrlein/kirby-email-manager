@@ -16,6 +16,7 @@ return [
             'required' => 'Questo campo è obbligatorio.',
             'email' => 'Per favore, inserisci un indirizzo email valido.',
             'name' => 'Per favore, inserisci un nome valido.',
+            'too_short' => 'Il tuo input deve contenere almeno :minLength caratteri.',
             'message' => [
                 'too_short' => 'Il tuo messaggio deve contenere almeno :minLength caratteri.'
             ],

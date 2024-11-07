@@ -26,7 +26,6 @@ class FormHandler
     protected $contentWrapper; 
     protected $languageCode;
     protected $templateConfig;
-    protected $translations;
     protected $languageHelper;
     protected $page;
     /**
@@ -136,7 +135,7 @@ class FormHandler
             if (csrf(get('csrf')) !== true) {
                 $csrfError = $this->languageHelper->get('validation.system.csrf');
                 LogHelper::logError($csrfError);
-                
+
                 return [
                     'alert' => [
                         'type' => 'error',
@@ -184,7 +183,7 @@ class FormHandler
                         continue;
                     }
 
-                    $fieldErrors = ValidationHelper::validateField($fieldKey, $fieldConfig, $data, $this->translations, $this->languageCode);
+                    $fieldErrors = ValidationHelper::validateField($fieldKey, $fieldConfig, $data, $this->templateConfig,  $this->languageCode);
                     if (!empty($fieldErrors)) {
                         $errors = array_merge($errors, $fieldErrors);
                     }

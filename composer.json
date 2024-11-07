@@ -38,6 +38,6 @@
   },
   "scripts": {
     "test": "phpunit",
-    "test:coverage": "phpunit --coverage-html tests/coverage"
+    "test:coverage": "phpunit --coverage-html test/coverage"
   }
 }

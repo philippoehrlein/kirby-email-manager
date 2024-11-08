@@ -93,6 +93,28 @@ class FormHandler
     {    
         $session = $this->kirby->session();
         $data = $this->kirby->request()->data();
+        $errors = [];
+        $alert = [];
+
+        // CAPTCHA Validierung durchführen
+        if (isset($this->templateConfig['captcha'])) {
+            $captchaErrors = ValidationHelper::validateCaptcha(
+                $data, 
+                $this->templateConfig, 
+                $this->languageHelper
+            );
+            
+            if (!empty($captchaErrors)) {
+                return [
+                    'alert' => [
+                        'type' => 'error',
+                        'message' => $this->languageHelper->get('captcha.error_messages.invalid'),
+                        'errors' => $captchaErrors
+                    ],
+                    'data' => $data
+                ];
+            }
+        }
 
         if (!empty($data['website_hp_'])) {
             go($this->page->url());

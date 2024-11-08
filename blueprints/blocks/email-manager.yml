@@ -1,0 +1,6 @@
+title: Email Manager
+icon: email
+
+tabs:
+  email: email-manager/email-tab
+  legal: email-manager/legal-tab

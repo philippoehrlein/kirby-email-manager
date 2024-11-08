@@ -61,18 +61,13 @@ fields:
         label: panel.email.email_label
         type: email
         required: true
-      success:
-        type: structure
-        max: 1
-        label: panel.success.message_label
-        fields:
-          title:
-            label: panel.success.title_label
-            type: text
-            required: true
-          text:
-            label: panel.success.text_label
-            type: writer
-            required: true
+      success_title:
+        label: panel.success.title_label
+        type: text
+        required: true
+      success_text:
+        label: panel.success.text_label
+        type: writer
+        required: true
     help: panel.email.send_to_structure_help
     required: true

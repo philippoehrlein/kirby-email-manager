@@ -91,8 +91,14 @@ return [
             'label' => 'Reset'
         ]
     ],
+    'captcha' => [
+        'error_messages' => [
+            'missing' => 'Please verify that you are human.',
+            'invalid' => 'Verification failed. Please try again.'
+        ]
+    ],
     'panel.tab' => 'Email Manager',
-    'panel.templates.headline' => 'Email Templates',
+    'panel.templates.headline' => 'Email',
     'panel.templates.label' => 'Email Template',
     'panel.email.send_to_more_label' => 'Send email to different email addresses based on subject?',
     'panel.email.send_to_one' => 'No, only one email address',

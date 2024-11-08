@@ -115,6 +115,22 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
     </div>
   <?php endif; ?>
 
+  <!-- CAPTCHA Integration -->
+  <?php if (isset($templateConfig['captcha'])): ?>
+    <?php
+      $captchaConfig = $templateConfig['captcha'];
+      if (isset($captchaConfig['frontend']['snippet'])) {
+        snippet($captchaConfig['frontend']['snippet'], [
+          'options' => $captchaConfig['options'] ?? [],
+          'fieldName' => $captchaConfig['frontend']['field_name'] ?? 'captcha-response',
+          'error' => $fieldErrors[$captchaConfig['frontend']['field_name']] ?? null,
+          'config' => $config,
+          'languageCode' => $languageCode
+        ]);
+      }
+    ?>
+  <?php endif; ?>
+
   <!-- Form Actions (Buttons) -->
   <div class="<?= FormHelper::getClassName('form', $config, 'actions') ?>">
     <?php if ($resetButtonShow): ?>

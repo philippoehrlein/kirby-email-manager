@@ -91,8 +91,14 @@ return [
             'label' => 'Zurücksetzen'
         ]
     ],
+    'captcha' => [
+        'error_messages' => [
+            'missing' => 'Bitte bestätigen Sie, dass Sie ein Mensch sind.',
+            'invalid' => 'Die Überprüfung ist fehlgeschlagen. Bitte versuchen Sie es erneut.'
+        ]
+    ],
     'panel.tab' => 'E-Mail Manager',
-    'panel.templates.headline' => 'E-Mail-Vorlagen',
+    'panel.templates.headline' => 'E-Mail',
     'panel.templates.label' => 'E-Mail-Vorlage',
     'panel.email.send_to_more_label' => 'E-Mail über Betreff an verschiedene E-Mail-Adressen senden?',
     'panel.email.send_to_one' => 'Nein, nur eine E-Mail-Adresse',

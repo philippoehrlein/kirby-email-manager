@@ -91,8 +91,14 @@ return [
             'label' => 'Reimposta'
         ]
     ],
+    'captcha' => [
+        'error_messages' => [
+            'missing' => 'Per favore, verifica che sei umano.',
+            'invalid' => 'La verifica ha fallito. Per favore, riprova.'
+        ]
+    ],
     'panel.tab' => 'Gestore Email',
-    'panel.templates.headline' => 'Modelli Email',
+    'panel.templates.headline' => 'Email',
     'panel.templates.label' => 'Modello Email',
     'panel.email.send_to_more_label' => 'Inviare email a diversi indirizzi in base all\'oggetto?',
     'panel.email.send_to_one' => 'No, solo un indirizzo email',

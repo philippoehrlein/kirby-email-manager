@@ -31,7 +31,7 @@ class ValidationHelper
     // Sanitize input
     $data[$fieldKey] = SecurityHelper::sanitize($data[$fieldKey] ?? null);
 
-    // 1. Allgemeine Validierungen
+    // 1. General validations
     $errors = array_merge(
         $errors,
         self::validateRequired($fieldKey, $fieldConfig, $data, $languageHelper),
@@ -39,16 +39,32 @@ class ValidationHelper
         self::validateMaxLength($fieldKey, $fieldConfig, $data, $languageHelper)
     );
 
-    // Wenn bereits Fehler gefunden wurden, weitere Validierung abbrechen
+    // If errors are found, stop further validation
     if (!empty($errors)) {
         return $errors;
     }
 
-    // 2. Typ-spezifische Validierungen
+    // CAPTCHA validation (only if configured)
+    if (isset($templateConfig['captcha']) && 
+        isset($templateConfig['captcha']['frontend']['field_name']) && 
+        $fieldKey === $templateConfig['captcha']['frontend']['field_name']) {
+        
+        $captchaErrors = self::validateCaptcha($data, $templateConfig, $languageHelper);
+        
+        // If CAPTCHA errors are found, stop further validation
+        if (!empty($captchaErrors)) {
+            return $captchaErrors;
+        }
+        
+        // If CAPTCHA is valid, no further validation for this field
+        return [];
+    }
+
+    // 2. Type-specific validations
     switch ($fieldConfig['type']) {
       case 'email':
         if (!empty($data[$fieldKey]) && !SecurityHelper::validateEmail($data[$fieldKey])) {
-          $errors[$fieldKey] = $languageHelper->get('validation.fields.email');
+          $errors[$fieldKey] = $languageHelper->get('captcha.error_messages.invalid');
         }
         break;
 
@@ -122,7 +138,7 @@ class ValidationHelper
         if (!empty($data[$fieldKey]) && is_array($data[$fieldKey])) {
           $file = $data[$fieldKey];
           
-          // Prüfe Dateigröße
+          // Check file size
           $maxSize = isset($fieldConfig['max_size']) ? (int)$fieldConfig['max_size'] : 5242880;
           if ($file['size'] > $maxSize) {
             $errors[$fieldKey] = str_replace(
@@ -133,7 +149,7 @@ class ValidationHelper
             break;
           }
 
-          // Prüfe Dateityp
+          // Check file type
           $allowedTypes = $fieldConfig['allowed_types'] ?? [];
           $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
           if (!empty($allowedTypes) && !in_array($fileExtension, $allowedTypes)) {
@@ -145,7 +161,7 @@ class ValidationHelper
             break;
           }
 
-          // Prüfe MIME-Type
+          // Check MIME type
           if (!empty($fieldConfig['allowed_mimes'])) {
             $finfo = new \finfo(FILEINFO_MIME_TYPE);
             $mimeType = $finfo->file($file['tmp_name']);
@@ -260,7 +276,7 @@ class ValidationHelper
         }
         break;
     }
-    
+
     return $errors;
   }
 
@@ -321,6 +337,47 @@ class ValidationHelper
         $errors[$fieldKey] = str_replace(':maxLength', $maxLength, $languageHelper->get('validation.fields.message.too_long'));
       }
     }
+    return $errors;
+  }
+
+  /**
+   * Validates the CAPTCHA.
+   *
+   * @param array $data The form data.
+   * @param array $templateConfig The template configuration.
+   * @param LanguageHelper $languageHelper The language helper instance.
+   * @return array The validation errors.
+   */
+  public static function validateCaptcha($data, $templateConfig, $languageHelper) 
+  {
+    $errors = [];
+    
+    if (!isset($templateConfig['captcha'])) {
+        return $errors;
+    }
+
+    $captchaConfig = $templateConfig['captcha'];
+    $fieldName = $captchaConfig['frontend']['field_name'] ?? 'captcha-response';
+
+    if (empty($data[$fieldName])) {
+        $errors[$fieldName] = $languageHelper->get('captcha.error_messages.missing');
+        return $errors;
+    }
+
+    if (!kirby()->option('philippoehrlein.kirby-email-manager.captcha.validate_callback')) {
+        error_log('CAPTCHA validation callback not configured');
+        return $errors; 
+    }
+    $validateCallback = kirby()->option('philippoehrlein.kirby-email-manager.captcha.validate_callback');
+    
+    if (!is_callable($validateCallback)) {
+        return $errors;
+    }
+
+    if (!$validateCallback($data[$fieldName], $captchaConfig)) {
+        $errors[$fieldName] = $languageHelper->get('captcha.error_messages.invalid');
+    }
+
     return $errors;
   }
 }

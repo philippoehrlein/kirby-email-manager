@@ -91,9 +91,15 @@ return [
             'label' => 'Restablecer'
         ]
     ],
-    'panel.tab' => 'Gestor de Correo',
-    'panel.templates.headline' => 'Plantillas de Correo',
-    'panel.templates.label' => 'Plantilla de Correo',
+    'captcha' => [
+        'error_messages' => [
+            'missing' => 'Por favor, verifique que es humano.',
+            'invalid' => 'La verificación ha fallado. Por favor, inténtelo de nuevo.'
+        ]
+    ],
+    'panel.tab' => 'Gestor de E-Mail',
+    'panel.templates.headline' => 'E-Mail',
+    'panel.templates.label' => 'Plantilla de E-Mail',
     'panel.email.send_to_more_label' => '¿Enviar correo a diferentes direcciones según el asunto?',
     'panel.email.send_to_one' => 'No, solo una dirección de correo',
     'panel.email.send_to_many' => 'Sí, enviar a múltiples direcciones de correo',

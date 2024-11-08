@@ -91,8 +91,14 @@ return [
             'label' => 'Réinitialiser'
         ]
     ],
+    'captcha' => [
+        'error_messages' => [
+            'missing' => 'Veuillez vérifier que vous êtes humain.',
+            'invalid' => 'La vérification a échoué. Veuillez réessayer.'
+        ]
+    ],
     'panel.tab' => 'Gestionnaire d\'e-mails',
-    'panel.templates.headline' => 'Modèles d\'e-mails',
+    'panel.templates.headline' => 'E-mail',
     'panel.templates.label' => 'Modèle d\'e-mail',
     'panel.email.send_to_more_label' => 'Envoyer l\'e-mail à différentes adresses en fonction du sujet ?',
     'panel.email.send_to_one' => 'Non, une seule adresse e-mail',

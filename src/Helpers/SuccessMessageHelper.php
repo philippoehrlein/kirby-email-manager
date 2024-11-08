@@ -29,8 +29,8 @@ class SuccessMessageHelper
             $successStructure = $contentWrapper->send_to_structure()->toStructure()->findBy('topic', $topic);
             if ($successStructure) {
                 return [
-                    'title' => $successStructure->success()->toStructure()->first()->title()->value(),
-                    'text' => $successStructure->success()->toStructure()->first()->text()->value()
+                    'title' => $successStructure->success_title()->value(),
+                    'text' => $successStructure->success_text()->value()
                 ];
             }
         }

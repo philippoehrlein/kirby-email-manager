@@ -6,11 +6,11 @@ icon: server
 
 columns:
   main:
-    width: 1/2
+    width: 3/5
     sections:
       email: email-manager/email-section
 
   sidebar:
-    width: 1/2
+    width: 2/5
     sections:
       legal: email-manager/legal-section

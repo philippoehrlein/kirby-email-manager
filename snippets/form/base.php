@@ -2,6 +2,7 @@
 use KirbyEmailManager\Helpers\FormHelper;
 use KirbyEmailManager\Helpers\FieldHelper;
 
+
 $config = $config ?? [];
 
 // Set up CSS classes based on configuration
@@ -9,22 +10,22 @@ $fieldClass = FieldHelper::getFieldClassName('field', $config, $fieldConfig['typ
 $labelClass = FieldHelper::getFieldClassName('label', $config);
 $inputClass = FieldHelper::getFieldClassName('input', $config);
 
-// Spezifische Klassen für Textfelder hinzufügen
+// Add specific classes for text fields
 if (in_array($fieldConfig['type'], ['text', 'email', 'tel'])) {
     $inputClass .= ' ' . FieldHelper::getFieldClassName('input', $config, $fieldConfig['type']);
 } elseif (in_array($fieldConfig['type'], ['select', 'textarea'])) {
     $inputClass = FieldHelper::getFieldClassName($fieldConfig['type'], $config);
 }
 
-// Layout und Span-Styles definieren
+// Define layout and span styles
 $span = FormHelper::getResponsiveSpan($fieldConfig['width'] ?? '1/1');
 $spanStyle = FormHelper::generateSpanStyles($span);
 
-// Pflichtfeld-Klasse hinzufügen
+// Add required field class
 $isRequired = $fieldConfig['required'] ?? false;
 $requiredClass = $isRequired ? 'is-required' : '';
 
-// Zusätzliche Attribute vorbereiten
+// Prepare additional attributes
 $commonAttributes = [];
 if (isset($fieldConfig['title'])) {
     $commonAttributes['title'] = $fieldConfig['title'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
@@ -33,7 +34,7 @@ if (isset($fieldConfig['aria-label'])) {
     $commonAttributes['aria-label'] = $fieldConfig['aria-label'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
 }
 
-// Attribute generieren
+// Generate attributes
 $attributes = FieldHelper::prepareFieldAttributes(
     $fieldConfig,
     $fieldKey,

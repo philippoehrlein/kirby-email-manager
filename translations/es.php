@@ -97,7 +97,7 @@ return [
             'invalid' => 'La verificación ha fallado. Por favor, inténtelo de nuevo.'
         ]
     ],
-    'panel.tab' => 'Gestor de E-Mail',
+    'panel.email-manager.tab' => 'Gestor de E-Mail',
     'panel.templates.headline' => 'E-Mail',
     'panel.templates.label' => 'Plantilla de E-Mail',
     'panel.email.send_to_more_label' => '¿Enviar correo a diferentes direcciones según el asunto?',

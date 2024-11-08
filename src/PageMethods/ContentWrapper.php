@@ -3,6 +3,7 @@ namespace KirbyEmailManager\PageMethods;
 
 use Kirby\Content\Content;
 use Kirby\Content\Field;
+use Kirby\Cms\Page;
 
 /**
  * ContentWrapper class for managing content
@@ -25,8 +26,13 @@ class ContentWrapper extends Content
      */
     public function __construct($page, $blockContent = null)
     {
+        if (!$page instanceof Page) {
+            throw new \Exception('$page must be instance of Kirby\Cms\Page');
+        }
+        
         $this->page = $page;
-        parent::__construct($page->content()->toArray());
+        $content = $page->content()->toArray();
+        parent::__construct($content);
         $this->blockContent = $blockContent;
     }
 
@@ -40,7 +46,7 @@ class ContentWrapper extends Content
     public function __call(string $name, array $arguments = []): Field
     {
         if ($this->blockContent && isset($this->blockContent[$name])) {
-            return new Field($this->page->toPage(), $name, $this->blockContent[$name]);
+            return new Field($this->page, $name, $this->blockContent[$name]);
         }
         return parent::__call($name, $arguments);
     }

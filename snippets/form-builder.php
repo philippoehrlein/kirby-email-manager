@@ -37,9 +37,9 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
 
 
 <form id="contactForm" method="post" enctype="multipart/form-data" action="<?= $page->url() ?>" class="<?= FormHelper::getClassName('form', $config) ?>">
-  <?php if (isset($alert['message']) && $alert['type'] === 'error'): ?>
+  <?php if (isset($alert['message']) && $alert['type'] === 'error' && kirby()->request()->is('POST')): ?>
       <p class="<?= FormHelper::getClassName('error', $config, 'error') ?>"><?= $alert['message'] ?></p>
-  <?php elseif (isset($alert['message']) && $alert['type'] === 'warning'): ?>
+  <?php elseif (isset($alert['message']) && $alert['type'] === 'warning' && kirby()->request()->is('POST')): ?>
       <p class="<?= FormHelper::getClassName('error', $config, 'warning') ?>"><?= $alert['message'] ?></p>
   <?php endif ?>
 

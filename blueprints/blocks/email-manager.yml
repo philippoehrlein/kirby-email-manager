@@ -1,5 +1,5 @@
 title: Email Manager
-icon: email
+icon: email-manager
 
 tabs:
   email: email-manager/email-tab

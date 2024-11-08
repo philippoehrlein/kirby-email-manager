@@ -97,7 +97,7 @@ return [
             'invalid' => 'Verification failed. Please try again.'
         ]
     ],
-    'panel.tab' => 'Email Manager',
+    'panel.email-manager.tab' => 'Email Manager',
     'panel.templates.headline' => 'Email',
     'panel.templates.label' => 'Email Template',
     'panel.email.send_to_more_label' => 'Send email to different email addresses based on subject?',

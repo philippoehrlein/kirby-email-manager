@@ -97,7 +97,7 @@ return [
             'invalid' => 'Die Überprüfung ist fehlgeschlagen. Bitte versuchen Sie es erneut.'
         ]
     ],
-    'panel.tab' => 'E-Mail Manager',
+    'panel.email-manager.tab' => 'E-Mail Manager',
     'panel.templates.headline' => 'E-Mail',
     'panel.templates.label' => 'E-Mail-Vorlage',
     'panel.email.send_to_more_label' => 'E-Mail über Betreff an verschiedene E-Mail-Adressen senden?',
@@ -119,4 +119,6 @@ return [
     'panel.legal.headline' => 'Rechtliches',
     'panel.legal.footer_label' => 'Email Footer',
     'panel.legal.footer_help' => 'Optionaler rechtlicher Footer, der in Bestätigungsmails angezeigt wird.',
+    'panel.status.all_fields_set' => 'Alle erforderlichen Felder sind ausgefüllt.',
+    'panel.status.not_all_fields_set' => 'Bitte füllen Sie alle erforderlichen Felder aus.',
 ];

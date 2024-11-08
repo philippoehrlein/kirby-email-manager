@@ -1,8 +1,8 @@
 # Email Manager Tab Blueprint
 # This blueprint is used to create a new page tab for the Email Manager.
 type: tabs
-label: panel.email.tab_label
-icon: server
+label: panel.email-manager.tab
+icon: email-manager
 
 columns:
   main:

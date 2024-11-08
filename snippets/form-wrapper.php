@@ -1,6 +1,9 @@
 <?php
 use KirbyEmailManager\PageMethods\ContentWrapper;
 
+error_log('Page type: ' . get_class($page));
+error_log('Page content type: ' . get_class($page->content()));
+
 // Prüfe, ob Block-Daten vorhanden sind
 $blockContent = isset($block) && $block !== null ? $block->content()->toArray() : null;
 $contentWrapper = new ContentWrapper($page, $blockContent);

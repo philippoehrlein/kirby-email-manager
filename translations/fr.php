@@ -97,7 +97,7 @@ return [
             'invalid' => 'La vérification a échoué. Veuillez réessayer.'
         ]
     ],
-    'panel.tab' => 'Gestionnaire d\'e-mails',
+    'panel.email-manager.tab' => 'Gestionnaire d\'e-mails',
     'panel.templates.headline' => 'E-mail',
     'panel.templates.label' => 'Modèle d\'e-mail',
     'panel.email.send_to_more_label' => 'Envoyer l\'e-mail à différentes adresses en fonction du sujet ?',

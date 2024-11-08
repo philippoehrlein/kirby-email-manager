@@ -55,8 +55,7 @@ class EmailHelper {
         $receiverTemplate = $templateConfig['templates']['receiver'] ?? '';
         $templatePath = $selectedTemplate . '/' . $receiverTemplate;
 
-        $senderName = self::getEmailSender($templateConfig, $data);
-        $senderEmail = self::getFromEmail($templateConfig, $data, $kirby);
+        $replyToEmail = self::getReplyToEmail($templateConfig, $data);
 
         $formSenderName = self::getFormSender($templateConfig);
         $formSenderEmail = self::createNoReplyEmail($kirby);
@@ -71,29 +70,35 @@ class EmailHelper {
 
         $emailTemplate = new EmailTemplate($page, $data, $footerContent, $selectedTemplate, $templateConfig);
 
+        $emailConfig = [
+            'template' => $templatePath,
+            'from'     => [$formSenderEmail => $formSenderName],
+            'to'       => $to,
+            'subject'  => $subject,
+            'attachments' => $attachments,
+            'data'     => [
+                'email' => $emailTemplate->content(),
+                'form' => $emailTemplate->form(),
+                'languageCode' => $languageCode
+            ]
+        ];
+
+        if ($replyToEmail !== null) {
+            $emailConfig['replyTo'] = $replyToEmail;
+        }
+
         try {
-            $kirby->email([
-                'template' => $templatePath,
-                'from'     => [$formSenderEmail => $formSenderName],
-                'replyTo'  => $senderEmail,
-                'to'       => $to,
-                'subject'  => $subject,
-                'attachments' => $attachments,
-                'data'     => [
-                    'email' => $emailTemplate->content(),
-                    'form' => $emailTemplate->form(),
-                    'languageCode' => $languageCode
-                ]
-            ]);
+            $kirby->email($emailConfig);
             
         } catch (Exception $e) {
             error_log('Fehler beim Senden der E-Mail: ' . $e->getMessage());
             throw $e;
         }
 
-        if (isset($templateConfig['templates']['confirmation']) && isset($data['email'])) {
+        $confirmationEmail = self::getConfirmationEmail($templateConfig, $data);
+        
+        if ($confirmationEmail !== null && isset($templateConfig['templates']['confirmation'])) {
             $confirmationTemplate = $templateConfig['templates']['confirmation'] ?? '';
-            $confirmationHtmlTemplate = $confirmationTemplate . '.html.php' ?? null;
             $confirmationTextTemplate = $confirmationTemplate . '.text.php' ?? null;
         
             $confirmationTemplatePath = $kirby->root('site') . '/templates/emails/' . $selectedTemplate;
@@ -103,13 +108,12 @@ class EmailHelper {
             }
         
             $confirmationTemplatePath = $selectedTemplate . '/' . $confirmationTemplate;
-        
             $confirmationSubject = self::getConfirmationSubject($templateConfig);
             
             $kirby->email([
                 'template' => $confirmationTemplatePath,
                 'from'     => [$formSenderEmail => $formSenderName],
-                'to'       => $data['email'],
+                'to'       => $confirmationEmail,
                 'subject'  => $confirmationSubject,
                 'data'     => [
                     'email' => $emailTemplate->content(),
@@ -166,26 +170,32 @@ class EmailHelper {
     }
 
     /**
-     * Retrieves the from email address based on the template configuration, data, and Kirby instance.
+     * Retrieves the reply-to email address based on the template configuration, data, and Kirby instance.
      *
      * @param array $templateConfig The configuration for the email template.
      * @param array $data The form data.
-     * @param \Kirby\Cms\App $kirby The Kirby application instance.
-     * @return string The from email address.
+     * @return string The reply-to email address.
      */
-    public static function getFromEmail($templateConfig, $data, $kirby) {
+    public static function getReplyToEmail($templateConfig, $data) {
+        $replyToEmail = null;
+        $userName = null;
+
         foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
-            if (isset($fieldConfig['is_from_field']) && $fieldConfig['is_from_field'] === true && !empty($data[$fieldKey])) {
-                return $data[$fieldKey];
+            if (isset($fieldConfig['reply_to']) && $fieldConfig['reply_to'] === true && !empty($data[$fieldKey])) {
+                $replyToEmail = $data[$fieldKey];
+            }
+            if (isset($fieldConfig['user_name']) && $fieldConfig['user_name'] === true && !empty($data[$fieldKey])) {
+                $userName = $data[$fieldKey];
             }
         }
-    
-        $configuredFrom = option('email.from');
-        if ($configuredFrom) {
-            return $configuredFrom;
+
+        if ($replyToEmail && $userName) {
+            return [$replyToEmail => $userName];
+        } elseif ($replyToEmail) {
+            return $replyToEmail;
         }
-    
-        return self::createNoReplyEmail($kirby);
+        
+        return null;
     }
 
     /**
@@ -218,23 +228,6 @@ class EmailHelper {
     }
 
     /**
-     * Retrieves the email sender name based on the template configuration and form data.
-     *
-     * @param array $templateConfig The configuration for the email template.
-     * @param array $data The form data.
-     * @return string The email sender name.
-     */
-    public static function getEmailSender($templateConfig, $data) {
-        foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
-            if (isset($fieldConfig['is_from_name_field']) && $fieldConfig['is_from_name_field'] === true && !empty($data[$fieldKey])) {
-                return $data[$fieldKey];
-            }
-        }
-
-        return self::initLanguageHelper($templateConfig)->get('emails.sender');
-    }
-
-    /**
      * Retrieves the confirmation subject based on the template configuration.
      *
      * @param array $templateConfig The configuration for the email template.
@@ -252,5 +245,21 @@ class EmailHelper {
      */
     public static function getFormSender($templateConfig) {
         return self::initLanguageHelper($templateConfig)->get('emails.confirmation.sender');
+    }
+
+    /**
+     * Retrieves the confirmation email address based on the template configuration and data.
+     *
+     * @param array $templateConfig The configuration for the email template.
+     * @param array $data The form data.
+     * @return string The confirmation email address.
+     */
+    public static function getConfirmationEmail($templateConfig, $data) {
+        foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
+            if (isset($fieldConfig['confirmation_to']) && $fieldConfig['confirmation_to'] === true && !empty($data[$fieldKey])) {
+                return $data[$fieldKey];
+            }
+        }
+        return null;
     }
 }

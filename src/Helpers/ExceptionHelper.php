@@ -16,11 +16,11 @@ class ExceptionHelper {
   public static function handleException($e, LanguageHelper $languageHelper) {
     error_log('Error: ' . $e->getMessage());
     
-    $errorMessage = $languageHelper->get('error_messages.error_occurred') ?? 'Ein Fehler ist aufgetreten: ';
+    $errorMessage = $languageHelper->get('error_messages.error_occurred');
     
     return [
       'type' => 'error',
-      'message' => $errorMessage . (is_array($e->getMessage()) ? json_encode($e->getMessage()) : $e->getMessage())
+      'message' => $errorMessage . $e->getMessage()
     ];
   }
 }

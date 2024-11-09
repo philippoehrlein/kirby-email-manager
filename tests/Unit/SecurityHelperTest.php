@@ -53,7 +53,7 @@ class SecurityHelperTest extends TestCase
             ],
             'attribute_xss' => [
                 '" onclick="alert(\'XSS\')"',
-                '&quot; onclick=&quot;alert(&apos;XSS&apos;)&quot;'
+                '&quot; onclick=&quot;alert(&#039;XSS&#039;)&quot;'
             ],
             'null_input' => [
                 null,
@@ -184,6 +184,27 @@ class SecurityHelperTest extends TestCase
                 null,
                 []
             ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider csrfTokenProvider
+     */
+    public function it_validates_csrf_token_edge_cases($input, $expected)
+    {
+        $result = SecurityHelper::validateCSRFToken($input);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function csrfTokenProvider()
+    {
+        return [
+            'null_token' => [null, false],
+            'empty_string' => ['', false],
+            'boolean_false' => [false, false],
+            'integer_zero' => [0, false],
+            'empty_array' => [[], false],
         ];
     }
 }

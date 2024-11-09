@@ -5,6 +5,7 @@ namespace KirbyEmailManager\Helpers;
 use KirbyEmailManager\Helpers\SecurityHelper;
 use KirbyEmailManager\Helpers\LanguageHelper;
 use Kirby\Toolkit\V;
+use DateTime;
 
 /**
  * ValidationHelper class provides methods to validate form fields.
@@ -101,7 +102,7 @@ class ValidationHelper
         }
 
         if ($dateValue !== null) {
-          if (!v::date($dateValue)) {
+          if (!self::isValidDate($dateValue)) {
             $errors[$fieldKey] = $languageHelper->get('validation.fields.date.invalid');
           } else {
             if ($minDate && $dateValue < $minDate) {
@@ -143,7 +144,7 @@ class ValidationHelper
           if ($file['size'] > $maxSize) {
             $errors[$fieldKey] = str_replace(
               ':maxSize',
-              round($maxSize / 1048576, 2),
+              (string)round($maxSize / 1048576, 2),
               $languageHelper->get('validation.fields.file.too_large')
             );
             break;
@@ -215,7 +216,7 @@ class ValidationHelper
         $endDate = $data[$fieldKey]['end'] ?? null;
 
         if (!empty($startDate) || !empty($endDate)) {
-            if (!v::date($startDate) || !v::date($endDate)) {
+            if (!self::isValidDate($startDate) || !self::isValidDate($endDate)) {
                 $errors[$fieldKey] = $languageHelper->get('validation.fields.date.invalid');
                 break;
             }
@@ -379,5 +380,18 @@ class ValidationHelper
     }
 
     return $errors;
+  }
+
+  private static function isValidDate($date): bool
+  {
+    if (!is_string($date)) {
+        return false;
+    }
+    
+    // Kirby's Datumsformat aus der Konfiguration holen
+    $dateFormat = kirby()->option('date.handler.format', 'Y-m-d');
+    
+    $d = DateTime::createFromFormat($dateFormat, $date);
+    return $d && $d->format($dateFormat) === $date;
   }
 }

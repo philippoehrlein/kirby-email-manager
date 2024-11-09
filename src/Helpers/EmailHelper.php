@@ -34,7 +34,7 @@ class EmailHelper {
      * Sends an email based on the provided configuration and data.
      *
      * @param \Kirby\Cms\App $kirby The Kirby application instance.
-     * @param \Kirby\Cms\ContentWrapper $contentWrapper The content wrapper instance.
+     * @param \KirbyEmailManager\PageMethods\ContentWrapper $contentWrapper The content wrapper instance.
      * @param \Kirby\Cms\Page $page The current page instance.
      * @param array $templateConfig The configuration for the email template.
      * @param array $data The form data.
@@ -61,7 +61,7 @@ class EmailHelper {
         $formSenderEmail = self::createNoReplyEmail($kirby);
 
         $footerContent = null;
-        if ($contentWrapper) {
+        if ($contentWrapper->email_legal_footer()->notEmpty()) {
             $footer = $contentWrapper->email_legal_footer();
             if (!empty($footer)) {
                 $footerContent = UrlHelper::convertLinksToAbsolute($footer, $kirby);
@@ -99,7 +99,7 @@ class EmailHelper {
         
         if ($confirmationEmail !== null && isset($templateConfig['templates']['confirmation'])) {
             $confirmationTemplate = $templateConfig['templates']['confirmation'] ?? '';
-            $confirmationTextTemplate = $confirmationTemplate . '.text.php' ?? null;
+            $confirmationTextTemplate = $confirmationTemplate . '.text.php';
         
             $confirmationTemplatePath = $kirby->root('site') . '/templates/emails/' . $selectedTemplate;
         
@@ -127,7 +127,7 @@ class EmailHelper {
     /**
      * Sets the receiver email address based on the page and data.
      *
-     * @param \Kirby\Cms\Page $page The current page instance.
+     * @param \KirbyEmailManager\PageMethods\ContentWrapper $contentWrapper The content wrapper instance.
      * @param array $data The form data.
      * @return string The receiver email address.
      */
@@ -174,7 +174,7 @@ class EmailHelper {
      *
      * @param array $templateConfig The configuration for the email template.
      * @param array $data The form data.
-     * @return string The reply-to email address.
+     * @return string|array|null The reply-to email address.
      */
     public static function getReplyToEmail($templateConfig, $data) {
         $replyToEmail = null;
@@ -252,7 +252,7 @@ class EmailHelper {
      *
      * @param array $templateConfig The configuration for the email template.
      * @param array $data The form data.
-     * @return string The confirmation email address.
+     * @return string|array|null The confirmation email address.
      */
     public static function getConfirmationEmail($templateConfig, $data) {
         foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {

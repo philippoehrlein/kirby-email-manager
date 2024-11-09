@@ -15,15 +15,15 @@ class SecurityHelper
     /**
      * Escapes HTML special characters in a string.
      *
-     * @param string $input The input string to escape.
+     * @param string $string The input string to escape.
      * @return string The escaped string.
      */
     public static function escapeHtml($string): string 
     {
-        if (is_string($string)) {
-            return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8', true);
+        if (!is_string($string)) {
+            return '';
         }
-        return '';
+        return \Kirby\Toolkit\Escape::html($string);
     }
 
     /**
@@ -43,26 +43,31 @@ class SecurityHelper
     /**
      * Sanitizes an input string by removing potentially harmful characters.
      *
-     * @param string $input The input string to sanitize.
-     * @return string The sanitized string.
+     * @param string|array|null $input The input to sanitize.
+     * @return string|array The sanitized input.
      */
     public static function sanitize($input)
     {
         if ($input === null) {
             return '';
         }
-        return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+
+        if (is_array($input)) {
+            return array_map([self::class, 'sanitize'], $input);
+        }
+
+        return htmlspecialchars((string)$input, ENT_QUOTES, 'UTF-8');
     }
 
     /**
      * Validates an email address.
      *
-     * @param string $email The email address to validate.
+     * @param string|null $email The email address to validate.
      * @return bool True if the email is valid, false otherwise.
      */
-    public static function validateEmail($email)
+    public static function validateEmail($email): bool
     {
-        if($email === null) {
+        if ($email === null) {
             return false;
         }
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
@@ -109,25 +114,32 @@ class SecurityHelper
      * @param string $token The token to validate.
      * @return bool True if the token is valid, false otherwise.
      */
-    public static function validateCSRFToken($token)
+    public static function validateCSRFToken($token): bool 
     {
-        if($token === null) {
+        if (!$token) {
             return false;
         }
-        return csrf($token);
+        
+        try {
+            return csrf($token) === true;
+        } catch (\Exception $e) {
+            LogHelper::logError('CSRF validation failed: ' . $e->getMessage());
+            return false;
+        }
     }
 
     /**
      * Sanitizes and validates an array of form data.
      *
-     * @param array $data The form data to sanitize and validate.
+     * @param array|null $data The form data to sanitize and validate.
      * @return array The sanitized and validated data.
      */
-    public static function sanitizeAndValidateFormData($data)
+    public static function sanitizeAndValidateFormData($data): array
     {
-        if($data === null) {
+        if ($data === null) {
             return [];
         }
+        
         $sanitizedData = [];
         foreach ($data as $key => $value) {
             if (is_array($value)) {
@@ -140,14 +152,19 @@ class SecurityHelper
     }
 
     /**
-     * Sets security headers.
+     * Validates file extension against a list of allowed extensions
      *
-     * @return void
+     * @param string $filename The filename to check
+     * @param array $allowedExtensions Array of allowed file extensions
+     * @return bool True if extension is allowed, false otherwise
      */
-    public static function setSecurityHeaders(): void
+    public static function validateFileExtension(?string $filename, array $allowedExtensions = []): bool
     {
-        header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'");
-        header("X-XSS-Protection: 1; mode=block");
-        header("X-Content-Type-Options: nosniff");
+        if ($filename === null || empty($allowedExtensions)) {
+            return false;
+        }
+
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        return in_array($extension, array_map('strtolower', $allowedExtensions));
     }
 }

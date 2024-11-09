@@ -13,7 +13,7 @@ use KirbyEmailManager\Helpers\ValidationHelper;
 use KirbyEmailManager\Helpers\LogHelper;
 use KirbyEmailManager\Helpers\ConfigHelper;
 use KirbyEmailManager\Helpers\SuccessMessageHelper;
-
+use KirbyEmailManager\Helpers\SecurityHelper;
 
 /**
  * FormHandler class provides methods to handle form submissions.
@@ -33,6 +33,7 @@ class FormHandler
      *
      * @param \Kirby\Cms\App $kirby The Kirby application instance.
      * @param \Kirby\Cms\Page $page The current page instance.
+     * @param \KirbyEmailManager\PageMethods\ContentWrapper $contentWrapper The content wrapper instance.
      */
     public function __construct($kirby, $page, $contentWrapper)
     {
@@ -71,7 +72,10 @@ class FormHandler
             throw new Exception($this->languageHelper->get('error_messages.config_file_not_found') . $configPath);
         }
 
-        $ymlConfig = Data::read($configPath) ?? [];
+        $ymlConfig = Data::read($configPath);
+        if (!is_array($ymlConfig)) {
+            $ymlConfig = [];
+        }
         $this->templateConfig = array_merge($pluginConfig, $ymlConfig);
     }
 
@@ -118,7 +122,6 @@ class FormHandler
 
         if (!empty($data['website_hp_'])) {
             go($this->page->url());
-            exit;
         }
         
         $alert = [
@@ -127,46 +130,50 @@ class FormHandler
         ];
 
         if ($this->kirby->request()->is('POST') && get('submit')) {
-            $uploads = $this->kirby->request()->files()->toArray();
 
+            // CSRF-Token validieren
+            if (!SecurityHelper::validateCSRFToken(get('csrf'))) {
+                return [
+                    'alert' => [
+                        'type' => 'error',
+                        'message' => $this->languageHelper->get('system.csrf_error')
+                    ],
+                    'data' => $data
+                ];
+            }
+
+            // Formulardaten bereinigen
+            $data = SecurityHelper::sanitizeAndValidateFormData($data);
+
+            // Datei-Uploads verarbeiten
             $attachments = [];
-            foreach ($uploads as $fieldName => $uploadField) {
-                if (isset($this->templateConfig['fields'][$fieldName]) && 
-                    $this->templateConfig['fields'][$fieldName]['type'] === 'file') {
-                    
+            $uploads = $this->kirby->request()->files()->toArray();
+            foreach ($uploads as $field => $uploadField) {
+                if (is_array($uploadField)) {
                     foreach ($uploadField as $upload) {
-                        if (is_array($upload) && isset($upload['error'])) {
-                            if ($upload['error'] === UPLOAD_ERR_OK) {
-                                $tmpName = $upload['tmp_name'];
-                                $originalName = $upload['name'];
-                                $safeFileName = F::safeName($originalName);
-                                $targetPath = $tmpName . '_' . $safeFileName;
+                        if (is_array($upload) && isset($upload['error']) && $upload['error'] === UPLOAD_ERR_OK) {
+                            $originalName = SecurityHelper::sanitizeFilename($upload['name']);
+                            $targetPath = $upload['tmp_name'] . '_' . $originalName;
 
-                                if (move_uploaded_file($tmpName, $targetPath)) {
-                                    $attachments[] = $targetPath;
-                                } else {
-                                    error_log('Error moving file: ' . error_get_last()['message']);
-                                }
+                            if (move_uploaded_file($upload['tmp_name'], $targetPath)) {
+                                $attachments[] = $targetPath;
                             }
                         }
                     }
                 }
             }
 
-            
-            if (csrf(get('csrf')) !== true) {
-                $csrfError = $this->languageHelper->get('validation.system.csrf');
-                LogHelper::logError($csrfError);
-
+            // E-Mail-Validierung für E-Mail-Felder
+            if (isset($data['email']) && !SecurityHelper::validateEmail($data['email'])) {
                 return [
                     'alert' => [
                         'type' => 'error',
-                        'message' => $csrfError
+                        'message' => $this->languageHelper->get('validation.email')
                     ],
                     'data' => $data
                 ];
             }
-    
+
             $submissionTime = (int)($data['timestamp'] ?? 0);
             $currentTime = time();
             $timeDifference = abs($currentTime - $submissionTime);
@@ -247,8 +254,6 @@ class FormHandler
                         $session->set('form.success', $successMessage);
                     
                         go($this->page->url());
-                        exit;
-
                     } catch (Exception $e) {
                         $alert = ExceptionHelper::handleException($e, $this->languageHelper);
                         LogHelper::logError($e);

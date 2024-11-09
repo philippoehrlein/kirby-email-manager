@@ -75,7 +75,7 @@ class LanguageHelper
      * Retrieves a value from the template configuration.
      *
      * @param string $key The key to retrieve.
-     * @return mixed The value from the template configuration or null if not found.
+     * @return string|null The value from the template configuration or null if not found.
      */
     protected function getFromTemplateConfig(string $key, ?string $language = null): ?string
     {

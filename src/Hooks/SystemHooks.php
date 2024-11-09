@@ -1,6 +1,8 @@
 <?php
 namespace KirbyEmailManager\Hooks;
 
+use Kirby\Cms\App;
+
 /**
  * SystemHooks class for managing system hooks
  * 
@@ -32,9 +34,12 @@ class SystemHooks
         $customTranslations = $kirby->option('philippoehrlein.kirby-email-manager.translations', []);
         
         foreach ($customTranslations as $lang => $translations) {
+            $translationObj = $kirby->translations();
+            $existingTranslations = $translationObj->get($lang, []);
+            
             $kirby->extend([
                 'translations' => [
-                    $lang => array_merge($kirby->translations($lang), $translations)
+                    $lang => array_merge($existingTranslations, $translations)
                 ]
             ]);
         }   

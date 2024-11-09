@@ -10,12 +10,15 @@ namespace KirbyEmailManager\Helpers;
 class FileValidationHelper
 {
     private static $allowedMimeTypes = [
-        'application/pdf' => ['pdf'],
         'image/jpeg' => ['jpg', 'jpeg'],
         'image/png' => ['png'],
         'image/gif' => ['gif'],
+        'image/webp' => ['webp'],
+        'application/pdf' => ['pdf'],
         'application/msword' => ['doc'],
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => ['docx']
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => ['docx'],
+        'application/zip' => ['zip'],
+        'application/x-rar-compressed' => ['rar']
     ];
 
     private static $maxFileSize = 5242880;
@@ -37,29 +40,41 @@ class FileValidationHelper
             return ['error' => self::getUploadErrorMessage($file['error'], $translations)];
         }
 
-        $maxSize = (int)($fieldConfig['max_size'] ?? self::$maxFileSize);
+        $maxSize = $fieldConfig['max_size'] ?? self::$maxFileSize;
         if ($file['size'] > $maxSize) {
             $errors['size'] = str_replace(
                 ':maxSize',
-                round($maxSize / 1048576, 2),
-                $fieldConfig['error_message'][$languageCode] ?? $translations['error_messages']['file_too_large']
+                (string)round($maxSize / 1048576, 2),
+                $translations['file']['too_large']
             );
+            return $errors;
+        }
+
+        if (!self::isSafeFile($file['tmp_name'])) {
+            $errors['security'] = $translations['file']['malicious'];
+            return $errors;
         }
 
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->file($file['tmp_name']);
+        $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         
-        $allowedTypes = $fieldConfig['allowed_types'] ?? array_keys(self::$allowedMimeTypes);
-        if (!in_array($mimeType, $allowedTypes)) {
+        if (!isset(self::$allowedMimeTypes[$mimeType])) {
             $errors['type'] = str_replace(
                 ':allowedTypes',
-                implode(', ', $allowedTypes),
-                $fieldConfig['error_message'][$languageCode] ?? $translations['error_messages']['invalid_file_type']
+                implode(', ', array_keys(self::$allowedMimeTypes)),
+                $translations['file']['invalid_type']
             );
+            return $errors;
         }
-
-        if (!self::isSafeFile($file['tmp_name'])) {
-            $errors['security'] = $translations['error_messages']['malicious_file'];
+        
+        if (!in_array($extension, self::$allowedMimeTypes[$mimeType])) {
+            $errors['type'] = str_replace(
+                ':allowedTypes',
+                implode(', ', self::$allowedMimeTypes[$mimeType]),
+                $translations['file']['invalid_type']
+            );
+            return $errors;
         }
 
         return $errors;
@@ -89,30 +104,25 @@ class FileValidationHelper
      */
     private static function isSafeFile(string $filePath): bool
     {
-        $dangerousPatterns = [
-            '/<%.*?%>/is', 
-            '/<script.*?>.*?<\/script>/is',
-            '/<iframe.*?>/is',
-            '/<object.*?>.*?<\/object>/is',
-            '/<link.*?>/is',
-            '/<style.*?>.*?<\/style>/is',
-            '/javascript:/is',
-            '/vbscript:/is',
-            '/data:/is',
+        $maliciousPatterns = [
+            '<?php',
+            '<script',
+            'eval(',
+            'base64_decode(',
+            'system(',
+            'exec(',
+            'passthru(',
+            'shell_exec('
         ];
-
+        
         $content = file_get_contents($filePath);
         
-        if (preg_match('/^\\+ADw-/', $content)) {
-            return false;
-        }
-
-        foreach ($dangerousPatterns as $pattern) {
-            if (preg_match($pattern, $content)) {
+        foreach ($maliciousPatterns as $pattern) {
+            if (stripos($content, $pattern) !== false) {
                 return false;
             }
         }
-
+        
         return true;
     }
 

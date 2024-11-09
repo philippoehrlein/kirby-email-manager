@@ -22,6 +22,8 @@ class Field {
     public $class;
     public $options;
     public $placeholder;
+    public $title;
+    public $ariaLabel;
     public $type;
     private $attributes = [];
     
@@ -118,7 +120,7 @@ class Field {
             'required' => $this->required,
             'placeholder' => $this->placeholder,
             'title' => $this->title,
-            'aria-label' => $this->{'aria-label'}
+            'aria-label' => $this->ariaLabel
         ];
 
         if($key !== null) {
@@ -212,8 +214,7 @@ class FieldHelper
             $baseAttributes,
             $fieldConfig,
             $value,
-            $placeholder,
-            $languageCode
+            $placeholder
         );
         
         foreach ($fieldAttributes as $key => $val) {

@@ -2,6 +2,8 @@
 
 namespace KirbyEmailManager\Helpers;
 
+use Kirby\Cms\App;
+
 /**
  * UrlHelper class for managing URL-related functions
  * 
@@ -16,10 +18,10 @@ class UrlHelper
      * Converts relative URLs to absolute URLs in the content.
      * 
      * @param string $content The content to convert.
-     * @param Kirby $kirby The Kirby instance.
+     * @param \Kirby\Cms\App $kirby The Kirby instance.
      * @return string The converted content.
      */
-    public static function convertLinksToAbsolute($content, $kirby)
+    public static function convertLinksToAbsolute($content, App $kirby)
     {
         return preg_replace_callback(
             '/<a\s+(?:[^>]*?\s+)?href="([^"]*)"/',
@@ -36,10 +38,10 @@ class UrlHelper
      * Converts a URL to an absolute URL.
      * 
      * @param string $url The URL to convert.
-     * @param Kirby $kirby The Kirby instance.
+     * @param \Kirby\Cms\App $kirby The Kirby instance.
      * @return string The converted URL.
      */
-    private static function convertUrl($url, $kirby)
+    private static function convertUrl($url, App $kirby)
     {
         if (strpos($url, 'x-webdoc://') === 0) {
             return self::convertXWebdocUrl($url, $kirby);
@@ -55,45 +57,40 @@ class UrlHelper
      * Converts an x-webdoc URL to an absolute URL.
      * 
      * @param string $url The URL to convert.
-     * @param Kirby $kirby The Kirby instance.
+     * @param \Kirby\Cms\App $kirby The Kirby instance.
      * @return string The converted URL.
      */
-    private static function convertXWebdocUrl($url, $kirby)
+    private static function convertXWebdocUrl($url, App $kirby)
     {
         $pagePos = strpos($url, '/@/page/');
         if ($pagePos !== false) {
             $pageId = substr($url, $pagePos + 8);
             $page = $kirby->site()->page('@' . $pageId);
             if ($page) {
-                $url = $page->url();
-                return $url;
-            } else {
-                return $url;
+                return $page->url();
             }
-        } else {
-            $url = preg_replace('/^x-webdoc:\/\/[^\/]+/', '', $url);
-            $url = self::getBaseUrl() . '/' . ltrim($url, '/');
             return $url;
         }
+        
+        $url = preg_replace('/^x-webdoc:\/\/[^\/]+/', '', $url);
+        return self::getBaseUrl() . '/' . ltrim($url, '/');
     }
 
     /**
      * Converts an internal page URL to an absolute URL.
      * 
      * @param string $url The URL to convert.
-     * @param Kirby $kirby The Kirby instance.
+     * @param \Kirby\Cms\App $kirby The Kirby instance.
      * @return string The converted URL.
      */
-    private static function convertInternalPageUrl($url, $kirby)
+    private static function convertInternalPageUrl($url, App $kirby)
     {
         $pageId = substr($url, 8);
         $page = $kirby->site()->page('@' . $pageId);
         if ($page) {
-            $url = $page->url();
-            return $url;
-        } else {
-            return $url;
+            return $page->url();
         }
+        return $url;
     }
 
     /**

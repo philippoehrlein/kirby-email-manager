@@ -1,6 +1,8 @@
 <?php
 namespace KirbyEmailManager\Helpers;
 
+use Kirby\Session\Session;
+
 /**
  * SessionHelper class for managing session-related functions
  * 
@@ -18,35 +20,42 @@ class SessionHelper
      * 
      * @return bool True if the form was successfully submitted, false otherwise.
      */
-    public static function isFormSuccess() {
-        $session = kirby()->session();
-        self::$successMessage = $session->get('form.success');
+    public static function isFormSuccess(): bool 
+    {
+        try {
+            $session = kirby()->session();
+            self::$successMessage = $session->get('form.success');
 
-        if (self::$successMessage) {
-            $session->remove('form.success');
-            return true;
+            if (self::$successMessage) {
+                $session->remove('form.success');
+                return true;
+            }
+
+            return false;
+        } catch (\Exception $e) {
+            return false;
         }
-
-        return false;
     }
 
     /**
      * Retrieves the success title from the session.
      * 
-     * @param Page $page The page object.
+     * @param \Kirby\Cms\Page $page The page object.
      * @return string The success title.
      */
-    public static function getSuccessTitle($page) {
+    public static function getSuccessTitle($page): string 
+    {
         return self::$successMessage['title'] ?? $page->send_to_success_title()->value();
     }
 
     /**
      * Retrieves the success text from the session.
      * 
-     * @param Page $page The page object.
+     * @param \Kirby\Cms\Page $page The page object.
      * @return string The success text.
      */
-    public static function getSuccessText($page) {
+    public static function getSuccessText($page): string 
+    {
         return self::$successMessage['text'] ?? $page->send_to_success_text()->value();
     }
 }

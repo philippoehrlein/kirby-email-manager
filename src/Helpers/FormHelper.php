@@ -28,7 +28,7 @@ class FormHelper
         if ($denominator === 0) {
             return 12; // Avoid division by zero
         }
-        return round(($numerator / $denominator) * 12);
+        return (int)round(($numerator / $denominator) * 12);
     }
 
     /**
@@ -47,7 +47,7 @@ class FormHelper
               $spans[$breakpoint] = self::calculateSpan($width[$breakpoint] ?? $width['default'] ?? '1/1');
           }
       } else {
-          $span = self::calculateSpan($width ?? '1/1');
+          $span = self::calculateSpan($width);
           foreach ($breakpoints as $breakpoint) {
               $spans[$breakpoint] = $span;
           }

@@ -1,13 +1,1 @@
-
-.email-manager-header[data-v-e4a2bcbe] {
-  margin-bottom: var(--spacing-4);
-}
-.email-manager-header h1[data-v-e4a2bcbe] {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--spacing-3);
-}
-.email-manager-header svg[data-v-e4a2bcbe] {
-  color: var(--color-gray-600);
-}
+.email-manager-header[data-v-1e7bc602]{margin-bottom:var(--spacing-4)}.email-manager-header h1[data-v-1e7bc602]{display:flex;flex-direction:row;align-items:center;gap:var(--spacing-3)}.email-manager-header svg[data-v-1e7bc602]{color:var(--color-gray-600)}

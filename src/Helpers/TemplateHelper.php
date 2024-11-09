@@ -74,6 +74,6 @@ class TemplateHelper
         $languageHelper = new LanguageHelper($language, $config);
 
         // Holt den Namen aus der Konfiguration oder nutzt den Fallback
-        return $languageHelper->get('name', ['folder' => ucfirst($folder)]) ?? ucfirst($folder) . ' Template';
+        return $languageHelper->get('name', ['folder' => ucfirst($folder)]);
     }
 }

@@ -79,7 +79,6 @@ class EmailTemplate
      * Returns the value of a config key.
      * 
      * @param string $key The key.
-     * @param mixed $default The default value.
      * @return mixed The value.
      */
     protected function getConfigValue(string $key)
@@ -111,12 +110,12 @@ class EmailTemplate
 
         if (isset($this->config['emails']['content'])) {
             foreach ($this->config['emails']['content'] as $key => $value) {
-                $contentData[$key] = $this->createField($key, $this->languageHelper->get('emails.content.' . $key), $this->page);
+                $contentData[$key] = $this->createField($key, $this->languageHelper->get('emails.content.' . $key));
             }
         }
 
         if ($this->footerContent) {
-            $contentData['footer'] = $this->createField('footer', $this->footerContent, $this->page);
+            $contentData['footer'] = $this->createField('footer', $this->footerContent);
         }
 
         foreach ($this->formData as $key => $value) {
@@ -126,8 +125,7 @@ class EmailTemplate
 
             $formData[$key] = $this->createField(
                 $key,
-                is_array($value) ? implode(', ', array_filter($value)) : $value,
-                $this->page
+                is_array($value) ? implode(', ', array_filter($value)) : $value
             );
         }
 

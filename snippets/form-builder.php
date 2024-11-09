@@ -43,7 +43,7 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
       <p class="<?= FormHelper::getClassName('error', $config, 'warning') ?>"><?= $alert['message'] ?></p>
   <?php endif ?>
 
-  <div class="hp_field__sp" aria-hidden="true">
+  <div class="visually-hidden" aria-hidden="true">
     <label for="website_hp_" tabindex="-1">
       <span class="visually-hidden"><?= t('honeypot_label') ?></span>
     </label>

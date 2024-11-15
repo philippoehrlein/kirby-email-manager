@@ -1,8 +1,6 @@
 <?php
 namespace KirbyEmailManager\Hooks;
 
-use Kirby\Cms\App;
-
 /**
  * SystemHooks class for managing system hooks
  * 

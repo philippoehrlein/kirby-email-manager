@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/classloader.php';
 
 use KirbyEmailManager\Helpers\PathHelper;
 use KirbyEmailManager\Helpers\SessionHelper;

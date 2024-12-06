@@ -14,6 +14,8 @@ if (in_array($fieldConfig['type'], ['text', 'email', 'tel'])) {
     $inputClass = FieldHelper::getFieldClassName('input', $config, $fieldConfig['type']);
 } elseif (in_array($fieldConfig['type'], ['select', 'textarea'])) {
     $inputClass = FieldHelper::getFieldClassName($fieldConfig['type'], $config);
+} else {
+    $inputClass = FieldHelper::getFieldClassName('input', $config, $fieldConfig['type']);
 }
 
 // Define layout and span styles
@@ -48,7 +50,7 @@ $attributes = FieldHelper::prepareFieldAttributes(
 
 <div class="<?= $fieldClass ?>" style="<?= $spanStyle ?>">
   <label for="<?= $fieldKey ?>" class="<?= $labelClass . ' ' . $requiredClass ?>">
-    <?= $label ?>
+    <?= LanguageHelper::getTranslatedValue($fieldConfig['label'], $languageCode) ?>
   </label>
 
   <?php snippet('email-manager/fields/' . $fieldConfig['type'], [

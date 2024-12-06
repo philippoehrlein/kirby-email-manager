@@ -4,7 +4,7 @@ namespace KirbyEmailManager\Helpers;
 
 use KirbyEmailManager\Helpers\SecurityHelper;
 use KirbyEmailManager\Helpers\LanguageHelper;
-use Kirby\Toolkit\V;
+use KirbyEmailManager\Helpers\FileValidationHelper;
 use DateTime;
 
 /**
@@ -137,40 +137,15 @@ class ValidationHelper
 
       case 'file':
         if (!empty($data[$fieldKey]) && is_array($data[$fieldKey])) {
-          $file = $data[$fieldKey];
-          
-          // Check file size
-          $maxSize = isset($fieldConfig['max_size']) ? (int)$fieldConfig['max_size'] : 5242880;
-          if ($file['size'] > $maxSize) {
-            $errors[$fieldKey] = str_replace(
-              ':maxSize',
-              (string)round($maxSize / 1048576, 2),
-              $languageHelper->get('validation.fields.file.too_large')
-            );
-            break;
-          }
-
-          // Check file type
-          $allowedTypes = $fieldConfig['allowed_types'] ?? [];
-          $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-          if (!empty($allowedTypes) && !in_array($fileExtension, $allowedTypes)) {
-            $errors[$fieldKey] = str_replace(
-              ':allowedTypes',
-              implode(', ', $allowedTypes),
-              $languageHelper->get('validation.fields.file.invalid_type')
-            );
-            break;
-          }
-
-          // Check MIME type
-          if (!empty($fieldConfig['allowed_mimes'])) {
-            $finfo = new \finfo(FILEINFO_MIME_TYPE);
-            $mimeType = $finfo->file($file['tmp_name']);
-            if (!in_array($mimeType, $fieldConfig['allowed_mimes'])) {
-              $errors[$fieldKey] = $languageHelper->get('validation.fields.file.invalid_type');
-              break;
+            foreach ($data[$fieldKey] as $file) {
+                $fileErrors = FileValidationHelper::validateFile($file, $fieldConfig, $languageCode);
+                if (!empty($fileErrors)) {
+                    $errors[$fieldKey] = $fileErrors['error'] ?? $languageHelper->get('validation.fields.file.unknown_error');
+                    break;
+                }
             }
-          }
+        } else {
+            $errors[$fieldKey] = $languageHelper->get('validation.fields.file.no_file_uploaded');
         }
         break;
 

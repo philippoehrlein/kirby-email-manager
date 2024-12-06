@@ -33,17 +33,14 @@ return [
             'file' => [
                 'too_large' => 'The file is too large. Maximum size is :maxSize MB.',
                 'invalid_type' => 'Invalid file type. Allowed types are: :allowedTypes.',
-                'move_error' => 'Error moving file. PHP error: ',
-                'upload_error' => 'Error uploading file. PHP error: ',
-                'too_large_ini' => 'The file exceeds the allowed size in the PHP configuration.',
-                'too_large_form' => 'The file exceeds the allowed size in the form.',
-                'partial_upload' => 'The file was only partially uploaded.',
-                'no_upload' => 'No file was uploaded.',
-                'missing_temp' => 'The temporary folder is missing.',
-                'write_error' => 'Error saving the file.',
-                'upload_stopped' => 'The file upload was stopped by an extension.',
+                'security_error' => 'The file may contain malicious code.',
+                'too_many_files' => 'The maximum number of files is :maxFiles.',
+                'move_error' => 'Error moving the file. PHP error: ',
+                'upload_error' => 'Error uploading the file. PHP error: ',
                 'unknown_error' => 'An unknown error occurred during upload.',
-                'malicious' => 'The file may contain malicious code.'
+                'no_file_uploaded' => 'Please select an attachment.',
+                'security_error' => 'The file has an unauthorized file extension.',
+                'upload_error' => 'Error uploading the file.'
             ],
             'password' => [
                 'min_length' => 'The password must be at least :minLength characters long.'

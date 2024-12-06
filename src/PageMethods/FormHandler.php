@@ -4,6 +4,7 @@ namespace KirbyEmailManager\PageMethods;
 use KirbyEmailManager\Helpers\LanguageHelper;
 use KirbyEmailManager\Helpers\EmailHelper;
 use Kirby\Data\Data;
+use Kirby\Http\Request\Files;
 use Exception;
 
 use Kirby\Filesystem\F;
@@ -14,6 +15,7 @@ use KirbyEmailManager\Helpers\LogHelper;
 use KirbyEmailManager\Helpers\ConfigHelper;
 use KirbyEmailManager\Helpers\SuccessMessageHelper;
 use KirbyEmailManager\Helpers\SecurityHelper;
+use KirbyEmailManager\Helpers\FileValidationHelper;
 
 /**
  * FormHandler class provides methods to handle form submissions.
@@ -208,11 +210,52 @@ class FormHandler
                 }
 
                 foreach ($this->templateConfig['fields'] as $fieldKey => $fieldConfig) {
+                    // Spezielle Behandlung für File-Uploads
                     if ($fieldConfig['type'] === 'file') {
+                        $files = $this->kirby->request()->files();
+                        $fileErrors = [];
+                        
+                        // Required-Prüfung für Files
+                        if (!empty($fieldConfig['required'])) {
+                            if (!isset($files->data()[$fieldKey]) || empty($files->data()[$fieldKey])) {
+                                $errors[$fieldKey] = $this->languageHelper->get('validation.fields.file.no_file_uploaded');
+                                continue;
+                            }
+                        }
+                        
+                        // Wenn Files vorhanden sind, validiere sie
+                        if (isset($files->data()[$fieldKey])) {
+                            // Prüfe maximale Anzahl der Dateien
+                            if (isset($fieldConfig['max_files']) && count($files->data()[$fieldKey]) > $fieldConfig['max_files']) {
+                                $errors[$fieldKey] = str_replace(
+                                    ':maxFiles',
+                                    $fieldConfig['max_files'],
+                                    $this->languageHelper->get('validation.fields.file.too_many_files')
+                                );
+                                continue;
+                            }
+
+                            foreach ($files->data()[$fieldKey] as $file) {
+                                $fileErrors = FileValidationHelper::validateFile($file, $fieldConfig, $this->languageCode);
+                                if (!empty($fileErrors)) {
+                                    $errors[$fieldKey] = $fileErrors['error'] ?? $this->languageHelper->get('validation.fields.file.unknown_error');
+                                    break;
+                                }
+                            }
+                            
+                            // Wenn keine Fehler, speichere nur den Dateinamen für die E-Mail
+                            if (empty($fileErrors)) {
+                                $data[$fieldKey] = array_map(function($file) {
+                                    return $file['name'];
+                                }, $files->data()[$fieldKey]);
+                            }
+                        }
+                        
                         continue;
                     }
 
-                    $fieldErrors = ValidationHelper::validateField($fieldKey, $fieldConfig, $data, $this->templateConfig,  $this->languageCode);
+                    // Normale Validierung für alle anderen Feldtypen
+                    $fieldErrors = ValidationHelper::validateField($fieldKey, $fieldConfig, $data, $this->templateConfig, $this->languageCode);
                     if (!empty($fieldErrors)) {
                         $errors = array_merge($errors, $fieldErrors);
                     }

@@ -31,19 +31,16 @@ return [
                 'invalid_range' => 'La date de fin doit être postérieure à la date de début.'
             ],
             'file' => [
-                'too_large' => 'Le fichier est trop volumineux. La taille maximale est de :maxSize Mo.',
-                'invalid_type' => 'Type de fichier non valide. Les types autorisés sont : :allowedTypes.',
-                'move_error' => 'Erreur lors du déplacement du fichier. Erreur PHP : ',
-                'upload_error' => 'Erreur lors du téléchargement du fichier. Erreur PHP : ',
-                'too_large_ini' => 'Le fichier dépasse la taille autorisée dans la configuration PHP.',
-                'too_large_form' => 'Le fichier dépasse la taille autorisée dans le formulaire.',
-                'partial_upload' => 'Le fichier n\'a été que partiellement téléchargé.',
-                'no_upload' => 'Aucun fichier n\'a été téléchargé.',
-                'missing_temp' => 'Le dossier temporaire est manquant.',
-                'write_error' => 'Erreur lors de l\'enregistrement du fichier.',
-                'upload_stopped' => 'Le téléchargement du fichier a été arrêté par une extension.',
-                'unknown_error' => 'Une erreur inconnue s\'est produite lors du téléchargement.',
-                'malicious' => 'Le fichier peut contenir du code malveillant.'
+                'too_large' => 'Le fichier est trop grand. La taille maximale est de :maxSize MB.',
+                'invalid_type' => 'Type de fichier non valide. Types autorisés: :allowedTypes.',
+                'security_error' => 'Le fichier peut contenir du code malveillant.',
+                'too_many_files' => 'Le nombre maximum de fichiers est de :maxFiles.',
+                'move_error' => 'Erreur lors du déplacement du fichier. Erreur PHP: ',
+                'upload_error' => 'Erreur lors du téléchargement du fichier. Erreur PHP: ',
+                'unknown_error' => 'Un erreur inconnue est survenue lors du téléchargement.',
+                'no_file_uploaded' => 'Veuillez sélectionner un fichier.',
+                'security_error' => 'Le fichier a une extension non autorisée.',
+                'upload_error' => 'Erreur lors du téléchargement du fichier.'
             ],
             'password' => [
                 'min_length' => 'Le mot de passe doit contenir au moins :minLength caractères.'

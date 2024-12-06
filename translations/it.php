@@ -32,18 +32,15 @@ return [
             ],
             'file' => [
                 'too_large' => 'Il file è troppo grande. La dimensione massima è :maxSize MB.',
-                'invalid_type' => 'Tipo di file non valido. I tipi consentiti sono: :allowedTypes.',
+                'invalid_type' => 'Tipo di file non va lido. Tipi consentiti: :allowedTypes.',
+                'security_error' => 'Il file potrebbe contenere codice dannoso.',
+                'too_many_files' => 'Il numero massimo di file è :maxFiles.',
                 'move_error' => 'Errore durante lo spostamento del file. Errore PHP: ',
                 'upload_error' => 'Errore durante il caricamento del file. Errore PHP: ',
-                'too_large_ini' => 'Il file supera la dimensione consentita nella configurazione PHP.',
-                'too_large_form' => 'Il file supera la dimensione consentita nel modulo.',
-                'partial_upload' => 'Il file è stato caricato solo parzialmente.',
-                'no_upload' => 'Nessun file è stato caricato.',
-                'missing_temp' => 'La cartella temporanea è mancante.',
-                'write_error' => 'Errore durante il salvataggio del file.',
-                'upload_stopped' => 'Il caricamento del file è stato interrotto da un\'estensione.',
                 'unknown_error' => 'Si è verificato un errore sconosciuto durante il caricamento.',
-                'malicious' => 'Il file potrebbe contenere codice dannoso.'
+                'no_file_uploaded' => 'Per favore, seleziona un file.',
+                'security_error' => 'Il file ha un\'estensione non autorizzata.',
+                'upload_error' => 'Errore durante il caricamento del file.'
             ],
             'password' => [
                 'min_length' => 'La password deve contenere almeno :minLength caratteri.'

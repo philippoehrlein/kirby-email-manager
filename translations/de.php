@@ -33,17 +33,14 @@ return [
             'file' => [
                 'too_large' => 'Die Datei ist zu groß. Maximale Größe ist :maxSize MB.',
                 'invalid_type' => 'Ungültiger Dateityp. Erlaubte Typen sind: :allowedTypes.',
+                'security_error' => 'Die Datei enthält möglicherweise schädlichen Code.',
+                'too_many_files' => 'Die maximale Anzahl der Dateien beträgt :maxFiles.',
                 'move_error' => 'Fehler beim Verschieben der Datei. PHP-Fehler: ',
                 'upload_error' => 'Fehler beim Hochladen der Datei. PHP-Fehler: ',
-                'too_large_ini' => 'Die Datei überschreitet die in der PHP-Konfiguration erlaubte Größe.',
-                'too_large_form' => 'Die Datei überschreitet die im Formular erlaubte Größe.',
-                'partial_upload' => 'Die Datei wurde nur teilweise hochgeladen.',
-                'no_upload' => 'Es wurde keine Datei hochgeladen.',
-                'missing_temp' => 'Der temporäre Ordner fehlt.',
-                'write_error' => 'Fehler beim Speichern der Datei.',
-                'upload_stopped' => 'Der Dateiupload wurde durch eine Erweiterung gestoppt.',
                 'unknown_error' => 'Ein unbekannter Fehler ist beim Upload aufgetreten.',
-                'malicious' => 'Die Datei enthält möglicherweise schädlichen Code.'
+                'no_file_uploaded' => 'Wählen Sie einen Anhang aus.',
+                'security_error' => 'Die Datei hat eine unerlaubte Dateiendung.',
+                'upload_error' => 'Fehler beim Hochladen der Datei.'
             ],
             'password' => [
                 'min_length' => 'Das Passwort muss mindestens :minLength Zeichen lang sein.'

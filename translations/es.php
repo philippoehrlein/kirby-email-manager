@@ -31,19 +31,16 @@ return [
                 'invalid_range' => 'La fecha de finalización debe ser posterior a la fecha de inicio.'
             ],
             'file' => [
-                'too_large' => 'El archivo es demasiado grande. El tamaño máximo es de :maxSize MB.',
-                'invalid_type' => 'Tipo de archivo no válido. Los tipos permitidos son: :allowedTypes.',
-                'move_error' => 'Error al mover el archivo. Error PHP: ',
-                'upload_error' => 'Error al subir el archivo. Error PHP: ',
-                'too_large_ini' => 'El archivo excede el tamaño permitido en la configuración PHP.',
-                'too_large_form' => 'El archivo excede el tamaño permitido en el formulario.',
-                'partial_upload' => 'El archivo solo se subió parcialmente.',
-                'no_upload' => 'No se subió ningún archivo.',
-                'missing_temp' => 'Falta la carpeta temporal.',
-                'write_error' => 'Error al guardar el archivo.',
-                'upload_stopped' => 'La subida del archivo fue detenida por una extensión.',
-                'unknown_error' => 'Ocurrió un error desconocido durante la subida.',
-                'malicious' => 'El archivo puede contener código malicioso.'
+                'too_large' => 'El archivo es demasiado grande. El tamaño máximo es :maxSize MB.',
+                'invalid_type' => 'Tipo de archivo no válido. Tipos permitidos: :allowedTypes.',
+                'security_error' => 'El archivo puede contener código malicioso.',
+                'too_many_files' => 'El número máximo de archivos es :maxFiles.',
+                'move_error' => 'Error al mover el archivo. Error de PHP: ',
+                'upload_error' => 'Error al subir el archivo. Error de PHP: ',
+                'unknown_error' => 'Se produjo un error desconocido durante el upload.',
+                'no_file_uploaded' => 'Por favor, seleccione un archivo.',
+                'security_error' => 'El archivo tiene una extensión no permitida.',
+                'upload_error' => 'Error al subir el archivo.'
             ],
             'password' => [
                 'min_length' => 'La contraseña debe tener al menos :minLength caracteres.'

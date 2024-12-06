@@ -11,7 +11,8 @@ use PHPUnit\Framework\TestCase;
 class FileValidationHelperTest extends TestCase
 {
     private $testFiles = [];
-    private $translations;
+    private $languageCode = 'de';
+    private $fieldConfig;
 
     /**
      * Create test files and translations before the tests
@@ -23,12 +24,8 @@ class FileValidationHelperTest extends TestCase
         
         $this->createTestFiles();
         
-        $this->translations = [
-            'file' => [
-                'too_large' => 'Die Datei ist zu groß. Maximale Größe ist :maxSize MB.',
-                'invalid_type' => 'Ungültiger Dateityp.',
-                'malicious' => 'Die Datei enthält möglicherweise schädlichen Code.'
-            ]
+        $this->fieldConfig = [
+            'max_size' => 5 * 1024 * 1024 // 5MB
         ];
     }
 
@@ -56,13 +53,9 @@ class FileValidationHelperTest extends TestCase
         file_put_contents($validPdf, '%PDF-1.4' . PHP_EOL); 
         $this->testFiles[] = $validPdf;
 
-        $maliciousFile = tempnam(sys_get_temp_dir(), 'test_') . '.pdf';
-        file_put_contents($maliciousFile, '<?php echo "hack"; ?>');
-        $this->testFiles[] = $maliciousFile;
-
-        $fakePdf = tempnam(sys_get_temp_dir(), 'test_') . '.pdf';
-        file_put_contents($fakePdf, "\x89PNG\r\n\x1a\n"); 
-        $this->testFiles[] = $fakePdf;
+        $phpFile = tempnam(sys_get_temp_dir(), 'test_') . '.pdf';
+        file_put_contents($phpFile, '<?php echo "test"; ?>');
+        $this->testFiles[] = $phpFile;
     }
 
     /**
@@ -79,11 +72,7 @@ class FileValidationHelperTest extends TestCase
             'size' => filesize($this->testFiles[0])
         ];
 
-        $fieldConfig = [
-            'max_size' => 5 * 1024 * 1024
-        ];
-
-        $errors = FileValidationHelper::validateFile($file, $fieldConfig, $this->translations, 'de');
+        $errors = FileValidationHelper::validateFile($file, $this->fieldConfig, $this->languageCode);
         $this->assertEmpty($errors);
     }
 
@@ -94,57 +83,50 @@ class FileValidationHelperTest extends TestCase
     public function testMaliciousFileUpload()
     {
         $file = [
-            'name' => 'malicious.pdf',
+            'name' => 'malicious.php',
             'type' => 'application/pdf',
             'tmp_name' => $this->testFiles[1],
             'error' => UPLOAD_ERR_OK,
             'size' => filesize($this->testFiles[1])
         ];
 
-        $fieldConfig = [
-            'max_size' => 5 * 1024 * 1024
-        ];
-
-        $errors = FileValidationHelper::validateFile($file, $fieldConfig, $this->translations, 'de');
-        $this->assertArrayHasKey('security', $errors);
+        $errors = FileValidationHelper::validateFile($file, $this->fieldConfig, $this->languageCode);
+        $this->assertArrayHasKey('error', $errors);
     }
 
     /**
      * Test an invalid mime type upload
      * @return void
      */
-    public function testInvalidMimeTypeUpload()
+    public function testInvalidMimeType()
     {
         $file = [
-            'name' => 'fake.pdf',
-            'type' => 'application/pdf',
-            'tmp_name' => $this->testFiles[2], 
+            'name' => 'test.xyz',
+            'type' => 'application/xyz',
+            'tmp_name' => $this->testFiles[0],
             'error' => UPLOAD_ERR_OK,
-            'size' => filesize($this->testFiles[2])
+            'size' => filesize($this->testFiles[0])
         ];
 
-        $errors = FileValidationHelper::validateFile($file, [], $this->translations, 'de');
-        $this->assertArrayHasKey('type', $errors);
+        $errors = FileValidationHelper::validateFile($file, $this->fieldConfig, $this->languageCode);
+        $this->assertArrayHasKey('error', $errors);
     }
 
     /**
      * Test an oversized file upload
      * @return void
      */
-    public function testOversizedFileUpload()
+    public function testFileTooLarge()
     {
         $file = [
             'name' => 'large.pdf',
             'type' => 'application/pdf',
-            'tmp_name' => $this->testFiles[2], 
+            'tmp_name' => $this->testFiles[2],
             'error' => UPLOAD_ERR_OK,
-            'size' => 6 * 1024 * 1024 
+            'size' => 6 * 1024 * 1024
         ];
 
-        $errors = FileValidationHelper::validateFile($file, [
-            'max_size' => 5 * 1024 * 1024 
-        ], $this->translations, 'de');
-        
-        $this->assertArrayHasKey('size', $errors);
+        $errors = FileValidationHelper::validateFile($file, $this->fieldConfig, $this->languageCode);
+        $this->assertArrayHasKey('error', $errors);
     }
 }

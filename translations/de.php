@@ -92,10 +92,16 @@ return [
         ]
     ],
     'captcha' => [
-        'error_messages' => [
+        'error' => [
             'missing' => 'Bitte bestätigen Sie, dass Sie ein Mensch sind.',
             'invalid' => 'Die Überprüfung ist fehlgeschlagen. Bitte versuchen Sie es erneut.'
         ]
+    ],
+    'error' => [
+        'no_template' => 'Keine E-Mail-Vorlage ausgewählt.',
+        'config_file_not_found' => 'Konfigurations-Datei nicht gefunden: ',
+        'template_config_empty' => 'Die Vorlagenkonfiguration ist leer.',
+        'error_occurred' => 'Ein Fehler ist aufgetreten: '
     ],
     'panel.email-manager.tab' => 'E-Mail Manager',
     'panel.templates.headline' => 'E-Mail',

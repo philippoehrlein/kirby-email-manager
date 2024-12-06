@@ -65,7 +65,7 @@ class ValidationHelper
     switch ($fieldConfig['type']) {
       case 'email':
         if (!empty($data[$fieldKey]) && !SecurityHelper::validateEmail($data[$fieldKey])) {
-          $errors[$fieldKey] = $languageHelper->get('captcha.error_messages.invalid');
+          $errors[$fieldKey] = $languageHelper->get('validation.fields.email');
         }
         break;
 
@@ -361,7 +361,7 @@ class ValidationHelper
     $fieldName = $captchaConfig['frontend']['field_name'] ?? 'captcha-response';
 
     if (empty($data[$fieldName])) {
-        $errors[$fieldName] = $languageHelper->get('captcha.error_messages.missing');
+        $errors[$fieldName] = $languageHelper->get('captcha.error.missing');
         return $errors;
     }
 
@@ -376,7 +376,7 @@ class ValidationHelper
     }
 
     if (!$validateCallback($data[$fieldName], $captchaConfig)) {
-        $errors[$fieldName] = $languageHelper->get('captcha.error_messages.invalid');
+        $errors[$fieldName] = $languageHelper->get('captcha.error.invalid');
     }
 
     return $errors;
@@ -388,7 +388,6 @@ class ValidationHelper
         return false;
     }
     
-    // Kirby's Datumsformat aus der Konfiguration holen
     $dateFormat = kirby()->option('date.handler.format', 'Y-m-d');
     
     $d = DateTime::createFromFormat($dateFormat, $date);

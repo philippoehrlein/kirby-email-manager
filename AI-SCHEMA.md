@@ -18,11 +18,9 @@ form_submission:       # Optional, anti-spam settings
 
 # E-Mail-Einstellungen
 emails:               # Required
-  contact:            # Required - Recipient email settings
-    subject:          
-      default:        # Required - Multilingual default subject
-      topic:          # Required - Dynamic subject with :topic placeholder, used for email subject with selectable topic
-      sender:           # Required - Multilingual sender display name (shown as email sender)
+  receiver:            # Required - Recipient email settings
+    subject:          # Required - Multilingual default subject
+    sender:           # Required - Multilingual sender display name (shown as email sender)
   confirmation:       # Optional - Confirmation email settings
     subject:          # Required if confirmation is used (multilingual)
     sender:           # Required - Multilingual sender display name (shown as email sender)
@@ -44,9 +42,10 @@ fields:              # Required
     width: 1/2      # Optional - Field width (1/1, 1/2, 1/3, 2/3, 1/4, 3/4)
     placeholder:     # Optional (multilingual)
     validate:        # Optional - Available: email, url, phone, date, minLength:X, maxLength:Y
-    error_message:   # Optional (multilingual) - Custom error message
+    error:           # Optional (multilingual) - Custom error message
     title:           # Optional (multilingual) - Tooltip/Help text
-    aria-label:      # Optional (multilingual) - Accessibility label
+    aria:            # Optional (multilingual) - Accessibility label
+    help:            # Optional (multilingual) - Help text
 
     # Type-specific attributes (use only relevant for chosen type):
 
@@ -64,12 +63,6 @@ fields:              # Required
       option_key:    # Unique identifier
         en: Label
         de: Bezeichnung
-
-    # date
-    date_format:     # Optional (multilingual)
-    min: today      # Optional (today, +Xmonths, YYYY-MM-DD)
-    max: +6months   # Optional
-    validate: date  # Recommended for date fields
 
     # time
     min: "09:00"    # Optional - 24h format

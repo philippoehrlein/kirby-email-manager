@@ -92,10 +92,16 @@ return [
         ]
     ],
     'captcha' => [
-        'error_messages' => [
+        'error' => [
             'missing' => 'Por favor, verifique que es humano.',
             'invalid' => 'La verificación ha fallado. Por favor, inténtelo de nuevo.'
         ]
+    ],
+    'error' => [
+        'no_template' => 'No se seleccionó plantilla de correo electrónico.',
+        'config_file_not_found' => 'Archivo de configuración no encontrado: ',
+        'template_config_empty' => 'La configuración de la plantilla está vacía.',
+        'error_occurred' => 'Ocurrió un error: '
     ],
     'panel.email-manager.tab' => 'Gestor de E-Mail',
     'panel.templates.headline' => 'E-Mail',

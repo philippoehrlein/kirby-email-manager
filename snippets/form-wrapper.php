@@ -1,21 +1,14 @@
 <?php
 use KirbyEmailManager\PageMethods\ContentWrapper;
 
-error_log('Page type: ' . get_class($page));
-error_log('Page content type: ' . get_class($page->content()));
-
-// Prüfe, ob Block-Daten vorhanden sind
 $blockContent = isset($block) && $block !== null ? $block->content()->toArray() : null;
 $contentWrapper = new ContentWrapper($page, $blockContent);
 
-// FormHandler ausführen, mit ContentWrapper
 $formHandler = $page->form_handler($contentWrapper);
 
-// Session abfragen
 $session = kirby()->session();
 $successMessage = $session->get('form.success');
 if ($successMessage): 
-    // Erfolgsmeldung anzeigen und danach aus der Session entfernen
     $session->remove('form.success');
     ?>
     <div class="alert alert--success">

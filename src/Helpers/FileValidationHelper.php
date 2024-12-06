@@ -93,7 +93,7 @@ class FileValidationHelper
             default => 'unknown_upload_error'
         };
 
-        return $translations['error_messages'][$errorKey];
+        return $translations['error'][$errorKey];
     }
 
     /**

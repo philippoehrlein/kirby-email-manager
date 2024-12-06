@@ -104,7 +104,7 @@ class EmailHelper {
             $confirmationTemplatePath = $kirby->root('site') . '/templates/emails/' . $selectedTemplate;
         
             if (!file_exists($confirmationTemplatePath . '/' . $confirmationTextTemplate)) {
-                throw new Exception(t('error_messages.confirmation_template_not_found', 'Confirmation email template not found: ') . $confirmationTemplatePath . '/[' . $confirmationTextTemplate . ']');
+                throw new Exception(t('error.confirmation_template_not_found', 'Confirmation email template not found: ') . $confirmationTemplatePath . '/[' . $confirmationTextTemplate . ']');
             }
         
             $confirmationTemplatePath = $selectedTemplate . '/' . $confirmationTemplate;
@@ -157,13 +157,13 @@ class EmailHelper {
     public static function getEmailSubject($contentWrapper, $data, $templateConfig) {
         $languageHelper = self::initLanguageHelper($templateConfig);
         
-        // Wenn send_to_more aktiviert ist und ein Thema ausgewählt wurde
+        // Check if send_to_more is enabled
         if ($contentWrapper->send_to_more()->toBool() && isset($data['topic'])) {
-            $templateSubject = $languageHelper->get('emails.subject.topic');
-            $subject = str_replace(':topic', $data['topic'], $templateSubject);
+            // Subject with topic
+            $subject = str_replace(':topic', $data['topic'], $languageHelper->get('emails.receiver.subject'));
         } else {
-            // Standard E-Mail-Betreff
-            $subject = $languageHelper->get('emails.subject.default');
+            // Standard subject
+            $subject = $languageHelper->get('emails.receiver.subject');
         }
 
         return $subject;

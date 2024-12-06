@@ -1,18 +1,17 @@
 <?php
 use KirbyEmailManager\Helpers\FormHelper;
 use KirbyEmailManager\Helpers\FieldHelper;
-
+use KirbyEmailManager\Helpers\LanguageHelper;
 
 $config = $config ?? [];
 
 // Set up CSS classes based on configuration
 $fieldClass = FieldHelper::getFieldClassName('field', $config, $fieldConfig['type']);
 $labelClass = FieldHelper::getFieldClassName('label', $config);
-$inputClass = FieldHelper::getFieldClassName('input', $config);
 
 // Add specific classes for text fields
 if (in_array($fieldConfig['type'], ['text', 'email', 'tel'])) {
-    $inputClass .= ' ' . FieldHelper::getFieldClassName('input', $config, $fieldConfig['type']);
+    $inputClass = FieldHelper::getFieldClassName('input', $config, $fieldConfig['type']);
 } elseif (in_array($fieldConfig['type'], ['select', 'textarea'])) {
     $inputClass = FieldHelper::getFieldClassName($fieldConfig['type'], $config);
 }
@@ -28,10 +27,11 @@ $requiredClass = $isRequired ? 'is-required' : '';
 // Prepare additional attributes
 $commonAttributes = [];
 if (isset($fieldConfig['title'])) {
-    $commonAttributes['title'] = $fieldConfig['title'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
+    $commonAttributes['title'] = LanguageHelper::getTranslatedValue($fieldConfig['title'], $languageCode);
 }
-if (isset($fieldConfig['aria-label'])) {
-    $commonAttributes['aria-label'] = $fieldConfig['aria-label'][$languageCode] ?? $fieldConfig['error_message'][$languageCode] ?? '';
+
+if (isset($fieldConfig['aria'])) {
+    $commonAttributes['aria-label'] = LanguageHelper::getTranslatedValue($fieldConfig['aria'], $languageCode);
 }
 
 // Generate attributes
@@ -48,10 +48,10 @@ $attributes = FieldHelper::prepareFieldAttributes(
 
 <div class="<?= $fieldClass ?>" style="<?= $spanStyle ?>">
   <label for="<?= $fieldKey ?>" class="<?= $labelClass . ' ' . $requiredClass ?>">
-    <?= $fieldConfig['label'][$languageCode] ?>
+    <?= $label ?>
   </label>
 
-  <?php snippet('email-manager/form/' . $fieldConfig['type'], [
+  <?php snippet('email-manager/fields/' . $fieldConfig['type'], [
     'field' => $attributes,
     'value' => $value,
     'options' => $attributes->options ?? []

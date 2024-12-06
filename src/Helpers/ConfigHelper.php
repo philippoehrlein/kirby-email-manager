@@ -20,13 +20,13 @@ class ConfigHelper
   public static function validateTemplateConfig($templateConfig)
   {
       if (empty($templateConfig)) {
-          throw new Exception(t('error_messages.template_config_empty'));
+          throw new Exception(t('error.template_config_empty'));
       }
 
       $requiredKeys = ['fields', 'templates', 'buttons', 'emails'];
       foreach ($requiredKeys as $key) {
           if (!isset($templateConfig[$key])) {
-              $message = t('error_messages.missing_required_key');
+              $message = t('error.missing_required_key');
               $message = str_replace('{key}', $key, $message);
               throw new Exception($message);
           }
@@ -50,7 +50,7 @@ class ConfigHelper
             $requiredProperties = ['type', 'label'];
             foreach ($requiredProperties as $property) {
                 if (!isset($fieldConfig[$property])) {
-                    throw new Exception(t('error_messages.field_missing_property', "Missing '{$property}' for field '{$fieldKey}' in template configuration."));
+                    throw new Exception(t('error.field_missing_property', "Missing '{$property}' for field '{$fieldKey}' in template configuration."));
                 }
             }
         }

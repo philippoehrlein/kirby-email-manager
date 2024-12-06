@@ -65,7 +65,7 @@ class FormHelper
     public static function generateSpanStyles(array $spans): string
     {
         $styles = [];
-        if (isset($spans['default']) && $spans['default'] !== 12) {
+        if (isset($spans['default'])) {
             $styles[] = "--span:" . $spans['default'];
         }
         if (isset($spans['medium']) && $spans['medium'] !== $spans['default']) {
@@ -74,6 +74,7 @@ class FormHelper
         if (isset($spans['large']) && $spans['large'] !== $spans['medium']) {
             $styles[] = "--span-large:" . $spans['large'];
         }
+
         return implode('; ', $styles);
     }
 
@@ -86,30 +87,15 @@ class FormHelper
      */
     public static function getClassName(string $element, array $config = [], string $modifier = null): string
     {
-        $defaultClasses = [
-            'form'    => 'form',
-            'grid'    => 'grid',
-            'field'   => 'field',
-            'label'   => 'label',
-            'input'   => 'input',
-            'error'   => 'error',
-            'button'  => 'button',
-            'select'  => 'select',
-            'textarea' => 'textarea',
-            'helper-text' => 'helper-text',
-        ];
-
         $prefix = $config['classPrefix'] ?? 'kem-';
-        $customClasses = $config['classes'] ?? [];
+        $className = $config['classes'][$element] ?? $element;
         $additionalClasses = $config['additionalClasses'][$element] ?? '';
-
-        $className = $customClasses[$element] ?? $defaultClasses[$element] ?? '';
-
-        if ($prefix !== false && !empty($className) && !in_array($element, $config['noPrefixElements'] ?? [])) {
+        
+        if ($prefix !== false) {
             $className = $prefix . $className;
         }
-
-        if ($modifier) {
+        if ($modifier !== null) {
+            $modifier = $config['classModifiers'][$element][$modifier] ?? $modifier;
             $className .= ' ' . $className . '--' . $modifier;
         }
 

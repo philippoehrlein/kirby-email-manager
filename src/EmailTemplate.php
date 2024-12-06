@@ -142,7 +142,7 @@ class EmailTemplate
     {
         $configPath = kirby()->root('site') . '/templates/emails/' . $this->templateId . '/config.yml';
         if (!file_exists($configPath)) {
-            throw new Exception(t('error_messages.config_file_not_found') . $configPath);
+            throw new Exception(t('error.config_file_not_found') . $configPath);
         }
         $this->config = Data::read($configPath);
     }

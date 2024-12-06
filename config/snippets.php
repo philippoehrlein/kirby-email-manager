@@ -21,14 +21,14 @@ function getSnippets(): array
     $snippets = [];
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($snippetsDir));
 
-    // Explizit den Email-Manager Block registrieren
+    // Register the Email-Manager block
     $snippets['blocks/email-manager'] = $snippetsDir . '/blocks/email-manager.php';
 
-    // Restliche Snippets registrieren
+    // Register the remaining snippets
     foreach ($iterator as $file) {
         if ($file->isFile() && $file->getExtension() === 'php') {
             $relativePath = str_replace($snippetsDir . '/', '', $file->getPathname());
-            // Blocks-Verzeichnis überspringen, da wir es separat behandeln
+            // Skip the Blocks directory since we handle it separately
             if (strpos($relativePath, 'blocks/') === 0) {
                 continue;
             }

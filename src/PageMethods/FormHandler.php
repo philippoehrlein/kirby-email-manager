@@ -60,7 +60,7 @@ class FormHandler
         $selectedTemplateId = $this->contentWrapper->email_templates()->value();
         
         if (empty($selectedTemplateId)) {
-            throw new Exception($this->languageHelper->get('error_messages.no_template'));
+            throw new Exception('No template selected');
         }
 
         // Plugin-Config und YML-Config zusammenführen
@@ -69,7 +69,7 @@ class FormHandler
         
         $configPath = $this->kirby->root('site') . '/templates/emails/' . $selectedTemplateId . '/config.yml';
         if (!file_exists($configPath)) {
-            throw new Exception($this->languageHelper->get('error_messages.config_file_not_found') . $configPath);
+            throw new Exception('Config file not found: ' . $configPath);
         }
 
         $ymlConfig = Data::read($configPath);
@@ -112,7 +112,7 @@ class FormHandler
                 return [
                     'alert' => [
                         'type' => 'error',
-                        'message' => $this->languageHelper->get('captcha.error_messages.invalid'),
+                        'message' => $this->languageHelper->get('captcha.error.invalid'),
                         'errors' => $captchaErrors
                     ],
                     'data' => $data

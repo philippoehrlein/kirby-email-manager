@@ -134,8 +134,62 @@ class Field {
         }));
     }
 
-    public function className() {
-        return FieldHelper::getFieldClassName('daterange-wrapper', $this->config);
+    /**
+     * Retrieves the class name for a form field.
+     * 
+     * @param string $name The name of the field.
+     * @return string The class name for the field.
+     */
+    public function className($name) {
+        return FieldHelper::getFieldClassName($name, $this->config);
+    }
+
+     /**
+     * Get the field type
+     */
+    public function type(): string
+    {
+        return $this->type ?? '';
+    }
+
+    /**
+     * Get the field class
+     */
+    public function class(): string
+    {
+        return $this->class ?? '';
+    }
+
+    /**
+     * Get the placeholder text
+     */
+    public function placeholder(): ?string
+    {
+        return $this->placeholder;
+    }
+
+    /**
+     * Get the required status
+     */
+    public function required(): bool
+    {
+        return $this->required ?? false;
+    }
+
+    /**
+     * Get the aria label
+     */
+    public function ariaLabel(): ?string
+    {
+        return $this->ariaLabel;
+    }
+
+    /**
+     * Get the field options
+     */
+    public function options(): ?array
+    {
+        return $this->options;
     }
 }
 

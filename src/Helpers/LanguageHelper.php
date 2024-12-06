@@ -44,53 +44,29 @@ class LanguageHelper
             return $this->replacePlaceholders($this->cache[$cacheKey], $placeholders);
         }
 
-        // 1. Versuche Template Config in aktueller Sprache
-        $string = $this->getFromTemplateConfig($key);
-        
-        if ($string === null && $this->currentLang !== $this->defaultLang) {
-            // 2. Versuche Template Config in Standardsprache
-            $string = $this->getFromTemplateConfig($key, $this->defaultLang);
-        }
-
-        if ($string === null) {
-            // 3. Versuche Plugin Übersetzungen in aktueller Sprache
-            $string = $this->getPluginTranslation($key);
-        }
-
-        if ($string === null && $this->currentLang !== $this->defaultLang) {
-            // 4. Versuche Plugin Übersetzungen in Standardsprache
-            $string = $this->getPluginTranslation($key, $this->defaultLang);
-        }
-
-        if ($string === null) {
-            $string = $key;
-        }
-
-        $this->cache[$cacheKey] = $string;
-
-        return $this->replacePlaceholders($string, $placeholders);
-    }
-
-    /**
-     * Retrieves a value from the template configuration.
-     *
-     * @param string $key The key to retrieve.
-     * @return string|null The value from the template configuration or null if not found.
-     */
-    protected function getFromTemplateConfig(string $key, ?string $language = null): ?string
-    {
-        if (empty($this->templateConfig)) {
-            return null;
-        }
-
+        // 1. Try Template Config
         $value = $this->getNestedValue($this->templateConfig, explode('.', $key));
-
-        if (is_array($value)) {
-            $lang = $language ?? $this->currentLang;
-            return $value[$lang] ?? null;
+        if ($value !== null) {
+            $string = self::getTranslatedValue($value, $this->currentLang, $this->defaultLang);
+            if ($string !== null) {
+                $this->cache[$cacheKey] = $string;
+                return $this->replacePlaceholders($string, $placeholders);
+            }
         }
 
-        return is_string($value) ? $value : null;
+        // 2. Try Plugin Translations
+        $translations = $this->getPluginTranslation($key);
+        if ($translations !== null) {
+            $string = self::getTranslatedValue($translations, $this->currentLang, $this->defaultLang);
+            if ($string !== null) {
+                $this->cache[$cacheKey] = $string;
+                return $this->replacePlaceholders($string, $placeholders);
+            }
+        }
+
+        // Fallback to the key itself
+        $this->cache[$cacheKey] = $key;
+        return $this->replacePlaceholders($key, $placeholders);
     }
 
     /**
@@ -154,5 +130,39 @@ class LanguageHelper
         }
 
         return $current;
+    }
+
+    /**
+     * Checks and gets the correct value from a string or translated array
+     *
+     * @param string|array $value The value to check
+     * @param string|null $language The desired language
+     * @param string $defaultLang The fallback language (default: 'en')
+     * @return string|null
+     */
+    public static function getTranslatedValue(string|array $value, ?string $language = null, string $defaultLang = 'en'): ?string
+    {
+        // If it's a string, return it directly
+        if (is_string($value)) {
+            return $value;
+        }
+        
+        // If it's an array, return the corresponding translation
+        if (is_array($value)) {
+            // If a language is specified
+            if ($language && isset($value[$language])) {
+                return $value[$language];
+            }
+            
+            // Fallback to default language
+            if (isset($value[$defaultLang])) {
+                return $value[$defaultLang];
+            }
+            
+            // If no matching translation is found, take the first available value
+            return reset($value) ?: null;
+        }
+        
+        return null;
     }
 }

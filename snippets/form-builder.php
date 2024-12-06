@@ -24,7 +24,8 @@ $config = [
     'classPrefix' => $pluginConfig['classPrefix'] ?? $prefix ?? 'kem-',
     'classes' => $pluginConfig['classes'] ?? [],
     'additionalClasses' => $pluginConfig['additionalClasses'] ?? [],
-    'noPrefixElements' => $pluginConfig['noPrefixElements'] ?? []
+    'noPrefixElements' => $pluginConfig['noPrefixElements'] ?? [],
+    'classModifiers' => $pluginConfig['classModifiers'] ?? []
 ];
 
 $successMessage = $alert['successMessage'] ?? null;
@@ -93,10 +94,11 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
       : SecurityHelper::escapeHtml($rawValue);
     
     snippet('email-manager/form/base', [
+        'label' => $languageHelper->get('fields.' . $fieldKey . '.label'),
         'fieldKey' => $fieldKey,
         'fieldConfig' => $fieldConfig,
         'value' => $value,
-        'placeholder' => $fieldConfig['placeholder'][$languageCode] ?? '',
+        'placeholder' => $languageHelper->get('fields.' . $fieldKey . '.placeholder'),
         'config' => $config,
         'languageCode' => $languageCode,
         'error' => $fieldErrors[$fieldKey] ?? null
@@ -107,7 +109,7 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
   <!-- GDPR Checkbox -->
   <?php if ($contentWrapper->gdpr_checkbox()->toBool()): ?>
     <div class="<?= FormHelper::getClassName('field', $config, 'checkbox') ?>">
-      <input type="checkbox" tabindex="0" class="<?= FormHelper::getClassName('input', $config) ?> <?= FormHelper::getClassName('input', $config) ?>--checkbox" id="gdpr" name="gdpr" <?= array_key_exists('gdpr', $data) ? 'checked' : '' ?> required>
+      <input type="checkbox" tabindex="0" class="<?= FormHelper::getClassName('input', $config, 'checkbox') ?>" id="gdpr" name="gdpr" <?= array_key_exists('gdpr', $data) ? 'checked' : '' ?> required>
       <?php
        $gdprText = $contentWrapper->gdpr_text()->kt()->permalinksToUrls();
       ?>
@@ -131,13 +133,14 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
     ?>
   <?php endif; ?>
 
-  <!-- Form Actions (Buttons) -->
-  <div class="<?= FormHelper::getClassName('form', $config, 'actions') ?>">
-    <?php if ($resetButtonShow): ?>
-      <button type="reset" tabindex="0" class="<?= FormHelper::getClassName('button', $config, 'secondary') ?>"><?= $resetButtonText ?></button>
-    <?php endif; ?>
-    <input type="submit" tabindex="0" class="<?= FormHelper::getClassName('button', $config, 'primary') ?>" name="submit" value="<?= $sendButtonText ?>" />
-  </div>
+  <?php snippet('email-manager/form/actions', [
+    'classActions' => FormHelper::getClassName('form', $config, 'actions'),
+    'classButtonSecondary' => FormHelper::getClassName('button', $config, 'secondary'),
+    'classButtonPrimary' => FormHelper::getClassName('button', $config, 'primary'),
+    'resetButtonShow' => $resetButtonShow,
+    'resetButtonText' => $resetButtonText,
+    'sendButtonText' => $sendButtonText
+  ]) ?>
 
   <input type="hidden" name="csrf" value="<?= csrf() ?>">
   

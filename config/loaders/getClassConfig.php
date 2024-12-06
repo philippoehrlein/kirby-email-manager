@@ -3,20 +3,34 @@
 return [
     'classPrefix' => 'kem-',
     'classes' => [
+        'button'  => 'button',
+        'error' => 'error', 
+        'field' => 'field',
         'form'  => 'form',
         'grid'  => 'grid',
-        'field' => 'field',
-        'label' => 'label',
+        'help' => 'help',
         'input' => 'input',
-        'error' => 'error',
+        'label' => 'label',
+        'select'  => 'select',
+        'textarea' => 'textarea',
     ],
     'additionalClasses' => [
+        'button' => '',
+        'error' => '',
+        'field' => '',
         'form'  => '',
         'grid'  => '',
-        'field' => '',
-        'label' => '',
+        'help' => '',
         'input' => '',
-        'error' => '',
+        'label' => '',
+        'select' => '',
+        'textarea' => '',
+    ],
+    'classModifiers' => [
+        'button' => [
+            'primary' => 'primary',
+            'secondary' => 'secondary'
+        ],
     ],
     'noPrefixElements' => [],
 ];

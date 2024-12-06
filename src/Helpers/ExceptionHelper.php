@@ -16,7 +16,7 @@ class ExceptionHelper {
   public static function handleException($e, LanguageHelper $languageHelper) {
     error_log('Error: ' . $e->getMessage());
     
-    $errorMessage = $languageHelper->get('error_messages.error_occurred');
+    $errorMessage = $languageHelper->get('error.error_occurred');
     
     return [
       'type' => 'error',

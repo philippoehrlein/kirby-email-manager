@@ -92,10 +92,16 @@ return [
         ]
     ],
     'captcha' => [
-        'error_messages' => [
+        'error' => [
             'missing' => 'Please verify that you are human.',
             'invalid' => 'Verification failed. Please try again.'
         ]
+    ],
+    'error' => [
+        'no_template' => 'No email template selected.',
+        'config_file_not_found' => 'Configuration file not found: ',
+        'template_config_empty' => 'The template configuration is empty.',
+        'error_occurred' => 'An error occurred: '
     ],
     'panel.email-manager.tab' => 'Email Manager',
     'panel.templates.headline' => 'Email',

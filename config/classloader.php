@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Autoload classes
+ */
 spl_autoload_register(function ($class) {
     $prefix = 'KirbyEmailManager\\';
-    $base_dir = __DIR__ . '/src/';
+    $base_dir = __DIR__ . '/../lib/';
 
     $len = strlen($prefix);
     if (strncmp($prefix, $class, $len) !== 0) {

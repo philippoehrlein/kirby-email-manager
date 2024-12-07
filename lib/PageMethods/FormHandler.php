@@ -16,6 +16,7 @@ use KirbyEmailManager\Helpers\ConfigHelper;
 use KirbyEmailManager\Helpers\SuccessMessageHelper;
 use KirbyEmailManager\Helpers\SecurityHelper;
 use KirbyEmailManager\Helpers\FileValidationHelper;
+use KirbyEmailManager\Helpers\WebhookHelper;
 
 /**
  * FormHandler class provides methods to handle form submissions.
@@ -43,11 +44,11 @@ class FormHandler
         $this->page = $page;
         $this->contentWrapper = $contentWrapper;
         
-        // Config laden und validieren
+        // Load and validate config
         $this->loadTemplateConfig();
         ConfigHelper::validateTemplateConfig($this->templateConfig);
         
-        // LanguageHelper nur einmal initialisieren
+        // Initialize LanguageHelper only once
         $this->languageHelper = new LanguageHelper(null, $this->templateConfig);
         $this->languageCode = $this->languageHelper->getLanguage();
     }
@@ -65,7 +66,7 @@ class FormHandler
             throw new Exception('No template selected');
         }
 
-        // Plugin-Config und YML-Config zusammenführen
+        // Merge plugin config and YML config
         $templates = $this->kirby->option('philippoehrlein.kirby-email-manager.templates');
         $pluginConfig = $templates[$selectedTemplateId] ?? [];
         
@@ -102,7 +103,7 @@ class FormHandler
         $errors = [];
         $alert = [];
 
-        // CAPTCHA Validierung durchführen
+        // Perform CAPTCHA validation
         if (isset($this->templateConfig['captcha'])) {
             $captchaErrors = ValidationHelper::validateCaptcha(
                 $data, 
@@ -133,7 +134,7 @@ class FormHandler
 
         if ($this->kirby->request()->is('POST') && get('submit')) {
 
-            // CSRF-Token validieren
+            // Validate CSRF token
             if (!SecurityHelper::validateCSRFToken(get('csrf'))) {
                 return [
                     'alert' => [
@@ -144,10 +145,10 @@ class FormHandler
                 ];
             }
 
-            // Formulardaten bereinigen
+            // Clean form data
             $data = SecurityHelper::sanitizeAndValidateFormData($data);
 
-            // Datei-Uploads verarbeiten
+            // Process file uploads
             $attachments = [];
             $uploads = $this->kirby->request()->files()->toArray();
             foreach ($uploads as $field => $uploadField) {
@@ -165,7 +166,7 @@ class FormHandler
                 }
             }
 
-            // E-Mail-Validierung für E-Mail-Felder
+            // Email validation for email fields
             if (isset($data['email']) && !SecurityHelper::validateEmail($data['email'])) {
                 return [
                     'alert' => [
@@ -210,7 +211,7 @@ class FormHandler
                 }
 
                 foreach ($this->templateConfig['fields'] as $fieldKey => $fieldConfig) {
-                    // Spezielle Behandlung für File-Uploads
+                    // Special handling for file uploads
                     if ($fieldConfig['type'] === 'file') {
                         $files = $this->kirby->request()->files();
                         $fileErrors = [];
@@ -223,9 +224,9 @@ class FormHandler
                             }
                         }
                         
-                        // Wenn Files vorhanden sind, validiere sie
+                        // If files are present, validate them
                         if (isset($files->data()[$fieldKey])) {
-                            // Prüfe maximale Anzahl der Dateien
+                            // Check maximum number of files
                             if (isset($fieldConfig['max_files']) && count($files->data()[$fieldKey]) > $fieldConfig['max_files']) {
                                 $errors[$fieldKey] = str_replace(
                                     ':maxFiles',
@@ -243,7 +244,7 @@ class FormHandler
                                 }
                             }
                             
-                            // Wenn keine Fehler, speichere nur den Dateinamen für die E-Mail
+                            // If no errors, store only the file name for the email
                             if (empty($fileErrors)) {
                                 $data[$fieldKey] = array_map(function($file) {
                                     return $file['name'];
@@ -254,7 +255,7 @@ class FormHandler
                         continue;
                     }
 
-                    // Normale Validierung für alle anderen Feldtypen
+                    // Normal validation for all other field types
                     $fieldErrors = ValidationHelper::validateField($fieldKey, $fieldConfig, $data, $this->templateConfig, $this->languageCode);
                     if (!empty($fieldErrors)) {
                         $errors = array_merge($errors, $fieldErrors);
@@ -295,16 +296,29 @@ class FormHandler
                         
                         $successMessage = SuccessMessageHelper::getSuccessMessage($this->contentWrapper, $data, $this->languageCode);
                         $session->set('form.success', $successMessage);
-                    
+                        
+                        // Webhook mit Template-Konfiguration triggern
+                        WebhookHelper::trigger('form.success', $data, $this->templateConfig);
+                        
                         go($this->page->url());
                     } catch (Exception $e) {
                         $alert = ExceptionHelper::handleException($e, $this->languageHelper);
                         LogHelper::logError($e);
+                        // Webhook mit Template-Konfiguration triggern
+                        WebhookHelper::trigger('form.error', [
+                            'error' => $e->getMessage(),
+                            'data' => $data
+                        ], $this->templateConfig);
                     }
                 }
             } catch (Exception $e) {
                 $alert = ExceptionHelper::handleException($e, $this->languageHelper);
                 LogHelper::logError($e);
+                // Webhook mit Template-Konfiguration triggern
+                WebhookHelper::trigger('form.error', [
+                    'error' => $e->getMessage(),
+                    'data' => $data
+                ], $this->templateConfig);
             }
         }
         return ['alert' => $alert, 'data' => $data ?? []];

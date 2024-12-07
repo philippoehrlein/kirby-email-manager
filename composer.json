@@ -21,7 +21,7 @@
   },
   "autoload": {
       "psr-4": {
-          "KirbyEmailManager\\": "src/"
+          "KirbyEmailManager\\": "lib/"
       }
   },
   "autoload-dev": {

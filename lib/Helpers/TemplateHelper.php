@@ -22,29 +22,27 @@ class TemplateHelper
      */
     public static function getEmailTemplates(): array
     {
-        $templateDir = kirby()->root('site') . '/templates/emails';
+        $blueprintDir = kirby()->root('blueprints') . '/emails';
 
-        if (!Dir::exists($templateDir)) {
+        if (!Dir::exists($blueprintDir)) {
             return [];
         }
 
         $templates = [];
-        $folders = Dir::read($templateDir);
+        $files = Dir::files($blueprintDir);
 
-        foreach ($folders as $folder) {
-            $folderPath = $templateDir . '/' . $folder;
-            $configFile = $folderPath . '/config.yml';
-            
-            if (is_dir($folderPath) && file_exists($configFile)) {
-                $config = Data::read($configFile);
+        foreach ($files as $file) {
+            if (str_ends_with($file, '.yml')) {
+                $templateId = basename($file, '.yml');
+                $blueprintPath = $blueprintDir . '/' . $file;
+                $config = Data::read($blueprintPath);
 
                 if (empty($config)) {
                     continue;
                 }
 
                 if (isset($config['type']) && $config['type'] === 'managed-template') {
-                    $templateId = $config['id'] ?? $folder;
-                    $templateName = self::getTemplateName($config, $folder);
+                    $templateName = self::getTemplateName($config, $templateId);
 
                     $templates[$templateId] = [
                         'id' => $templateId,
@@ -59,21 +57,13 @@ class TemplateHelper
     }
 
     /**
-     * Retrieves the template name based on the configuration and folder.
-     * 
-     * @param array $config The configuration array.
-     * @param string $folder The folder name.
-     * @return string The template name.
+     * Retrieves the template name based on the configuration.
      */
-    public static function getTemplateName($config, $folder) 
+    public static function getTemplateName($config, $templateId) 
     {
-        // Setzt die aktuelle Sprache
         $language = kirby()->languageCode();
-        
-        // Erstellt eine Instanz von LanguageHelper und übergibt die Template-Config
         $languageHelper = new LanguageHelper($language, $config);
-
-        // Holt den Namen aus der Konfiguration oder nutzt den Fallback
-        return $languageHelper->get('name', ['folder' => ucfirst($folder)]);
+        
+        return $languageHelper->get('name', ['folder' => ucfirst($templateId)]);
     }
 }

@@ -23,7 +23,7 @@ class ConfigHelper
           throw new Exception(t('error.template_config_empty'));
       }
 
-      $requiredKeys = ['fields', 'templates', 'buttons', 'emails'];
+      $requiredKeys = ['fields', 'buttons', 'emails'];
       foreach ($requiredKeys as $key) {
           if (!isset($templateConfig[$key])) {
               $message = t('error.missing_required_key');

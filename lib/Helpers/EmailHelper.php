@@ -46,20 +46,14 @@ class EmailHelper {
     public static function sendEmail($kirby, $contentWrapper, $page, $templateConfig, $data, $languageCode, $attachments, $subject) {
         self::initLanguageHelper($templateConfig, $languageCode);
 
-        $to = self::getReceiverEmail($contentWrapper, $data);
+        $to = self::getToEmail($contentWrapper, $data);
         $subject = self::getEmailSubject($contentWrapper, $data, $templateConfig);
         $selectedTemplate = $contentWrapper->email_templates();
-
-        $templatePath = $kirby->root('site') . '/templates/emails/' . $selectedTemplate;
-
-        $receiverTemplate = $templateConfig['templates']['receiver'] ?? '';
-        $templatePath = $selectedTemplate . '/' . $receiverTemplate;
-
         $replyToEmail = self::getReplyToEmail($templateConfig, $data);
-
         $formSenderName = self::getFormSender($templateConfig);
         $formSenderEmail = self::createNoReplyEmail($kirby);
 
+        // Get footer content if available
         $footerContent = null;
         if ($contentWrapper->email_legal_footer()->notEmpty()) {
             $footer = $contentWrapper->email_legal_footer();
@@ -70,8 +64,9 @@ class EmailHelper {
 
         $emailTemplate = new EmailTemplate($page, $data, $footerContent, $selectedTemplate, $templateConfig);
 
+        // Send main email
         $emailConfig = [
-            'template' => $templatePath,
+            'template' => $selectedTemplate . '/mail',
             'from'     => [$formSenderEmail => $formSenderName],
             'to'       => $to,
             'subject'  => $subject,
@@ -89,38 +84,40 @@ class EmailHelper {
 
         try {
             $kirby->email($emailConfig);
-            
         } catch (Exception $e) {
-            error_log('Fehler beim Senden der E-Mail: ' . $e->getMessage());
+            error_log('Fehler beim Senden der Haupt-E-Mail: ' . $e->getMessage());
             throw $e;
         }
-
-        $confirmationEmail = self::getConfirmationEmail($templateConfig, $data);
         
-        if ($confirmationEmail !== null && isset($templateConfig['templates']['confirmation'])) {
-            $confirmationTemplate = $templateConfig['templates']['confirmation'] ?? '';
-            $confirmationTextTemplate = $confirmationTemplate . '.text.php';
+        // Check if reply should be sent
+        $replyPath = $kirby->root('templates') . '/emails/' . $selectedTemplate . '/reply.text.php';
+        $replyEmail = self::getReplyEmail($templateConfig, $data);
         
-            $confirmationTemplatePath = $kirby->root('site') . '/templates/emails/' . $selectedTemplate;
-        
-            if (!file_exists($confirmationTemplatePath . '/' . $confirmationTextTemplate)) {
-                throw new Exception(t('error.confirmation_template_not_found', 'Confirmation email template not found: ') . $confirmationTemplatePath . '/[' . $confirmationTextTemplate . ']');
+        $hasReplyField = false;
+        foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
+            if ($fieldConfig['type'] === 'email' && isset($fieldConfig['reply']) && $fieldConfig['reply'] === true) {
+                $hasReplyField = true;
+                break;
             }
+        }
         
-            $confirmationTemplatePath = $selectedTemplate . '/' . $confirmationTemplate;
-            $confirmationSubject = self::getConfirmationSubject($templateConfig);
-            
-            $kirby->email([
-                'template' => $confirmationTemplatePath,
-                'from'     => [$formSenderEmail => $formSenderName],
-                'to'       => $confirmationEmail,
-                'subject'  => $confirmationSubject,
-                'data'     => [
-                    'email' => $emailTemplate->content(),
-                    'form' => $emailTemplate->form(),
-                    'languageCode' => $languageCode
-                ]
-            ]);
+        if ($replyEmail !== null && file_exists($replyPath) && $hasReplyField) {
+            try {
+                $kirby->email([
+                    'template' => $selectedTemplate . '/reply',
+                    'from'     => [$formSenderEmail => $formSenderName],
+                    'to'       => $replyEmail,
+                    'subject'  => self::getReplySubject($templateConfig),
+                    'data'     => [
+                        'email' => $emailTemplate->content(),
+                        'form' => $emailTemplate->form(),
+                        'languageCode' => $languageCode
+                    ]
+                ]);
+            } catch (Exception $e) {
+                error_log('Error sending reply email: ' . $e->getMessage());
+                // We don't throw the error here since the main email was already sent
+            }
         }
     }
 
@@ -131,7 +128,7 @@ class EmailHelper {
      * @param array $data The form data.
      * @return string The receiver email address.
      */
-    public static function getReceiverEmail($contentWrapper, $data) {
+    public static function getToEmail($contentWrapper, $data) {
         if ($contentWrapper->send_to_more()->toBool()) {
             $emailStructure = $contentWrapper->send_to_structure()->toStructure();
             if ($emailStructure->count() > 0 && isset($data['topic'])) {
@@ -160,10 +157,10 @@ class EmailHelper {
         // Check if send_to_more is enabled
         if ($contentWrapper->send_to_more()->toBool() && isset($data['topic'])) {
             // Subject with topic
-            $subject = str_replace(':topic', $data['topic'], $languageHelper->get('emails.receiver.subject'));
+            $subject = str_replace(':topic', $data['topic'], $languageHelper->get('emails.mail.subject'));
         } else {
             // Standard subject
-            $subject = $languageHelper->get('emails.receiver.subject');
+            $subject = $languageHelper->get('emails.mail.subject');
         }
 
         return $subject;
@@ -233,7 +230,7 @@ class EmailHelper {
      * @param array $templateConfig The configuration for the email template.
      * @return string The confirmation subject.
      */
-    public static function getConfirmationSubject($templateConfig) {
+    public static function getReplySubject($templateConfig) {
         return self::initLanguageHelper($templateConfig)->get('emails.confirmation.subject');
     }
     
@@ -244,19 +241,19 @@ class EmailHelper {
      * @return string The confirmation sender.
      */
     public static function getFormSender($templateConfig) {
-        return self::initLanguageHelper($templateConfig)->get('emails.confirmation.sender');
+        return self::initLanguageHelper($templateConfig)->get('emails.reply.sender');
     }
 
     /**
-     * Retrieves the confirmation email address based on the template configuration and data.
+     * Retrieves the reply email address based on the template configuration and data.
      *
      * @param array $templateConfig The configuration for the email template.
      * @param array $data The form data.
-     * @return string|array|null The confirmation email address.
+     * @return string|array|null The reply email address.
      */
-    public static function getConfirmationEmail($templateConfig, $data) {
+    public static function getReplyEmail($templateConfig, $data) {
         foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
-            if (isset($fieldConfig['confirmation_to']) && $fieldConfig['confirmation_to'] === true && !empty($data[$fieldKey])) {
+            if (isset($fieldConfig['reply_to']) && $fieldConfig['reply_to'] === true && !empty($data[$fieldKey])) {
                 return $data[$fieldKey];
             }
         }

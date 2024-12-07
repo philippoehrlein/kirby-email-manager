@@ -18,20 +18,21 @@ form_submission:       # Optional, anti-spam settings
 
 # E-Mail-Einstellungen
 emails:               # Required
-  receiver:            # Required - Recipient email settings
+  mail:               # Required - Main email settings (formerly 'receiver')
     subject:          # Required - Multilingual default subject
     sender:           # Required - Multilingual sender display name (shown as email sender)
-  confirmation:       # Optional - Confirmation email settings
-    subject:          # Required if confirmation is used (multilingual)
+  reply:             # Optional - Reply email settings (formerly 'confirmation')
+    subject:          # Required if reply is used (multilingual)
     sender:           # Required - Multilingual sender display name (shown as email sender)
   content:            # Optional - Custom email content blocks (multilingual)
     # These are text blocks that will be passed to the email templates
     custom_key:       # Any number of custom keys, multilingual
 
-# Template-Pfade
-templates:            # Required
-  receiver: receiver/contact             # Required - Path/filename without extension (example: receiver/contact)
-  confirmation: confirmation/confirmation # Required - Path/filename without extension (example: confirmation/confirmation)
+# Webhooks
+webhooks:             # Optional - Webhook configurations
+  - handler: name     # Required - Handler identifier
+    events:           # Required - Array of events to trigger on
+      - form.success  # Available events: form.success, form.error
 
 # Formularfelder
 fields:              # Required
@@ -52,11 +53,11 @@ fields:              # Required
     # text
     minlength: X      # Optional - Minimum length for text input (where X is any positive int)
     maxlength: Y      # Optional - Maximum length for text input (where Y is any positive int larger than X)
-    user_name: true   # Optional - Marks field as username, will be used for confirmation email and reply-to address
+    user_name: true   # Optional - Marks field as username, will be used for reply email and reply-to address
 
     # email
-    confirmation_to: true  # Optional - Send confirmation to this address
-    reply_to: true        # Optional - Use as reply-to address
+    reply: true       # Optional - Send reply email to this address
+    reply_to: true    # Optional - Use as reply-to address
 
     # select/radio/checkbox
     options:         # Required for these types

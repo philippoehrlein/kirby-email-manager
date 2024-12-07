@@ -65,21 +65,58 @@ class FormHandler
         if (empty($selectedTemplateId)) {
             throw new Exception('No template selected');
         }
-
-        // Merge plugin config and YML config
-        $templates = $this->kirby->option('philippoehrlein.kirby-email-manager.templates');
-        $pluginConfig = $templates[$selectedTemplateId] ?? [];
         
-        $configPath = $this->kirby->root('site') . '/templates/emails/' . $selectedTemplateId . '/config.yml';
-        if (!file_exists($configPath)) {
-            throw new Exception('Config file not found: ' . $configPath);
+        $blueprintPath = $this->kirby->root('blueprints') . '/emails/' . $selectedTemplateId . '.yml';
+        if (!file_exists($blueprintPath)) {
+            throw new Exception('Blueprint not found: ' . $blueprintPath);
         }
 
-        $ymlConfig = Data::read($configPath);
-        if (!is_array($ymlConfig)) {
-            $ymlConfig = [];
+        $this->templateConfig = Data::read($blueprintPath);
+        if (!is_array($this->templateConfig)) {
+            throw new Exception('Invalid blueprint configuration');
         }
-        $this->templateConfig = array_merge($pluginConfig, $ymlConfig);
+        
+        // Add template ID to config
+        $this->templateConfig['id'] = $selectedTemplateId;
+        
+        // Validate template paths
+        $this->validateTemplatePaths($selectedTemplateId);
+    }
+
+    /**
+     * Validates that all required template files exist
+     */
+    protected function validateTemplatePaths($templateId)
+    {
+        $templateBase = $this->kirby->root('templates') . '/emails/' . $templateId;
+        
+        // Required text template
+        $requiredFiles = [
+            'mail.text.php'
+        ];
+
+        // Optional templates
+        $optionalFiles = [
+            'mail.html.php',
+            'reply.text.php',
+            'reply.html.php'
+        ];
+
+        // Check required files
+        foreach ($requiredFiles as $file) {
+            $path = $templateBase . '/' . $file;
+            if (!file_exists($path)) {
+                throw new Exception("Required template file not found: {$path}");
+            }
+        }
+
+        // Log warning for missing optional templates
+        foreach ($optionalFiles as $file) {
+            $path = $templateBase . '/' . $file;
+            if (!file_exists($path)) {
+                error_log("Warning: Optional template not found: {$path}");
+            }
+        }
     }
 
     /**

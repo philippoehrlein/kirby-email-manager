@@ -140,7 +140,7 @@ class EmailTemplate
      */
     protected function loadConfig(): void
     {
-        $configPath = kirby()->root('site') . '/templates/emails/' . $this->templateId . '/config.yml';
+        $configPath = kirby()->root('blueprints') . '/emails/' . $this->templateId . '.yml';
         if (!file_exists($configPath)) {
             throw new Exception(t('error.config_file_not_found') . $configPath);
         }

@@ -2,8 +2,6 @@
 
 namespace KirbyEmailManager\Helpers;
 
-use Kirby\Toolkit\I18n;
-
 /**
  * LanguageHelper class provides methods to handle language-related tasks.
  * @author Philipp Oehrlein
@@ -25,7 +23,6 @@ class LanguageHelper
     public function __construct(?string $language = null, array $templateConfig = [])
     {
         $this->currentLang = $language ?? kirby()->languageCode() ?? $this->defaultLang;
-
         $this->templateConfig = $templateConfig;
     }
 
@@ -108,7 +105,7 @@ class LanguageHelper
     protected function getPluginTranslation(string $key, ?string $language = null): ?string 
     {
         $lang = $language ?? $this->currentLang;
-        $translationFile = dirname(__DIR__, 2) . "/translations/{$lang}.php";
+        $translationFile = dirname(__DIR__, 2) . "/translations/form/{$lang}.php";
         
         if (!file_exists($translationFile)) {
             return null;

@@ -46,7 +46,7 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
 
   <div class="visually-hidden" aria-hidden="true">
     <label for="website_hp_" tabindex="-1">
-      <span class="visually-hidden"><?= t('honeypot_label') ?></span>
+      <span class="visually-hidden"><?= $languageHelper->get('form.honeypot.label') ?></span>
     </label>
     <input type="text" name="website_hp_" id="website_hp_" tabindex="-1" autocomplete="off">
   </div>
@@ -69,16 +69,14 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
         'fieldConfig' => [
             'type' => 'select',
             'required' => true,
-            'placeholder' => [
-                $languageCode => t('select_topic')
-            ],
+            'placeholder' => $languageHelper->get('form.select_topic'),
             'options' => $options,
             'label' => [
-                $languageCode => t('panel.email.topic_label')
+                $languageCode => t('philippoehrlein.kirby-email-manager.panel.email.topic_label')
             ]
         ],
         'value' => $data['topic'] ?? '',
-        'placeholder' => t('select_topic'),
+        'placeholder' => $languageHelper->get('form.select_topic'),
         'config' => $config,
         'languageCode' => $languageCode,
         'error' => $fieldErrors['topic'] ?? null

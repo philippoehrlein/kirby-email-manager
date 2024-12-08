@@ -1,10 +1,10 @@
 type: tabs
-label: panel.templates.headline
-icon: server
+label: philippoehrlein.kirby-email-manager.panel.templates.headline
+icon: email-manager
 
 fields:
   email_templates:
-    label: panel.templates.label
+    label: philippoehrlein.kirby-email-manager.panel.templates.label
     type: select
     options: query
     required: true
@@ -15,34 +15,34 @@ fields:
 
   send_to_more:
     type: toggle
-    label: panel.email.send_to_more_label
+    label: philippoehrlein.kirby-email-manager.panel.email.send_to_more_label
     text: 
-      - panel.email.send_to_one
-      - panel.email.send_to_many
+      - philippoehrlein.kirby-email-manager.panel.email.send_to_one
+      - philippoehrlein.kirby-email-manager.panel.email.send_to_many
 
   send_to:
-    label: panel.email.send_to_label
+    label: philippoehrlein.kirby-email-manager.panel.email.send_to_label
     type: email
     when:
       send_to_more: false
     required: true
 
   send_to_success_title:
-    label: panel.success.title_label
+    label: philippoehrlein.kirby-email-manager.panel.success.title_label
     type: text
     when:
       send_to_more: false
     required: true
 
   send_to_success_text:
-    label: panel.success.text_label
+    label: philippoehrlein.kirby-email-manager.panel.success.text_label
     type: writer
     when:
       send_to_more: false
     required: true
 
   send_to_structure:
-    label: panel.email.send_to_structure_label
+    label: philippoehrlein.kirby-email-manager.panel.email.send_to_structure_label
     type: structure
     when:
       send_to_more: true
@@ -53,20 +53,26 @@ fields:
         width: 1/2
     fields:
       topic:
-        label: panel.email.topic_label
+        label: philippoehrlein.kirby-email-manager.panel.email.topic_label
         type: text
         required: true
       email:
-        label: panel.email.email_label
+        label: philippoehrlein.kirby-email-manager.panel.email.email_label
         type: email
         required: true
+      line:
+        type: line
       success_title:
-        label: panel.success.title_label
+        label: philippoehrlein.kirby-email-manager.panel.success.title_label
         type: text
         required: true
       success_text:
-        label: panel.success.text_label
+        label: philippoehrlein.kirby-email-manager.panel.success.text_label
         type: writer
         required: true
-    help: panel.email.send_to_structure_help
+      success_help:
+        type: info
+        label: Info
+        text: philippoehrlein.kirby-email-manager.panel.help.multiple_recipients
+    help: philippoehrlein.kirby-email-manager.panel.email.send_to_structure_help
     required: true

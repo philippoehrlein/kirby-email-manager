@@ -130,7 +130,7 @@ class ValidationHelper
         if (!empty($telValue)) {
           $pattern = $fieldConfig['pattern'] ?? '^[0-9+\-\s()]{8,}$';
           if (!preg_match("/$pattern/", $telValue)) {
-            $errors[$fieldKey] = $languageHelper->get('validation.fields.invalid_phone');
+            $errors[$fieldKey] = $languageHelper->get('validation.fields.phone');
           }
         }
         break;
@@ -154,7 +154,7 @@ class ValidationHelper
         
         if (!empty($numberValue)) {
           if (!is_numeric($numberValue)) {
-            $errors[$fieldKey] = $languageHelper->get('validation.fields.invalid_number');
+            $errors[$fieldKey] = $languageHelper->get('validation.fields.number.invalid');
             break;
           }
 
@@ -181,7 +181,7 @@ class ValidationHelper
         
         if (!empty($radioValue)) {
             if (!array_key_exists($radioValue, $fieldConfig['options'])) {
-                $errors[$fieldKey] = $languageHelper->get('validation.fields.invalid_option');
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.option');
             }
         }
         break;
@@ -222,7 +222,7 @@ class ValidationHelper
 
         if (!empty($timeValue)) {
             if (!preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', $timeValue)) {
-                $errors[$fieldKey] = $languageHelper->get('validation.fields.invalid_time');
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.time.invalid');
                 break;
             }
 
@@ -247,7 +247,7 @@ class ValidationHelper
       case 'url':
         if (!empty($data[$fieldKey])) {
             if (!SecurityHelper::validateUrl($data[$fieldKey])) {
-                $errors[$fieldKey] = $languageHelper->get('validation.fields.invalid_url');
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.url');
             }
         }
         break;

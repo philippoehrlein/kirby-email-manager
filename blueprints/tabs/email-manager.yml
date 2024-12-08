@@ -1,7 +1,7 @@
 # Email Manager Tab Blueprint
 # This blueprint is used to create a new page tab for the Email Manager.
 type: tabs
-label: panel.email-manager.tab
+label: philippoehrlein.kirby-email-manager.panel.email-manager.tab
 icon: email-manager
 
 columns:

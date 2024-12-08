@@ -176,7 +176,7 @@ class FormHandler
                 return [
                     'alert' => [
                         'type' => 'error',
-                        'message' => $this->languageHelper->get('system.csrf_error')
+                        'message' => $this->languageHelper->get('validation.system.csrf')
                     ],
                     'data' => $data
                 ];

@@ -11,28 +11,41 @@ use Exception;
  */
 class ConfigHelper
 {
-  /**
-   * Validates the template configuration.
-   *
-   * @param array $templateConfig The template configuration to validate.
-   * @throws Exception If the template configuration is empty or missing required keys.
-   */
-  public static function validateTemplateConfig($templateConfig)
-  {
-      if (empty($templateConfig)) {
-          throw new Exception(t('error.template_config_empty'));
-      }
+    protected static string $prefix = 'philippoehrlein.kirby-email-manager.';
 
-      $requiredKeys = ['fields', 'buttons', 'emails'];
-      foreach ($requiredKeys as $key) {
-          if (!isset($templateConfig[$key])) {
-              $message = t('error.missing_required_key');
-              $message = str_replace('{key}', $key, $message);
-              throw new Exception($message);
-          }
-      }
+    /**
+     * Translates a key by automatically adding the plugin prefix
+     */
+    protected static function t(string $key): string
+    {
+        if (!str_starts_with($key, self::$prefix)) {
+            $key = self::$prefix . $key;
+        }
+        return t($key);
+    }
 
-      self::validateFields($templateConfig['fields']);
+    /**
+     * Validates the template configuration.
+     *
+     * @param array $templateConfig The template configuration to validate.
+     * @throws Exception If the template configuration is empty or missing required keys.
+     */
+    public static function validateTemplateConfig($templateConfig)
+    {
+        if (empty($templateConfig)) {
+            throw new Exception(self::t('error.template_config_empty'));
+        }
+
+        $requiredKeys = ['fields', 'buttons', 'emails'];
+        foreach ($requiredKeys as $key) {
+            if (!isset($templateConfig[$key])) {
+                $message = self::t('error.missing_required_key');
+                $message = str_replace('{key}', $key, $message);
+                throw new Exception($message);
+            }
+        }
+
+        self::validateFields($templateConfig['fields']);
     }
   
    /**

@@ -130,13 +130,17 @@ class EmailHelper {
      */
     public static function getToEmail($contentWrapper, $data) {
         if ($contentWrapper->send_to_more()->toBool()) {
+
             $emailStructure = $contentWrapper->send_to_structure()->toStructure();
+
             if ($emailStructure->count() > 0 && isset($data['topic'])) {
-            foreach ($emailStructure as $item) {
-                if ($item->topic() == $data['topic']) {
+
+                foreach ($emailStructure as $item) {
+                    if ($item->topic() == $data['topic']) {
                         return $item->email()->value();
                     }
                 }
+                
             }
         }
 
@@ -225,13 +229,13 @@ class EmailHelper {
     }
 
     /**
-     * Retrieves the confirmation subject based on the template configuration.
+     * Retrieves the reply mail subject based on the template configuration.
      *
      * @param array $templateConfig The configuration for the email template.
-     * @return string The confirmation subject.
+     * @return string The reply mail subject.
      */
     public static function getReplySubject($templateConfig) {
-        return self::initLanguageHelper($templateConfig)->get('emails.confirmation.subject');
+        return self::initLanguageHelper($templateConfig)->get('emails.reply.subject');
     }
     
     /**

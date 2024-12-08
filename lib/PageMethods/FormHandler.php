@@ -320,7 +320,6 @@ class FormHandler
                 }
 
                 if (!empty($errors)) {
-                    error_log('ERROR');
                     $alert['type'] = 'error';
                     $alert['message'] = $this->languageHelper->get('validation.template.validation_error');
                     $alert['errors'] = $errors;

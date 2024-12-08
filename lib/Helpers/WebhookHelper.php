@@ -18,17 +18,12 @@ class WebhookHelper
      */
     public static function trigger(string $event, array $data, array $templateConfig): void 
     {
-        error_log('Template Config: ' . print_r($templateConfig, true));
-        error_log('Registered Handlers: ' . print_r(kirby()->option('philippoehrlein.kirby-email-manager.webhooks.handlers', []), true));
-
         if (!self::hasHandlers($templateConfig)) {
             error_log('No handlers found');
             return;
         }
 
         foreach ($templateConfig['webhooks'] as $webhook) {
-            error_log('Processing Webhook: ' . print_r($webhook, true));
-
             if (!isset($webhook['handler']) || 
                 !isset($webhook['events']) || 
                 !in_array($event, $webhook['events'])) {

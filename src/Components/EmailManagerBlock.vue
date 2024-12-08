@@ -2,7 +2,8 @@
   <div>
     <k-block-title :fieldset="{
       'icon': 'email-manager',
-      'name': 'Email Manager'
+      'name': 'Email Manager',
+      'label' : selectedEmailTemplate.text ? selectedEmailTemplate.text : null
     }" />
     <ul class="email-status-list">
       <li v-for="(value, key) in statusItems" :key="key">
@@ -25,6 +26,9 @@
 <script>
 export default {
   computed: {
+    selectedEmailTemplate() {
+      return this.$attrs.tabs.email.fields.email_templates.options.find(option => option.value === this.content.email_templates);
+    },
     isSingleEmail() {
       return !this.content.send_to_more;
     },
@@ -72,9 +76,6 @@ export default {
       if (!this.content.gdpr_checkbox) return true;
       return this.content.gdpr_text.length > 0;
     }
-  },
-  created() {
-    console.log(this.$store._actions);
   }
 }
 </script>

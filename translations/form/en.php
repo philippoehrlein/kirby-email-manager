@@ -63,7 +63,10 @@ return [
                 'unknown_error' => 'An unknown error occurred during the upload.',
                 'no_file_uploaded' => 'Please select an attachment.',
                 'security_error' => 'The file has an unauthorized file extension.',
-                'upload_error' => 'Error uploading the file.'
+                'upload_error' => 'Error uploading the file.',
+                'hidden_file' => 'Hidden files are not allowed.',
+                'invalid_signature' => 'File type does not match the file extension.',
+                'mime_mismatch' => 'The file seems to be corrupted or manipulated.'
             ],
             'password' => [
                 'min_length' => 'The password must be at least :minLength characters long.'

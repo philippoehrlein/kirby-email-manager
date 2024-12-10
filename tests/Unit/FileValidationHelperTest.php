@@ -56,6 +56,18 @@ class FileValidationHelperTest extends TestCase
         $phpFile = tempnam(sys_get_temp_dir(), 'test_') . '.pdf';
         file_put_contents($phpFile, '<?php echo "test"; ?>');
         $this->testFiles[] = $phpFile;
+
+        $validJpeg = tempnam(sys_get_temp_dir(), 'test_') . '.jpg';
+        file_put_contents($validJpeg, "\xFF\xD8\xFF\xE0" . str_repeat('0', 1024));
+        $this->testFiles[] = $validJpeg;
+
+        $hiddenFile = tempnam(sys_get_temp_dir(), '.test_') . '.pdf';
+        file_put_contents($hiddenFile, '%PDF-1.4' . PHP_EOL);
+        $this->testFiles[] = $hiddenFile;
+
+        $invalidSignature = tempnam(sys_get_temp_dir(), 'test_') . '.pdf';
+        file_put_contents($invalidSignature, 'INVALID' . PHP_EOL);
+        $this->testFiles[] = $invalidSignature;
     }
 
     /**
@@ -128,5 +140,76 @@ class FileValidationHelperTest extends TestCase
 
         $errors = FileValidationHelper::validateFile($file, $this->fieldConfig, $this->languageCode);
         $this->assertArrayHasKey('error', $errors);
+    }
+
+    /**
+     * Test for hidden files
+     */
+    public function testHiddenFile()
+    {
+        $file = [
+            'name' => '.hidden.pdf',
+            'type' => 'application/pdf',
+            'tmp_name' => $this->testFiles[3],
+            'error' => UPLOAD_ERR_OK,
+            'size' => filesize($this->testFiles[3])
+        ];
+
+        $errors = FileValidationHelper::validateFile($file, $this->fieldConfig, $this->languageCode);
+        $this->assertArrayHasKey('error', $errors);
+        $this->assertEquals('Versteckte Dateien sind nicht erlaubt.', $errors['error']);
+    }
+
+    /**
+     * Test for invalid file signature
+     */
+    public function testInvalidFileSignature()
+    {
+        $file = [
+            'name' => 'invalid.pdf',
+            'type' => 'application/pdf',
+            'tmp_name' => $this->testFiles[4],
+            'error' => UPLOAD_ERR_OK,
+            'size' => filesize($this->testFiles[4])
+        ];
+
+        $errors = FileValidationHelper::validateFile($file, $this->fieldConfig, $this->languageCode);
+        $this->assertArrayHasKey('error', $errors);
+        $this->assertEquals('Die Datei scheint beschädigt oder manipuliert zu sein.', $errors['error']);
+    }
+
+    /**
+     * Test for valid JPEG
+     */
+    public function testValidJpegUpload()
+    {
+        $file = [
+            'name' => 'test.jpg',
+            'type' => 'image/jpeg',
+            'tmp_name' => $this->testFiles[2],
+            'error' => UPLOAD_ERR_OK,
+            'size' => filesize($this->testFiles[2])
+        ];
+
+        $errors = FileValidationHelper::validateFile($file, $this->fieldConfig, $this->languageCode);
+        $this->assertEmpty($errors);
+    }
+
+    /**
+     * Test for MIME-Type Mismatch
+     */
+    public function testMimeTypeMismatch()
+    {
+        $file = [
+            'name' => 'fake.jpg',
+            'type' => 'image/jpeg',
+            'tmp_name' => $this->testFiles[0], // PDF-Datei
+            'error' => UPLOAD_ERR_OK,
+            'size' => filesize($this->testFiles[0])
+        ];
+
+        $errors = FileValidationHelper::validateFile($file, $this->fieldConfig, $this->languageCode);
+        $this->assertArrayHasKey('error', $errors);
+        $this->assertEquals('Dateityp stimmt nicht mit der Dateiendung überein.', $errors['error']);
     }
 }

@@ -63,7 +63,10 @@ return [
                 'unknown_error' => 'Une erreur inconnue est survenue lors du téléchargement.',
                 'no_file_uploaded' => 'Veuillez sélectionner une pièce jointe.',
                 'security_error' => 'Le fichier a une extension non autorisée.',
-                'upload_error' => 'Erreur lors du téléchargement du fichier.'
+                'upload_error' => 'Erreur lors du téléchargement du fichier.',
+                'hidden_file' => 'Les fichiers cachés ne sont pas autorisés.',
+                'invalid_signature' => 'Le type de fichier ne correspond pas à l\'extension du fichier.',
+                'mime_mismatch' => 'Le fichier semble corrompu ou manipulé.'
             ],
             'password' => [
                 'min_length' => 'Le mot de passe doit comporter au moins :minLength caractères.'

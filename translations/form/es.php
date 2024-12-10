@@ -63,7 +63,10 @@ return [
                 'unknown_error' => 'Se produjo un error desconocido durante la carga.',
                 'no_file_uploaded' => 'Por favor, selecciona un archivo adjunto.',
                 'security_error' => 'El archivo tiene una extensión no permitida.',
-                'upload_error' => 'Error al subir el archivo.'
+                'upload_error' => 'Error al subir el archivo.',
+                'hidden_file' => 'Los archivos ocultos no están permitidos.',
+                'invalid_signature' => 'El tipo de archivo no coincide con la extensión del archivo.',
+                'mime_mismatch' => 'El archivo parece estar dañado o manipulado.'
             ],
             'password' => [
                 'min_length' => 'La contraseña debe tener al menos :minLength caracteres.'

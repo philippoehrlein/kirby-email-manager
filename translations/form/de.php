@@ -63,7 +63,10 @@ return [
                 'unknown_error' => 'Ein unbekannter Fehler ist beim Upload aufgetreten.',
                 'no_file_uploaded' => 'Wählen Sie einen Anhang aus.',
                 'security_error' => 'Die Datei hat eine unerlaubte Dateiendung.',
-                'upload_error' => 'Fehler beim Hochladen der Datei.'
+                'upload_error' => 'Fehler beim Hochladen der Datei.',
+                'hidden_file' => 'Versteckte Dateien sind nicht erlaubt.',
+                'invalid_signature' => 'Dateityp stimmt nicht mit der Dateiendung überein.',
+                'mime_mismatch' => 'Die Datei scheint beschädigt oder manipuliert zu sein.'
             ],
             'password' => [
                 'min_length' => 'Das Passwort muss mindestens :minLength Zeichen lang sein.'

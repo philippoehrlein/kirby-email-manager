@@ -39,18 +39,23 @@ class FileValidationHelper
         $errors = [];
         $languageHelper = new LanguageHelper($languageCode, $fieldConfig);
         
-        // 1. Grundlegende Sicherheitschecks
+        // 1. Basic Security Checks
         if ($file['error'] !== UPLOAD_ERR_OK || empty($file['tmp_name'])) {
             return ['error' => $languageHelper->get('validation.fields.file.upload_error')];
         }
 
-        // 2. Prüfe Extension
+        // 2. Check for hidden files
+        if (!self::checkForHiddenFile($file['name'])) {
+            return ['error' => $languageHelper->get('validation.fields.file.hidden_file')];
+        }
+
+        // 3. Check file extension
         $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         if ($extension === 'php' || $extension === 'exe') {
             return ['error' => $languageHelper->get('validation.fields.file.security_error')];
         }
 
-        // 3. Prüfe MIME-Type
+        // 4. Check MIME-Type
         if (!isset(self::$allowedMimeTypes[$file['type']])) {
             return ['error' => str_replace(
                 ':allowedTypes',
@@ -59,7 +64,17 @@ class FileValidationHelper
             )];
         }
 
-        // 4. Prüfe Dateigröße
+        // 5. Check actual MIME-Type
+        if (!self::validateActualMimeType($file['tmp_name'])) {
+            return ['error' => $languageHelper->get('validation.fields.file.mime_mismatch')];
+        }
+
+        // 6. Check file signature
+        if (!self::validateFileSignature($file['tmp_name'], $file['type'])) {
+            return ['error' => $languageHelper->get('validation.fields.file.invalid_signature')];
+        }
+
+        // 7. Check file size
         $maxSize = $fieldConfig['max_size'] ?? self::$maxFileSize;
         if ($file['size'] > $maxSize) {
             return ['error' => str_replace(
@@ -73,5 +88,58 @@ class FileValidationHelper
         }
 
         return $errors;
+    }
+
+    /**
+     * Validates the actual MIME-Type of a file
+     */
+    private static function validateActualMimeType($filePath): bool 
+    {
+        if (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $actualMimeType = finfo_file($finfo, $filePath);
+            finfo_close($finfo);
+            
+            // Compare with the specified MIME-Type
+            return in_array($actualMimeType, array_keys(self::$allowedMimeTypes));
+        }
+        return false;
+    }
+
+    /**
+     * Checks for hidden files
+     */
+    private static function checkForHiddenFile($fileName): bool 
+    {
+        return !str_starts_with($fileName, '.');
+    }
+
+    /**
+     * Validates the file signature (Magic Numbers)
+     */
+    private static function validateFileSignature($filePath, $mimeType): bool 
+    {
+        $signatures = [
+            'image/jpeg' => "\xFF\xD8\xFF",
+            'image/png'  => "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A",
+            'image/gif'  => "\x47\x49\x46\x38",
+            'image/webp' => "\x52\x49\x46\x46",
+            'application/pdf' => "\x25\x50\x44\x46",
+            'application/msword' => "\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1",
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => "\x50\x4B\x03\x04",
+            'application/zip' => "\x50\x4B\x03\x04",
+            'application/x-rar-compressed' => "\x52\x61\x72\x21\x1A\x07"
+        ];
+
+        // If no signature is defined for the MIME type, skip the check
+        if (!isset($signatures[$mimeType])) {
+            return true;
+        }
+
+        $handle = fopen($filePath, 'rb');
+        $bytes = fread($handle, 8);
+        fclose($handle);
+
+        return str_starts_with($bytes, $signatures[$mimeType]);
     }
 }

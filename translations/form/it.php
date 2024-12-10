@@ -63,7 +63,10 @@ return [
                 'unknown_error' => 'Si è verificato un errore sconosciuto durante il caricamento.',
                 'no_file_uploaded' => 'Seleziona un file allegato.',
                 'security_error' => 'Il file ha un\'estensione non autorizzata.',
-                'upload_error' => 'Errore durante il caricamento del file.'
+                'upload_error' => 'Errore durante il caricamento del file.',
+                'hidden_file' => 'I file nascosti non sono consentiti.',
+                'invalid_signature' => 'Tipo di file non corrisponde all\'estensione del file.',
+                'mime_mismatch' => 'Il file sembra essere corrotto o manipolato.'
             ],
             'password' => [
                 'min_length' => 'La password deve essere di almeno :minLength caratteri.'

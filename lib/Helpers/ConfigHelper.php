@@ -16,12 +16,14 @@ class ConfigHelper
     /**
      * Translates a key by automatically adding the plugin prefix
      */
-    protected static function t(string $key): string
+    protected static function t(string $key, ?string $fallback = null): string
     {
         if (!str_starts_with($key, self::$prefix)) {
             $key = self::$prefix . $key;
         }
-        return t($key);
+        
+        $translation = t($key, null);
+        return $translation ?? $fallback ?? $key;
     }
 
     /**
@@ -46,6 +48,10 @@ class ConfigHelper
         }
 
         self::validateFields($templateConfig['fields']);
+        self::validateEmails($templateConfig['emails']);
+        self::validateFormSubmission($templateConfig['form_submission'] ?? []);
+        self::validateWebhooks($templateConfig['webhooks'] ?? []);
+        self::validateCaptcha($templateConfig['captcha'] ?? []);
     }
   
    /**
@@ -66,6 +72,84 @@ class ConfigHelper
                     throw new Exception(t('error.field_missing_property', "Missing '{$property}' for field '{$fieldKey}' in template configuration."));
                 }
             }
+        }
+    }
+
+    /**
+     * Validates the emails in the template configuration.
+     *
+     * @param array $emails The emails to validate.
+     * @throws Exception If the emails are missing required properties.
+     */
+    private static function validateEmails($emails)
+    {
+        if (!isset($emails['mail']['subject']) || !isset($emails['mail']['sender'])) {
+            throw new Exception(self::t('error.missing_email_configuration'));
+        }
+        if (isset($emails['reply'])) {
+            if (!isset($emails['reply']['subject']) || !isset($emails['reply']['sender'])) {
+                throw new Exception(self::t('error.missing_reply_email_configuration'));
+            }
+        }
+    }
+
+    /**
+     * Validates the form submission in the template configuration.
+     *
+     * @param array $formSubmission The form submission to validate.
+     * @throws Exception If the form submission is missing required properties.
+     */
+    private static function validateFormSubmission($formSubmission)
+    {
+        if (isset($formSubmission['min_time']) && $formSubmission['min_time'] < 0) {
+            throw new Exception(self::t('error.invalid_min_time'));
+        }
+        if (isset($formSubmission['max_time']) && $formSubmission['max_time'] < $formSubmission['min_time']) {
+            throw new Exception(self::t('error.invalid_max_time'));
+        }
+    }
+
+    /**
+     * Validates the webhooks in the template configuration.
+     *
+     * @param array $webhooks The webhooks to validate.
+     * @throws Exception If the webhooks are missing required properties.
+     */
+    private static function validateWebhooks($webhooks)
+    {
+        if(empty($webhooks)) {
+            return;
+        }
+
+        foreach ($webhooks as $webhook) {
+            if (!isset($webhook['handler']) || !isset($webhook['events'])) {
+                throw new Exception(self::t('error.missing_webhook_configuration'));
+            }
+        }
+    }
+
+    /**
+     * Validates the captcha in the template configuration.
+     *
+     * @param array $captcha The captcha to validate.
+     * @throws Exception If the captcha is missing required properties.
+     */
+    private static function validateCaptcha($captcha)
+    {
+        if(empty($captcha)) {
+            return;
+        }
+        if (!isset($captcha['frontend']['snippet'])) {
+            throw new Exception(self::t('error.missing_captcha_snippet', 'Missing CAPTCHA snippet configuration'));
+        }
+        if (!isset($captcha['frontend']['field_name'])) {
+            throw new Exception(self::t('error.missing_captcha_field_name', 'Missing CAPTCHA field name'));
+        }
+        if (!isset($captcha['options'])) {
+            throw new Exception(self::t('error.missing_captcha_options', 'Missing CAPTCHA options'));
+        }
+        if (!isset($captcha['error_messages'])) {
+            throw new Exception(self::t('error.missing_captcha_error_messages', 'Missing CAPTCHA error messages'));
         }
     }
 }

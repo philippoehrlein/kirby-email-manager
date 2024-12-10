@@ -12,7 +12,9 @@
     }
   ],
   "require": {
-    "php": ">=8.1.0"
+    "php": ">=8.1.0",
+    "symfony/console": "^7.2",
+    "getkirby/cli": "^1.0"
   },
   "require-dev": {
     "getkirby/cms": "^4.0",
@@ -40,6 +42,14 @@
   "scripts": {
     "test": "phpunit",
     "test:coverage": "phpunit --coverage-html test/coverage",
-    "analyse": "phpstan analyse"
+    "analyse": "phpstan analyse",
+    "check": [
+      "Composer\\Config::disableProcessTimeout",
+      "@php commands/check-templates.php"
+    ],
+    "inspect": [
+      "Composer\\Config::disableProcessTimeout",
+      "@php commands/inspect-templates.php inspect:templates"
+    ]
   }
 }

@@ -7,6 +7,12 @@ return [
             'config_file_not_found' => 'Konfigurations-Datei nicht gefunden: ',
             'template_config_empty'=> 'Die Vorlagenkonfiguration ist leer.',
             'field_missing_property' => 'Fehlende Eigenschaft ":property" für Feld ":fieldKey" in der Vorlagenkonfiguration.',
+            'missing_required_key' => 'Fehlende erforderliche Eigenschaft ":key" in der Vorlagenkonfiguration.',
+            'invalid_template_type' => 'Ungültige Vorlagentyp: ":type"',
+            'missing_captcha_snippet' => 'Fehlende Eigenschaft "snippet" für CAPTCHA in der Vorlagenkonfiguration.',
+            'missing_captcha_field_name' => 'Fehlende Eigenschaft "field_name" für CAPTCHA in der Vorlagenkonfiguration.',
+            'missing_captcha_options' => 'Fehlende Eigenschaft "options" für CAPTCHA in der Vorlagenkonfiguration.',
+            'missing_captcha_error_messages' => 'Fehlende Eigenschaft "error_messages" für CAPTCHA in der Vorlagenkonfiguration.'
         ],
     ],
     'philippoehrlein.kirby-email-manager.panel.email-manager.tab' => 'E-Mail Manager',

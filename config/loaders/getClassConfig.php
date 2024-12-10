@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'classPrefix' => 'kem-',
+    'classPrefix' => 'em-',
     'classes' => [
         'button'  => 'button',
         'error' => 'error', 

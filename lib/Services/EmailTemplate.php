@@ -1,6 +1,6 @@
 <?php
 
-namespace KirbyEmailManager;
+namespace KirbyEmailManager\Services;
 
 use Kirby\Content\Content;
 use Kirby\Data\Data;

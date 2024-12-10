@@ -2,7 +2,7 @@
 namespace KirbyEmailManager\Helpers;
 use KirbyEmailManager\Helpers\UrlHelper;
 use KirbyEmailManager\Helpers\LanguageHelper;
-use KirbyEmailManager\EmailTemplate;
+use KirbyEmailManager\Services\EmailTemplate;
 use Exception;
 
 /**

@@ -4,7 +4,6 @@ The **Email Manager** is a powerful plugin for [Kirby CMS](https://getkirby.com/
 
 >Complete documentation is available on the [Email Manager Documentation](https://email-manager.philippoehrlein.de).
 
----
 
 ## Features
 - **Quick Setup:** Get started in minutes with pre-built blueprints and templates.
@@ -14,7 +13,6 @@ The **Email Manager** is a powerful plugin for [Kirby CMS](https://getkirby.com/
 - **Extendable:** Add custom CAPTCHAs and integrate webhooks effortlessly.
 - **Multi-Language Support:** Pre-configured for EN, DE, FR, IT, and ES.
 
----
 
 ## Installation
 
@@ -28,7 +26,6 @@ composer require philippoehrlein/kirby-email-manager
 1.	Download the latest release from the [GitHub repository](https://github.com/philippoehrlein/kirby-email-manager/releases/latest).
 2.	Extract the contents and move the kirby-email-manager folder to /site/plugins/.
 
----
 
 ## Quick Start
 ### 1. Configure Kirby for Email Sending

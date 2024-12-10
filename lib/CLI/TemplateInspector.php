@@ -5,6 +5,12 @@ namespace KirbyEmailManager\CLI;
 use Exception;
 use Kirby\Data\Data;
 
+/**
+ * Class TemplateInspector
+ * @package KirbyEmailManager\CLI
+ * @author Philipp Oehrlein
+ * @version 1.0.0
+ */
 class TemplateInspector
 {
     public function inspect(string $templateId): array
@@ -12,7 +18,7 @@ class TemplateInspector
         try {
             $configPath = kirby()->root('blueprints') . '/emails/' . $templateId . '.yml';
             if (!file_exists($configPath)) {
-                throw new Exception("Konfigurationsdatei nicht gefunden: {$configPath}");
+                throw new Exception("Blueprint file not found: {$configPath}");
             }
             
             $config = Data::read($configPath);

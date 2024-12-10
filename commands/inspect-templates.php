@@ -9,6 +9,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class InspectTemplatesCommand
+ * @package KirbyEmailManager\CLI
+ * @author Philipp Oehrlein
+ * @version 1.0.0
+ */
 class InspectTemplatesCommand extends Command
 {
     protected static $defaultName = 'inspect:templates';
@@ -21,6 +27,12 @@ class InspectTemplatesCommand extends Command
             ->addArgument('templateId', InputArgument::REQUIRED, 'The ID of the template to inspect');
     }
 
+    /**
+     * Executes the command.
+     * @param InputInterface $input The input interface.
+     * @param OutputInterface $output The output interface.
+     * @return int The exit code.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $templateId = $input->getArgument('templateId');

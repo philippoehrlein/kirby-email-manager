@@ -8,6 +8,12 @@ use KirbyEmailManager\Helpers\TemplateHelper;
 use KirbyEmailManager\Helpers\LogHelper;
 use Kirby\Data\Data;
 
+/**
+ * Class TemplateChecker
+ * @package KirbyEmailManager\CLI
+ * @author Philipp Oehrlein
+ * @version 1.0.0
+ */
 class TemplateChecker
 {
     protected $errors = [];
@@ -48,7 +54,7 @@ class TemplateChecker
         try {
             $configPath = kirby()->root('blueprints') . '/emails/' . $templateId . '.yml';
             if (!file_exists($configPath)) {
-                $this->errors[] = "Template {$templateId}: Configuration file not found: {$configPath}";
+                $this->errors[] = "Template {$templateId}: Blueprint file not found: {$configPath}";
                 return;
             }
 

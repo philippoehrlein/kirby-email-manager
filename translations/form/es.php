@@ -23,6 +23,9 @@ return [
             'subject' => 'Confirmación de su consulta'
         ]
     ],
+    'error' => [
+        'rate_limit_exceeded' => 'Demasiadas solicitudes. Por favor, inténtalo de nuevo más tarde.'
+    ],
     'form' => [
         'status' => [
             'ready' => 'Formulario listo para su uso.',

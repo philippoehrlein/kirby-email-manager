@@ -37,7 +37,8 @@ class ValidationHelper
         $errors,
         self::validateRequired($fieldKey, $fieldConfig, $data, $languageHelper),
         self::validateMinLength($fieldKey, $fieldConfig, $data, $languageHelper),
-        self::validateMaxLength($fieldKey, $fieldConfig, $data, $languageHelper)
+        self::validateMaxLength($fieldKey, $fieldConfig, $data, $languageHelper),
+        self::validateDataType($fieldKey, $data[$fieldKey], $fieldConfig['type'], $languageHelper)
     );
 
     // If errors are found, stop further validation
@@ -367,5 +368,80 @@ class ValidationHelper
     
     $d = DateTime::createFromFormat($dateFormat, $date);
     return $d && $d->format($dateFormat) === $date;
+  }
+
+  private static function validateDataType(string $fieldKey, $value, string $type, LanguageHelper $languageHelper): array 
+  {
+    $errors = [];
+    
+    switch($type) {
+        case 'email':
+            if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.email');
+            }
+            break;
+            
+        case 'number':
+            if (!is_numeric($value)) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.number');
+            }
+            break;
+            
+        case 'tel':
+            if (!is_string($value) || !preg_match('/^[+\d\s-()]+$/', $value)) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.tel');
+            }
+            break;
+            
+        case 'date':
+            if (!self::isValidDate($value)) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.date.invalid');
+            }
+            break;
+            
+        case 'date-range':
+            if (!is_array($value) || 
+                !isset($value['start'], $value['end']) || 
+                !self::isValidDate($value['start']) || 
+                !self::isValidDate($value['end'])) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.date_range.invalid');
+            } elseif ($value['start'] > $value['end']) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.date_range.start_after_end');
+            }
+            break;
+            
+        case 'select':
+            if (!is_string($value) && !is_array($value)) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.select');
+            }
+            break;
+            
+        case 'checkbox':
+            if (!is_array($value)) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.checkbox');
+            }
+            break;
+            
+        case 'radio':
+            if (!is_string($value)) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.radio');
+            }
+            break;
+            
+        case 'textarea':
+        case 'text':
+            if (!is_string($value)) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.text');
+            }
+            break;
+            
+        case 'url':
+            if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_URL)) {
+                $errors[$fieldKey] = $languageHelper->get('validation.fields.url');
+            }
+            break;
+    }
+    
+    return $errors;
   }
 }

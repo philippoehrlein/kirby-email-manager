@@ -23,6 +23,9 @@ return [
             'subject' => 'Bestätigung Ihrer Anfrage'
         ]
     ],
+    'error' => [
+        'rate_limit_exceeded' => 'Zu viele Anfragen. Bitte versuche es später erneut.'
+    ],
     'form' => [
         'status' => [
             'ready' => 'Formular bereit zur Eingabe.',

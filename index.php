@@ -12,5 +12,8 @@ Kirby::plugin('philippoehrlein/kirby-email-manager', [
     'snippets' => require PathHelper::configDir() . 'snippets.php',
     'options' => require PathHelper::configDir() . 'main.php',
     'translations' => TranslationHelper::loadTranslations(PathHelper::translationDir()),
-    'hooks' => require PathHelper::configDir() . 'hooks.php'
+    'hooks' => require PathHelper::configDir() . 'hooks.php',
+    'options' => [
+        'cache.ip' => true
+    ]
 ]);

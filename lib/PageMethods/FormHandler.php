@@ -4,10 +4,7 @@ namespace KirbyEmailManager\PageMethods;
 use KirbyEmailManager\Helpers\LanguageHelper;
 use KirbyEmailManager\Helpers\EmailHelper;
 use Kirby\Data\Data;
-use Kirby\Http\Request\Files;
 use Exception;
-
-use Kirby\Filesystem\F;
 
 use KirbyEmailManager\Helpers\ExceptionHelper;
 use KirbyEmailManager\Helpers\ValidationHelper;
@@ -17,6 +14,7 @@ use KirbyEmailManager\Helpers\SuccessMessageHelper;
 use KirbyEmailManager\Helpers\SecurityHelper;
 use KirbyEmailManager\Helpers\FileValidationHelper;
 use KirbyEmailManager\Helpers\WebhookHelper;
+use KirbyEmailManager\Helpers\RateLimitHelper;
 
 /**
  * FormHandler class provides methods to handle form submissions.
@@ -238,6 +236,17 @@ class FormHandler
             }
 
             try {
+                // Rate Limit Check vor der Formularverarbeitung
+                if (!RateLimitHelper::checkRateLimit($this->templateConfig)) {
+                    return [
+                        'alert' => [
+                            'type' => 'error',
+                            'message' => $this->languageHelper->get('error.rate_limit_exceeded')
+                        ],
+                        'data' => $data ?? []
+                    ];
+                }
+
                 $errors = [];
                 $emailContent = [];
 

@@ -7,6 +7,12 @@ return [
             'config_file_not_found' => 'File di configurazione non trovato: ',
             'template_config_empty'=> 'La configurazione del modello è vuota.',
             'field_missing_property' => 'Proprietà mancante ":property" per il campo ":fieldKey" nella configurazione del modello.',
+            'missing_required_key' => 'Proprietà richiesta mancante ":key" nella configurazione del modello.',
+            'invalid_template_type' => 'Tipo di modello invalido: ":type"',
+            'missing_captcha_snippet' => 'Proprietà mancante "snippet" per CAPTCHA nella configurazione del modello.',
+            'missing_captcha_field_name' => 'Proprietà mancante "field_name" per CAPTCHA nella configurazione del modello.',
+            'missing_captcha_options' => 'Proprietà mancante "options" per CAPTCHA nella configurazione del modello.',
+            'missing_captcha_error_messages' => 'Proprietà mancante "error_messages" per CAPTCHA nella configurazione del modello.'
         ],
     ],
     'philippoehrlein.kirby-email-manager.panel.email-manager.tab' => 'Gestore Email',

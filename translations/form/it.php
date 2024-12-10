@@ -23,6 +23,9 @@ return [
             'subject' => 'Confirmación de su consulta'
         ]
     ],
+    'error' => [
+        'rate_limit_exceeded' => 'Troppe richieste. Si prega di riprovare più tardi.'
+    ],
     'form' => [
         'status' => [
             'ready' => 'Modulo pronto per l\'inserimento.',

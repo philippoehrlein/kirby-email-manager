@@ -23,6 +23,9 @@ return [
             'subject' => 'Confirmation of your inquiry'
         ]
     ],
+    'error' => [
+        'rate_limit_exceeded' => 'Too many requests. Please try again later.'
+    ],
     'form' => [
         'status' => [
             'ready' => 'Form ready for input.',

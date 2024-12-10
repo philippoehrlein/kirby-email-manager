@@ -7,6 +7,12 @@ return [
             'config_file_not_found' => 'Configuration file not found: ',
             'template_config_empty'=> 'The template configuration is empty.',
             'field_missing_property' => 'Missing property ":property" for field ":fieldKey" in the template configuration.',
+            'missing_required_key' => 'Missing required property ":key" in the template configuration.',
+            'invalid_template_type' => 'Invalid template type: ":type"',
+            'missing_captcha_snippet' => 'Missing property "snippet" for CAPTCHA in the template configuration.',
+            'missing_captcha_field_name' => 'Missing property "field_name" for CAPTCHA in the template configuration.',
+            'missing_captcha_options' => 'Missing property "options" for CAPTCHA in the template configuration.',
+            'missing_captcha_error_messages' => 'Missing property "error_messages" for CAPTCHA in the template configuration.'
         ],
     ],
     'philippoehrlein.kirby-email-manager.panel.email-manager.tab' => 'Email Manager',

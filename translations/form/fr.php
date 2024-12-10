@@ -23,6 +23,9 @@ return [
             'subject' => 'Confirmation de votre demande'
         ]
     ],
+    'error' => [
+        'rate_limit_exceeded' => 'Trop de requêtes. Veuillez réessayer plus tard.'
+    ],
     'form' => [
         'status' => [
             'ready' => 'Formulaire prêt pour la saisie.',

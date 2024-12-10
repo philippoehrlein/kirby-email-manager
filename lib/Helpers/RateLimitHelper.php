@@ -22,7 +22,6 @@ class RateLimitHelper
         }
         
         $cache = kirby()->cache('philippoehrlein.kirby-email-manager.ip');
-        
         $ip = $_SERVER['REMOTE_ADDR'];
         $now = time();
         
@@ -32,7 +31,18 @@ class RateLimitHelper
         $blockKey = "rate_limit.{$ipHash}.blocked";
         $blockCountKey = "rate_limit.{$ipHash}.block_count";
         
-        if ($cache->get($blockKey)) {
+        $blockData = $cache->get($blockKey);
+        
+        if ($blockData) {
+            $blockTime = is_array($blockData) ? ($blockData['created'] ?? time()) : time() - self::BLOCK_DURATION;
+            $blockDuration = is_array($blockData) ? ($blockData['duration'] ?? self::BLOCK_DURATION) : self::BLOCK_DURATION;
+            $expiresAt = $blockTime + $blockDuration;
+            
+            if ($now >= $expiresAt) {
+                $cache->remove($blockKey);
+                return true;
+            }
+            
             return false;
         }
         
@@ -41,13 +51,19 @@ class RateLimitHelper
         
         if (count($attempts) >= ($templateConfig['rate_limit']['max_attempts'] ?? self::MAX_ATTEMPTS)) {
             $blockCount = $cache->get($blockCountKey, 0) + 1;
-            $success = $cache->set($blockCountKey, $blockCount, 86400);
+            $cache->set($blockCountKey, $blockCount, 86400);
             
             if ($blockCount >= self::MAX_BLOCKS) {
-                $success = $cache->set($blockKey, true, self::PERMANENT_BLOCK);
+                $cache->set($blockKey, [
+                    'created' => time(),
+                    'duration' => self::PERMANENT_BLOCK
+                ], self::PERMANENT_BLOCK);
             } else {
                 $duration = self::BLOCK_DURATION * pow(2, $blockCount - 1);
-                $success = $cache->set($blockKey, true, $duration);
+                $cache->set($blockKey, [
+                    'created' => time(),
+                    'duration' => $duration
+                ], $duration);
             }
             return false;
         }

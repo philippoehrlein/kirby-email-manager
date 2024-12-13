@@ -67,9 +67,7 @@ export default {
     },
 
     validateSuccessMessage() {
-      return this.isSingleEmail
-        ? !!(this.content.send_to_success_title && this.content.send_to_success_text)
-        : this.content.send_to_structure?.every(item => item.success_title && item.success_text);
+      return !!(this.content.send_to_success_title && this.content.send_to_success_text);
     },
 
     validateGdpr() {

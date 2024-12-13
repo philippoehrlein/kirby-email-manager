@@ -24,20 +24,26 @@ class SuccessMessageHelper
      */
     public static function getSuccessMessage(ContentWrapper $contentWrapper, array $data, string $languageCode): array
     {
+        $successMessage = [
+            'title' => $contentWrapper->send_to_success_title()->value(),
+            'text' => $contentWrapper->send_to_success_text()->value()
+        ];
+
         if ($contentWrapper->send_to_more()->toBool() && isset($data['topic'])) {
             $topic = $data['topic'];
             $successStructure = $contentWrapper->send_to_structure()->toStructure()->findBy('topic', $topic);
             if ($successStructure) {
-                return [
-                    'title' => $successStructure->success_title()->value(),
-                    'text' => $successStructure->success_text()->value()
-                ];
+
+                if($successStructure->success_title()->isNotEmpty()) {
+                    $successMessage['title'] = $successStructure->success_title()->value();
+                }
+
+                if($successStructure->success_text()->isNotEmpty()) {
+                    $successMessage['text'] = $successStructure->success_text()->value();
+                }
             }
         }
 
-        return [
-            'title' => $contentWrapper->send_to_success_title()->value(),
-            'text' => $contentWrapper->send_to_success_text()->value()
-        ];
+        return $successMessage;
     }
 }

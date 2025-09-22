@@ -22,10 +22,22 @@ class RateLimitHelper
         }
         
         $cache = kirby()->cache('philippoehrlein.kirby-email-manager.ip');
-        $ip = $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         $now = time();
         
-        $ipHash = hash('sha256', $ip . kirby()->option('philippoehrlein/kirby-email-manager.ip.salt', ''));
+        // Validate IP address
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            $ip = 'unknown';
+        }
+        
+        // Get salt with fallback
+        $salt = kirby()->option('philippoehrlein/kirby-email-manager.ip.salt', '');
+        if (empty($salt)) {
+            // Generate a random salt as fallback
+            $salt = bin2hex(random_bytes(16));
+        }
+        
+        $ipHash = hash('sha256', $ip . $salt);
         
         $attemptsKey = "rate_limit.{$ipHash}.attempts";
         $blockKey = "rate_limit.{$ipHash}.blocked";

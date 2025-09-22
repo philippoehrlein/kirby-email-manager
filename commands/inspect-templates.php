@@ -45,10 +45,10 @@ class InspectTemplatesCommand extends Command
         }
 
         $output->writeln('<info>$form:</info>');
-        print_r($result['form']);
+        $output->writeln(json_encode($result['form'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE));
 
         $output->writeln('<info>$email:</info>');
-        print_r($result['content']);
+        $output->writeln(json_encode($result['content'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE));
 
         return Command::SUCCESS;
     }

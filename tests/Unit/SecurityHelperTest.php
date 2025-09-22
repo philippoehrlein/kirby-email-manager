@@ -82,7 +82,13 @@ class SecurityHelperTest extends TestCase
             'normal_filename' => ['test.txt', 'test.txt'],
             'path_traversal' => ['../test.txt', 'test.txt'],
             'nested_path' => ['/var/www/test.txt', 'test.txt'],
-            'null_input' => [null, '']
+            'null_input' => [null, ''],
+            'hidden_file' => ['.htaccess', 'htaccess'],
+            'dangerous_chars' => ['file<>:"|?*.txt', 'file.txt'],
+            'unicode_chars' => ['café.txt', 'cafe.txt'],
+            'spaces' => ['my file.txt', 'my-file.txt'],
+            'empty_after_sanitization' => ['...', 'uploaded_file'],
+            'long_filename' => [str_repeat('a', 300) . '.txt', str_repeat('a', 128) . '.txt']
         ];
     }
 

@@ -33,6 +33,7 @@ class FieldAttributeHelper
       'name' => $fieldKey,
       'class' => $inputClass,
       'required' => $fieldConfig['required'] ?? false,
+      'autofocus' => $fieldConfig['autofocus'] ?? false,
     ]);
   }
   
@@ -60,6 +61,7 @@ class FieldAttributeHelper
         $attributes['type'] = 'email';
         $attributes['placeholder'] = $placeholder;
         $attributes['value'] = $value;
+        $attributes['spellcheck'] = 'false';
         if (isset($fieldConfig['validate']) && $fieldConfig['validate'] === 'email') {
           $attributes['pattern'] = '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}';
         }
@@ -69,6 +71,7 @@ class FieldAttributeHelper
         $attributes['type'] = 'text';
         $attributes['placeholder'] = $placeholder;
         $attributes['value'] = $value;
+        $attributes['spellcheck'] = 'true';
         break;
 
       case 'tel':
@@ -180,7 +183,8 @@ class FieldAttributeHelper
       case 'textarea':
         $attributes['placeholder'] = $placeholder;
         $attributes['rows'] = $fieldConfig['rows'] ?? 6;
-        
+        $attributes['spellcheck'] = 'true';
+
         $resizeStyle = $fieldConfig['resizable'] ?? 'none';
         $attributes['style'] = "resize: $resizeStyle;";
         

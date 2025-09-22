@@ -136,9 +136,23 @@ class FileValidationHelper
             return true;
         }
 
+        // Validate file exists and is readable
+        if (!file_exists($filePath) || !is_readable($filePath)) {
+            return false;
+        }
+
         $handle = fopen($filePath, 'rb');
+        if ($handle === false) {
+            return false;
+        }
+
         $bytes = fread($handle, 8);
         fclose($handle);
+
+        // Check if we read enough bytes
+        if ($bytes === false || strlen($bytes) < strlen($signatures[$mimeType])) {
+            return false;
+        }
 
         return str_starts_with($bytes, $signatures[$mimeType]);
     }

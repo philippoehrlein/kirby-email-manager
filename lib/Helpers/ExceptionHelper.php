@@ -18,9 +18,12 @@ class ExceptionHelper {
     
     $errorMessage = $languageHelper->get('error.error_occurred');
     
+    // Only show detailed error messages in debug mode
+    $detailedMessage = kirby()->option('debug', false) ? $e->getMessage() : '';
+    
     return [
       'type' => 'error',
-      'message' => $errorMessage . $e->getMessage()
+      'message' => $errorMessage . $detailedMessage
     ];
   }
 }

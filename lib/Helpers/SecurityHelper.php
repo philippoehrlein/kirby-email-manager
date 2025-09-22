@@ -2,6 +2,9 @@
 
 namespace KirbyEmailManager\Helpers;
 
+use Kirby\Filesystem\F;
+use Kirby\Toolkit\V;
+
 /**
  * SecurityHelper class for managing security-related functions
  * 
@@ -37,7 +40,28 @@ class SecurityHelper
         if($filename === null) {
             return '';
         }
-        return basename($filename);
+        
+        // Use Kirby's proven F::safeName() method as base
+        $safeName = F::safeName($filename);
+        
+        // Additional security measures for contact forms:
+        
+        // Remove leading dots to prevent hidden files
+        $safeName = ltrim($safeName, '.');
+        
+        // Ensure filename is not empty after sanitization
+        if (empty($safeName)) {
+            $safeName = 'uploaded_file';
+        }
+        
+        // Limit filename length to prevent buffer overflow attacks
+        if (strlen($safeName) > 255) {
+            $extension = pathinfo($safeName, PATHINFO_EXTENSION);
+            $name = pathinfo($safeName, PATHINFO_FILENAME);
+            $safeName = substr($name, 0, 255 - strlen($extension) - 1) . '.' . $extension;
+        }
+        
+        return $safeName;
     }
 
     /**
@@ -84,18 +108,18 @@ class SecurityHelper
         if (empty($url)) {
             return false;
         }
-
-        $sanitizedUrl = filter_var($url, FILTER_SANITIZE_URL);
-        if (!filter_var($sanitizedUrl, FILTER_VALIDATE_URL)) {
+        
+        // Use Kirby's robust URL validation
+        if (!V::url($url)) {
             return false;
         }
         
-        // Erlaubte Protokolle
+        // Additional security: only allow http/https protocols
+        $urlParts = parse_url($url);
         $allowedProtocols = ['http', 'https'];
-        $urlParts = parse_url($sanitizedUrl);
         
         return isset($urlParts['scheme']) && 
-            in_array(strtolower($urlParts['scheme']), $allowedProtocols);
+               in_array(strtolower($urlParts['scheme']), $allowedProtocols);
     }
 
     /**

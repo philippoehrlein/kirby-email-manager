@@ -33,7 +33,7 @@ class LanguageHelper
      * @param array $placeholders The placeholders to replace in the translated string.
      * @return string The translated string.
      */
-    public function get(string $key, array $placeholders = []): string
+    public function get(string $key, array $placeholders = []): ?string
     {
         $cacheKey = $this->currentLang . '.' . $key;
 
@@ -42,16 +42,65 @@ class LanguageHelper
         }
 
         // 1. Try Template Config
-        $value = $this->getNestedValue($this->templateConfig, explode('.', $key));
+        $value = $this->getTranslationFromTemplateConfig($key, $cacheKey, $placeholders);
         if ($value !== null) {
-            $string = self::getTranslatedValue($value, $this->currentLang, $this->defaultLang);
-            if ($string !== null) {
-                $this->cache[$cacheKey] = $string;
-                return $this->replacePlaceholders($string, $placeholders);
-            }
+            return $this->replacePlaceholders($value, $placeholders);
         }
 
         // 2. Try Plugin Translations
+        $value = $this->getPluginTranslation($key);
+        if ($value !== null) {
+            return $this->replacePlaceholders($value, $placeholders);
+        }
+        
+        // Fallback: gebe den Key selbst zurück (mit Platzhalterersetzung) und cache ihn
+        $this->cache[$cacheKey] = $key;
+        return $this->replacePlaceholders($this->cache[$cacheKey], $placeholders);
+    }
+
+    protected function getFallbackTranslation(string $key, string $cacheKey, array $placeholders = []): ?string
+    {
+        $this->cache[$cacheKey] = $key;
+        return $this->replacePlaceholders($key, $placeholders);
+    }
+
+    /**
+     * Retrieves a translated string from the template configuration.
+     *
+     * @param string $key The key to translate.
+     * @param string $cacheKey The cache key.
+     * @param array $placeholders The placeholders to replace in the translated string.
+     * @return string The translated string.
+     */
+    public function getTranslationFromTemplateConfig(string $key, ?string $cacheKey = null, ?array $placeholders = []): ?string
+    {
+        $value = $this->getNestedValue($this->templateConfig, explode('.', $key));
+        if ($value === null) {
+            return null;
+        }
+
+        $string = self::getTranslatedValue($value, $this->currentLang, $this->defaultLang);
+        if ($string === null) {
+            return null;
+        }
+
+        if ($cacheKey !== null) {
+            $this->cache[$cacheKey] = $string;
+        }
+
+        return $this->replacePlaceholders($string, $placeholders ?? []);
+    }
+
+    /**
+     * Retrieves a translated string from the plugin translations.
+     *
+     * @param string $key The key to translate.
+     * @param string $cacheKey The cache key.
+     * @param array $placeholders The placeholders to replace in the translated string.
+     * @return string The translated string.
+     */
+    protected function getTranslationFromPluginTranslations(string $key, string $cacheKey, array $placeholders = []): ?string
+    {
         $translations = $this->getPluginTranslation($key);
         if ($translations !== null) {
             $string = self::getTranslatedValue($translations, $this->currentLang, $this->defaultLang);
@@ -61,9 +110,7 @@ class LanguageHelper
             }
         }
 
-        // Fallback to the key itself
-        $this->cache[$cacheKey] = $key;
-        return $this->replacePlaceholders($key, $placeholders);
+        return null;
     }
 
     /**

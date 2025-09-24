@@ -15,6 +15,7 @@ use KirbyEmailManager\Helpers\SecurityHelper;
 use KirbyEmailManager\Helpers\FileValidationHelper;
 use KirbyEmailManager\Helpers\WebhookHelper;
 use KirbyEmailManager\Helpers\RateLimitHelper;
+use KirbyEmailManager\Helpers\AttachmentHelper;
 
 /**
  * FormHandler class provides methods to handle form submissions.
@@ -183,30 +184,18 @@ class FormHandler
             // Clean form data
             $data = SecurityHelper::sanitizeAndValidateFormData($data);
 
-            // Process file uploads
-            $attachments = [];
+            // Process file uploads early to get validation errors
             $uploads = $this->kirby->request()->files()->toArray();
-            foreach ($uploads as $field => $uploadField) {
-                if (is_array($uploadField)) {
-                    foreach ($uploadField as $upload) {
-                        if (is_array($upload) && isset($upload['error']) && $upload['error'] === UPLOAD_ERR_OK) {
-                            $originalName = SecurityHelper::sanitizeFilename($upload['name']);
-                            $targetPath = $upload['tmp_name'] . '_' . $originalName;
-
-                            if (move_uploaded_file($upload['tmp_name'], $targetPath)) {
-                                $attachments[] = $targetPath;
-                            }
-                        }
-                    }
-                }
-            }
+            $uploadResult = AttachmentHelper::processUploads($uploads, $this->templateConfig, $this->languageCode);
+            $attachments = $uploadResult['attachments'];
+            $fileData = $uploadResult['fileData'];
 
             // Email validation for email fields
             if (isset($data['email']) && !SecurityHelper::validateEmail($data['email'])) {
                 return [
                     'alert' => [
                         'type' => 'error',
-                        'message' => $this->languageHelper->get('validation.email')
+                        'message' => $this->languageHelper->get('validation.fields.email')
                     ],
                     'data' => $data
                 ];
@@ -256,48 +245,15 @@ class FormHandler
                     $subject = $this->languageHelper->get('emails.subject.default');
                 }
 
-                foreach ($this->templateConfig['fields'] as $fieldKey => $fieldConfig) {
-                    // Special handling for file uploads
-                    if ($fieldConfig['type'] === 'file') {
-                        $files = $this->kirby->request()->files();
-                        $fileErrors = [];
-                        
-                        // Required-Prüfung für Files
-                        if (!empty($fieldConfig['required'])) {
-                            if (!isset($files->data()[$fieldKey]) || empty($files->data()[$fieldKey])) {
-                                $errors[$fieldKey] = $this->languageHelper->get('validation.fields.file.no_file_uploaded');
-                                continue;
-                            }
-                        }
-                        
-                        // If files are present, validate them
-                        if (isset($files->data()[$fieldKey])) {
-                            // Check maximum number of files
-                            if (isset($fieldConfig['max_files']) && count($files->data()[$fieldKey]) > $fieldConfig['max_files']) {
-                                $errors[$fieldKey] = str_replace(
-                                    ':maxFiles',
-                                    $fieldConfig['max_files'],
-                                    $this->languageHelper->get('validation.fields.file.too_many_files')
-                                );
-                                continue;
-                            }
+                // Add file data to form data
+                $data = array_merge($data, $fileData);
 
-                            foreach ($files->data()[$fieldKey] as $file) {
-                                $fileErrors = FileValidationHelper::validateFile($file, $fieldConfig, $this->languageCode);
-                                if (!empty($fileErrors)) {
-                                    $errors[$fieldKey] = $fileErrors['error'] ?? $this->languageHelper->get('validation.fields.file.unknown_error');
-                                    break;
-                                }
-                            }
-                            
-                            // If no errors, store only the file name for the email
-                            if (empty($fileErrors)) {
-                                $data[$fieldKey] = array_map(function($file) {
-                                    return $file['name'];
-                                }, $files->data()[$fieldKey]);
-                            }
-                        }
-                        
+                // Add file validation errors
+                $errors = array_merge($errors, $uploadResult['errors']);
+
+                foreach ($this->templateConfig['fields'] as $fieldKey => $fieldConfig) {
+                    // Skip file fields (already processed by AttachmentHelper)
+                    if ($fieldConfig['type'] === 'file') {
                         continue;
                     }
 
@@ -320,8 +276,6 @@ class FormHandler
                         default => 
                             htmlspecialchars($data[$fieldKey] ?? $this->languageHelper->get('validation.template.not_specified'))
                     };
-
-                    
                 }
 
                 if ($this->contentWrapper->gdpr_checkbox()->toBool() && empty($data['gdpr'])) {
@@ -334,10 +288,30 @@ class FormHandler
                     $alert['errors'] = $errors;
                 } else {
                     try {
+                        // Jetzt Attachments aus aktuellen Uploads sicher verschieben und sammeln
+                        $uploads = $this->kirby->request()->files()->toArray();
+                        foreach ($uploads as $field => $uploadField) {
+                            if (!is_array($uploadField)) {
+                                continue;
+                            }
+                            $fileList = isset($uploadField['name']) && isset($uploadField['tmp_name'])
+                                ? [$uploadField]
+                                : array_values($uploadField);
+                            foreach ($fileList as $upload) {
+                                if (is_array($upload) && isset($upload['error']) && $upload['error'] === UPLOAD_ERR_OK) {
+                                    $originalName = SecurityHelper::sanitizeFilename($upload['name']);
+                                    $targetPath = $upload['tmp_name'] . '_' . $originalName;
+                                    if (move_uploaded_file($upload['tmp_name'], $targetPath)) {
+                                        $attachments[] = $targetPath;
+                                    }
+                                }
+                            }
+                        }
+
                         EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $data, $this->languageCode, $attachments, $subject);
 
                         $alert['type'] = 'success';
-                        $alert['message'] = $this->languageHelper->get('form.success');
+                        $alert['message'] = $this->languageHelper->get('form.status.success');
                         
                         $successMessage = SuccessMessageHelper::getSuccessMessage($this->contentWrapper, $data, $this->languageCode);
                         $session->set('form.success', $successMessage);

@@ -24,7 +24,8 @@ return [
         ]
     ],
     'error' => [
-        'rate_limit_exceeded' => 'Trop de requêtes. Veuillez réessayer plus tard.'
+        'rate_limit_exceeded' => 'Trop de requêtes. Veuillez réessayer plus tard.',
+        'error_occurred' => 'Une erreur est survenue.'
     ],
     'form' => [
         'status' => [
@@ -43,8 +44,16 @@ return [
             'email' => 'Veuillez entrer une adresse email valide.',
             'too_short' => 'Votre saisie doit comporter au moins :minLength caractères.',
             'message' => [
-                'too_short' => 'Votre message doit comporter au moins :minLength caractères.'
+                'too_short' => 'Votre message doit comporter au moins :minLength caractères.',
+                'too_long' => 'Votre message doit comporter au maximum :maxLength caractères.'
             ],
+            'number' => 'Veuillez entrer un nombre valide.',
+            'tel' => 'Veuillez entrer un numéro de téléphone valide.',
+            'select' => 'Veuillez sélectionner une option valide.',
+            'radio' => 'Veuillez sélectionner une option.',
+            'text' => 'Veuillez entrer un texte valide.',
+            'option' => 'Option sélectionnée invalide.',
+            'invalid_option' => 'Option sélectionnée invalide.',
             'date' => [
                 'invalid' => 'Veuillez entrer une date valide.',
                 'before_min' => 'La date doit être après :min.',
@@ -52,6 +61,10 @@ return [
                 'min' => 'La date est antérieure à la limite autorisée.',
                 'max' => 'La date est postérieure à la limite autorisée.',
                 'invalid_range' => 'La date de fin doit être postérieure à la date de début.'
+            ],
+            'date_range' => [
+                'invalid' => 'Veuillez entrer une plage de dates valide.',
+                'start_after_end' => 'La date de début doit être antérieure à la date de fin.'
             ],
             'file' => [
                 'too_large' => 'Le fichier est trop volumineux. La taille maximale est de :maxSize Mo.',
@@ -84,10 +97,12 @@ return [
                 'too_large' => 'Le nombre doit être inférieur à :max.',
                 'invalid' => 'Veuillez entrer un nombre valide.'
             ],
-            'url' => 'Veuillez entrer une URL valide.'
+            'url' => 'Veuillez entrer une URL valide.',
+            'checkbox' => 'Ce champ est obligatoire.'
         ],
         'system' => [
             'csrf' => 'Jeton CSRF invalide.',
+            'gdpr_required' => 'Veuillez consentir au traitement des données.',
             'submission_time' => [
                 'warning' => 'Le délai de soumission a expiré. Veuillez vérifier vos saisies et soumettre à nouveau le formulaire.',
                 'too_fast' => 'Le formulaire a été soumis trop rapidement. Veuillez réessayer.'

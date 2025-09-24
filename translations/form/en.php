@@ -24,7 +24,8 @@ return [
         ]
     ],
     'error' => [
-        'rate_limit_exceeded' => 'Too many requests. Please try again later.'
+        'rate_limit_exceeded' => 'Too many requests. Please try again later.',
+        'error_occurred' => 'An error occurred.'
     ],
     'form' => [
         'status' => [
@@ -43,8 +44,16 @@ return [
             'email' => 'Please enter a valid email address.',
             'too_short' => 'Your input must be at least :minLength characters long.',
             'message' => [
-                'too_short' => 'Your message must be at least :minLength characters long.'
+                'too_short' => 'Your message must be at least :minLength characters long.',
+                'too_long' => 'Your message must be at most :maxLength characters long.'
             ],
+            'number' => 'Please enter a valid number.',
+            'tel' => 'Please enter a valid phone number.',
+            'select' => 'Please select a valid option.',
+            'radio' => 'Please select an option.',
+            'text' => 'Please enter a valid text.',
+            'option' => 'Invalid option selected.',
+            'invalid_option' => 'Invalid option selected.',
             'date' => [
                 'invalid' => 'Please enter a valid date.',
                 'before_min' => 'The date must be after :min.',
@@ -52,6 +61,10 @@ return [
                 'min' => 'Date is earlier than allowed.',
                 'max' => 'Date is later than allowed.',
                 'invalid_range' => 'End date must be later than the start date.'
+            ],
+            'date_range' => [
+                'invalid' => 'Please enter a valid date range.',
+                'start_after_end' => 'The start date must be before the end date.'
             ],
             'file' => [
                 'too_large' => 'The file is too large. Maximum size is :maxSize MB.',
@@ -84,10 +97,12 @@ return [
                 'too_large' => 'The number must be less than :max.',
                 'invalid' => 'Please enter a valid number.'
             ],
-            'url' => 'Please enter a valid URL.'
+            'url' => 'Please enter a valid URL.',
+            'checkbox' => 'This field is required.'
         ],
         'system' => [
             'csrf' => 'Invalid CSRF token.',
+            'gdpr_required' => 'Please consent to data processing.',
             'submission_time' => [
                 'warning' => 'The submission time has expired. Please check your inputs and resubmit the form.',
                 'too_fast' => 'The form was submitted too quickly. Please try again.'

@@ -1,13 +1,5 @@
 <?php
 use KirbyEmailManager\Helpers\FormHelper;
-
-$config = [
-  'classPrefix' => $pluginConfig['classPrefix'] ?? false,
-  'classes' => $pluginConfig['classes'] ?? [],
-  'additionalClasses' => $pluginConfig['additionalClasses'] ?? [],
-  'noPrefixElements' => $pluginConfig['noPrefixElements'] ?? []
-];
-
 $formGridClass = FormHelper::getClassName('grid', $config);
 $formFieldClass = FormHelper::getClassName('field', $config);
 ?>

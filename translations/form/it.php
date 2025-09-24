@@ -24,7 +24,8 @@ return [
         ]
     ],
     'error' => [
-        'rate_limit_exceeded' => 'Troppe richieste. Si prega di riprovare più tardi.'
+        'rate_limit_exceeded' => 'Troppe richieste. Si prega di riprovare più tardi.',
+        'error_occurred' => 'Si è verificato un errore.'
     ],
     'form' => [
         'status' => [
@@ -43,8 +44,16 @@ return [
             'email' => 'Si prega di inserire un indirizzo email valido.',
             'too_short' => 'Il tuo input deve essere di almeno :minLength caratteri.',
             'message' => [
-                'too_short' => 'Il tuo messaggio deve essere di almeno :minLength caratteri.'
+                'too_short' => 'Il tuo messaggio deve essere di almeno :minLength caratteri.',
+                'too_long' => 'Il tuo messaggio deve essere lungo al massimo :maxLength caratteri.'
             ],
+            'number' => 'Si prega di inserire un numero valido.',
+            'tel' => 'Si prega di inserire un numero di telefono valido.',
+            'select' => 'Si prega di selezionare un’opzione valida.',
+            'radio' => 'Si prega di selezionare un’opzione.',
+            'text' => 'Si prega di inserire un testo valido.',
+            'option' => 'Opzione selezionata non valida.',
+            'invalid_option' => 'Opzione selezionata non valida.',
             'date' => [
                 'invalid' => 'Si prega di inserire una data valida.',
                 'before_min' => 'La data deve essere successiva a :min.',
@@ -52,6 +61,10 @@ return [
                 'min' => 'La data è precedente al limite consentito.',
                 'max' => 'La data è successiva al limite consentito.',
                 'invalid_range' => 'La data di fine deve essere successiva alla data di inizio.'
+            ],
+            'date_range' => [
+                'invalid' => 'Si prega di inserire un intervallo di date valido.',
+                'start_after_end' => 'La data di inizio deve essere precedente alla data di fine.'
             ],
             'file' => [
                 'too_large' => 'Il file è troppo grande. La dimensione massima è :maxSize MB.',
@@ -84,10 +97,12 @@ return [
                 'too_large' => 'Il numero deve essere minore di :max.',
                 'invalid' => 'Si prega di inserire un numero valido.'
             ],
-            'url' => 'Si prega di inserire un URL valido.'
+            'url' => 'Si prega di inserire un URL valido.',
+            'checkbox' => 'Questo campo è obbligatorio.'
         ],
         'system' => [
             'csrf' => 'Token CSRF non valido.',
+            'gdpr_required' => 'Si prega di acconsentire al trattamento dei dati.',
             'submission_time' => [
                 'warning' => 'Il tempo per l\'invio è scaduto. Si prega di controllare i dati e inviare nuovamente il modulo.',
                 'too_fast' => 'Il modulo è stato inviato troppo rapidamente. Si prega di riprovare.'

@@ -33,7 +33,7 @@ $keepForm = $templateConfig['keep_form'] ?? false;
 $fieldErrors = $alert['errors'] ?? [];
 
 snippet('email-manager/styles/honeypot');
-snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
+snippet('email-manager/styles/grid', ['config' => $config]);
 ?>
 
 
@@ -96,7 +96,7 @@ snippet('email-manager/styles/grid', ['pluginConfig' => $pluginConfig]);
         'fieldKey' => $fieldKey,
         'fieldConfig' => $fieldConfig,
         'value' => $value,
-        'placeholder' => $languageHelper->get('fields.' . $fieldKey . '.placeholder'),
+        'placeholder' => $languageHelper->getTranslationFromTemplateConfig('fields.' . $fieldKey . '.placeholder'),
         'config' => $config,
         'languageCode' => $languageCode,
         'error' => $fieldErrors[$fieldKey] ?? null

@@ -24,7 +24,8 @@ return [
         ]
     ],
     'error' => [
-        'rate_limit_exceeded' => 'Zu viele Anfragen. Bitte versuche es später erneut.'
+        'rate_limit_exceeded' => 'Zu viele Anfragen. Bitte versuche es später erneut.',
+        'error_occurred' => 'Es ist ein Fehler aufgetreten.'
     ],
     'form' => [
         'status' => [
@@ -43,8 +44,16 @@ return [
             'email' => 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
             'too_short' => 'Ihre Eingabe muss mindestens :minLength Zeichen lang sein.',
             'message' => [
-                'too_short' => 'Ihre Nachricht muss mindestens :minLength Zeichen lang sein.'
+                'too_short' => 'Ihre Nachricht muss mindestens :minLength Zeichen lang sein.',
+                'too_long' => 'Ihre Nachricht darf höchstens :maxLength Zeichen lang sein.'
             ],
+            'number' => 'Bitte geben Sie eine gültige Zahl ein.',
+            'tel' => 'Bitte geben Sie eine gültige Telefonnummer ein.',
+            'select' => 'Bitte wählen Sie eine gültige Option aus.',
+            'radio' => 'Bitte wählen Sie eine Option aus.',
+            'text' => 'Bitte geben Sie einen gültigen Text ein.',
+            'option' => 'Ungültige Option ausgewählt.',
+            'invalid_option' => 'Ungültige Option ausgewählt.',
             'date' => [
                 'invalid' => 'Bitte geben Sie ein gültiges Datum ein.',
                 'before_min' => 'Das Datum muss nach :min liegen.',
@@ -52,6 +61,10 @@ return [
                 'min' => 'Datum ist früher als erlaubt.',
                 'max' => 'Datum ist später als erlaubt.',
                 'invalid_range' => 'Enddatum muss später als das Startdatum sein.'
+            ],
+            'date_range' => [
+                'invalid' => 'Bitte geben Sie einen gültigen Zeitraum ein.',
+                'start_after_end' => 'Das Startdatum muss vor dem Enddatum liegen.'
             ],
             'file' => [
                 'too_large' => 'Die Datei ist zu groß. Maximale Größe ist :maxSize MB.',
@@ -84,10 +97,12 @@ return [
                 'too_large' => 'Die Zahl muss kleiner als :max sein.',
                 'invalid' => 'Bitte geben Sie eine gültige Zahl ein.'
             ],
-            'url' => 'Bitte geben Sie eine gültige URL ein.'
+            'url' => 'Bitte geben Sie eine gültige URL ein.',
+            'checkbox' => 'Dieses Feld ist erforderlich.'
         ],
         'system' => [
             'csrf' => 'Ungültiges CSRF-Token.',
+            'gdpr_required' => 'Bitte stimmen Sie der Datenverarbeitung zu.',
             'submission_time' => [
                 'warning' => 'Die Übermittlungszeit ist abgelaufen. Bitte überprüfen Sie Ihre Eingaben und senden Sie das Formular erneut.',
                 'too_fast' => 'Das Formular wurde zu schnell übermittelt. Bitte versuchen Sie es erneut.'

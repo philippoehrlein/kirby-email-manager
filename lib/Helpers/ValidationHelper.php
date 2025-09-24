@@ -388,7 +388,7 @@ class ValidationHelper
             break;
             
         case 'tel':
-            if (!is_string($value) || !preg_match('/^[+\d\s-()]+$/', $value)) {
+            if (!is_string($value) || !preg_match('/^[+\d\s()\-]+$/', $value)) {
                 $errors[$fieldKey] = $languageHelper->get('validation.fields.tel');
             }
             break;

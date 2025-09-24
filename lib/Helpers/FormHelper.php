@@ -85,7 +85,7 @@ class FormHelper
      * @param array $config
      * @return string
      */
-    public static function getClassName(string $element, array $config = [], string $modifier = null): string
+    public static function getClassName(string $element, array $config = [], ?string $modifier = null): string
     {
         $prefix = $config['classPrefix'] ?? 'kem-';
         $className = $config['classes'][$element] ?? $element;

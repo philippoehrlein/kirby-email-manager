@@ -53,6 +53,8 @@ snippet('email-manager/styles/grid', ['config' => $config]);
 
   <input type="hidden" name="timestamp" value="<?= time() ?>">
 
+  <div class="<?= FormHelper::getClassName('grid', $config) ?>">
+
   <?php if ($contentWrapper->send_to_more()->toBool()): 
       $options = [];
       $inputClass = FormHelper::getClassName('select', $config);
@@ -83,7 +85,7 @@ snippet('email-manager/styles/grid', ['config' => $config]);
       ]);
   endif ?>
 
-  <div class="<?= FormHelper::getClassName('grid', $config) ?>">
+  
   <?php foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig): ?>
     <?php
     $rawValue = $data[$fieldKey] ?? '';

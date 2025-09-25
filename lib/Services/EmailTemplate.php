@@ -152,4 +152,14 @@ class EmailTemplate
         }
         $this->config = Data::read($configPath);
     }
+
+    /**
+     * Adds a subject to the content.
+     * 
+     * @param string $subject The subject.
+     */
+    public function addSubject(string $subject): void
+    {
+        $this->content()->subject()->value($subject);
+    }
 }

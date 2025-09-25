@@ -63,6 +63,7 @@ class EmailHelper {
         }
 
         $emailTemplate = new EmailTemplate($page, $data, $footerContent, $selectedTemplate, $templateConfig);
+        $emailTemplate->addSubject($subject);
 
         // Send main email
         $emailConfig = [
@@ -92,6 +93,9 @@ class EmailHelper {
         // Check if reply should be sent
         $replyPath = $kirby->root('templates') . '/emails/' . $selectedTemplate . '/reply.text.php';
         $replyEmail = self::getReplyEmail($templateConfig, $data);
+
+        error_log('replyEmail: ' . print_r($replyEmail, true));
+        error_log('replyPath: ' . $replyPath);
         
         $hasReplyField = false;
         foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
@@ -100,14 +104,18 @@ class EmailHelper {
                 break;
             }
         }
+        error_log('hasReplyField: ' . $hasReplyField);
         
         if ($replyEmail !== null && file_exists($replyPath) && $hasReplyField) {
+            $subject = self::getReplySubject($templateConfig);
+            $emailTemplate->addSubject($subject);
+
             try {
                 $kirby->email([
                     'template' => $selectedTemplate . '/reply',
                     'from'     => [$formSenderEmail => $formSenderName],
                     'to'       => $replyEmail,
-                    'subject'  => self::getReplySubject($templateConfig),
+                    'subject'  => $subject,
                     'data'     => [
                         'email' => $emailTemplate->content(),
                         'form' => $emailTemplate->form(),
@@ -256,7 +264,7 @@ class EmailHelper {
      */
     public static function getReplyEmail($templateConfig, $data) {
         foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
-            if (isset($fieldConfig['']) && $fieldConfig['replyto'] === true && !empty($data[$fieldKey])) {
+            if (isset($fieldConfig['replyto']) && $fieldConfig['replyto'] === true && !empty($data[$fieldKey])) {
                 return $data[$fieldKey];
             }
         }

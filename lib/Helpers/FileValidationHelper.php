@@ -16,15 +16,49 @@ class FileValidationHelper
         'image/png' => ['png'],
         'image/gif' => ['gif'],
         'image/webp' => ['webp'],
+        'image/svg+xml' => ['svg'],
         'application/pdf' => ['pdf'],
         'application/msword' => ['doc'],
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => ['docx'],
+        'application/vnd.ms-excel' => ['xls'],
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => ['xlsx'],
+        'application/vnd.ms-powerpoint' => ['ppt'],
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation' => ['pptx'],
+        'text/plain' => ['txt'],
+        'text/csv' => ['csv'],
+        'application/json' => ['json'],
         'application/zip' => ['zip'],
-        'application/x-rar-compressed' => ['rar']
+        'application/x-rar-compressed' => ['rar'],
+        'application/x-7z-compressed' => ['7z']
     ];
 
     private static $maxFileSize = 5242880;
     private const BYTES_PER_MB = 1048576;
+
+    /**
+     * Converts extension array to allowed_mimes array
+     *
+     * @param array $allowedTypes Array of file extensions (e.g., ['pdf', 'jpg', 'png'])
+     * @return array Array of MIME types
+     */
+    private static function convertTypesToMimes(array $allowedTypes): array
+    {
+        $allowedMimes = [];
+        
+        foreach ($allowedTypes as $type) {
+            $type = strtolower(trim($type));
+            
+            // Find MIME type for this extension
+            foreach (self::$allowedMimeTypes as $mimeType => $extensions) {
+                if (in_array($type, $extensions)) {
+                    $allowedMimes[] = $mimeType;
+                    break;
+                }
+            }
+        }
+        
+        return array_unique($allowedMimes);
+    }
 
     /**
      * Validates a file based on the provided configuration and translations.
@@ -56,16 +90,26 @@ class FileValidationHelper
         }
 
         // 4. Check MIME-Type
-        if (!isset(self::$allowedMimeTypes[$file['type']])) {
+        $allowedMimes = [];
+        
+        // Support extension (converted to MIME types)
+        if (isset($fieldConfig['extension']) && is_array($fieldConfig['extension'])) {
+            $allowedMimes = self::convertTypesToMimes($fieldConfig['extension']);
+        } else {
+            // Fallback to all supported MIME types
+            $allowedMimes = array_keys(self::$allowedMimeTypes);
+        }
+        
+        if (!in_array($file['type'], $allowedMimes)) {
             return ['error' => str_replace(
-                ':allowedTypes',
-                implode(', ', array_keys(self::$allowedMimeTypes)),
+                ':allowedtypes',
+                implode(', ', $allowedMimes),
                 $languageHelper->get('validation.fields.file.invalid_type')
             )];
         }
 
         // 5. Check actual MIME-Type
-        if (!self::validateActualMimeType($file['tmp_name'])) {
+        if (!self::validateActualMimeType($file['tmp_name'], $allowedMimes)) {
             return ['error' => $languageHelper->get('validation.fields.file.mime_mismatch')];
         }
 
@@ -75,10 +119,10 @@ class FileValidationHelper
         }
 
         // 7. Check file size
-        $maxSize = $fieldConfig['max_size'] ?? self::$maxFileSize;
+        $maxSize = $fieldConfig['maxsize'] ?? self::$maxFileSize;
         if ($file['size'] > $maxSize) {
             return ['error' => str_replace(
-                [':maxSize', ':size'],
+                [':maxsize', ':size'],
                 [
                     (string)round($maxSize / self::BYTES_PER_MB, 2),
                     (string)round($file['size'] / self::BYTES_PER_MB, 2)
@@ -93,15 +137,16 @@ class FileValidationHelper
     /**
      * Validates the actual MIME-Type of a file
      */
-    private static function validateActualMimeType($filePath): bool 
+    private static function validateActualMimeType($filePath, array $allowedMimes = null): bool 
     {
         if (function_exists('finfo_open')) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $actualMimeType = finfo_file($finfo, $filePath);
             finfo_close($finfo);
             
-            // Compare with the specified MIME-Type
-            return in_array($actualMimeType, array_keys(self::$allowedMimeTypes));
+            // Use provided allowed MIME types or fallback to all supported types
+            $allowedTypes = $allowedMimes ?? array_keys(self::$allowedMimeTypes);
+            return in_array($actualMimeType, $allowedTypes);
         }
         return false;
     }

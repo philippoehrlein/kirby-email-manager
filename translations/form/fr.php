@@ -42,10 +42,10 @@ return [
         'fields' => [
             'required' => 'Ce champ est obligatoire.',
             'email' => 'Veuillez entrer une adresse email valide.',
-            'too_short' => 'Votre saisie doit comporter au moins :minLength caractères.',
+            'too_short' => 'Votre saisie doit comporter au moins :minlength caractères.',
             'message' => [
-                'too_short' => 'Votre message doit comporter au moins :minLength caractères.',
-                'too_long' => 'Votre message doit comporter au maximum :maxLength caractères.'
+                'too_short' => 'Votre message doit comporter au moins :minlength caractères.',
+                'too_long' => 'Votre message doit comporter au maximum :maxlength caractères.'
             ],
             'number' => 'Veuillez entrer un nombre valide.',
             'tel' => 'Veuillez entrer un numéro de téléphone valide.',
@@ -67,8 +67,8 @@ return [
                 'start_after_end' => 'La date de début doit être antérieure à la date de fin.'
             ],
             'file' => [
-                'too_large' => 'Le fichier est trop volumineux. La taille maximale est de :maxSize Mo.',
-                'invalid_type' => 'Type de fichier invalide. Types autorisés : :allowedTypes.',
+                'too_large' => 'Le fichier est trop volumineux. La taille maximale est de :maxsize Mo.',
+                'invalid_type' => 'Type de fichier invalide. Types autorisés : :allowedtypes.',
                 'security_error' => 'Le fichier peut contenir du code malveillant.',
                 'too_many_files' => 'Le nombre maximal de fichiers est de :maxFiles.',
                 'move_error' => 'Erreur lors du déplacement du fichier. Erreur PHP : ',
@@ -82,7 +82,7 @@ return [
                 'mime_mismatch' => 'Le fichier semble corrompu ou manipulé.'
             ],
             'password' => [
-                'min_length' => 'Le mot de passe doit comporter au moins :minLength caractères.'
+                'min_length' => 'Le mot de passe doit comporter au moins :minlength caractères.'
             ],
             'phone' => 'Veuillez entrer un numéro de téléphone valide.',
             'option' => 'Option sélectionnée invalide.',

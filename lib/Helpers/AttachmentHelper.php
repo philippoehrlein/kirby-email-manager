@@ -48,10 +48,10 @@ class AttachmentHelper
         $validFiles = [];
 
         // Check maximum number of files
-        if (isset($fieldConfig['max_files']) && count($fileList) > $fieldConfig['max_files']) {
+        if (isset($fieldConfig['max']) && count($fileList) > $fieldConfig['max']) {
             $errors[] = str_replace(
                 ':maxFiles',
-                $fieldConfig['max_files'],
+                $fieldConfig['max'],
                 'validation.fields.file.too_many_files'
             );
             return ['errors' => $errors, 'validFiles' => []];

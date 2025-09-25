@@ -42,10 +42,10 @@ return [
         'fields' => [
             'required' => 'This field is required.',
             'email' => 'Please enter a valid email address.',
-            'too_short' => 'Your input must be at least :minLength characters long.',
+            'too_short' => 'Your input must be at least :minlength characters long.',
             'message' => [
-                'too_short' => 'Your message must be at least :minLength characters long.',
-                'too_long' => 'Your message must be at most :maxLength characters long.'
+                'too_short' => 'Your message must be at least :minlength characters long.',
+                'too_long' => 'Your message must be at most :maxlength characters long.'
             ],
             'number' => 'Please enter a valid number.',
             'tel' => 'Please enter a valid phone number.',
@@ -67,8 +67,8 @@ return [
                 'start_after_end' => 'The start date must be before the end date.'
             ],
             'file' => [
-                'too_large' => 'The file is too large. Maximum size is :maxSize MB.',
-                'invalid_type' => 'Invalid file type. Allowed types are: :allowedTypes.',
+                'too_large' => 'The file is too large. Maximum size is :maxsize MB.',
+                'invalid_type' => 'Invalid file type. Allowed types are: :allowedtypes.',
                 'security_error' => 'The file may contain harmful code.',
                 'too_many_files' => 'The maximum number of files is :maxFiles.',
                 'move_error' => 'Error moving the file. PHP error: ',
@@ -82,7 +82,7 @@ return [
                 'mime_mismatch' => 'The file seems to be corrupted or manipulated.'
             ],
             'password' => [
-                'min_length' => 'The password must be at least :minLength characters long.'
+                'min_length' => 'The password must be at least :minlength characters long.'
             ],
             'phone' => 'Please enter a valid phone number.',
             'option' => 'Invalid option selected.',

@@ -205,8 +205,8 @@ class FormHandler
             $currentTime = time();
             $timeDifference = abs($currentTime - $submissionTime);
 
-            $minTime = $this->templateConfig['form_submission']['min_time'] ?? 10;
-            $maxTime = $this->templateConfig['form_submission']['max_time'] ?? 7200;
+            $minTime = $this->templateConfig['formsubmission']['mintime'] ?? 10;
+            $maxTime = $this->templateConfig['formsubmission']['maxtime'] ?? 7200;
 
             if ($timeDifference < $minTime) { 
                 $alert['type'] = 'warning';

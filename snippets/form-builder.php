@@ -112,8 +112,8 @@ snippet('email-manager/styles/grid', ['config' => $config]);
       if (isset($captchaConfig['frontend']['snippet'])) {
         snippet($captchaConfig['frontend']['snippet'], [
           'options' => $captchaConfig['options'] ?? [],
-          'fieldName' => $captchaConfig['frontend']['field_name'] ?? 'captcha-response',
-          'error' => $fieldErrors[$captchaConfig['frontend']['field_name']] ?? null,
+          'fieldName' => $captchaConfig['frontend']['fieldname'] ?? 'captcha-response',
+          'error' => $fieldErrors[$captchaConfig['frontend']['fieldname']] ?? null,
           'config' => $config,
           'languageCode' => $languageCode
         ]);

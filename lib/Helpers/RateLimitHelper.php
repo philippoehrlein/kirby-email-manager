@@ -17,7 +17,7 @@ class RateLimitHelper
     
     public static function checkRateLimit(array $templateConfig): bool
     {
-        if (!($templateConfig['rate_limit']['track_ip'] ?? false)) {
+        if (!($templateConfig['ratelimit']['trackip'] ?? false)) {
             return true;
         }
         
@@ -39,9 +39,9 @@ class RateLimitHelper
         
         $ipHash = hash('sha256', $ip . $salt);
         
-        $attemptsKey = "rate_limit.{$ipHash}.attempts";
-        $blockKey = "rate_limit.{$ipHash}.blocked";
-        $blockCountKey = "rate_limit.{$ipHash}.block_count";
+        $attemptsKey = "ratelimit.{$ipHash}.attempts";
+        $blockKey = "ratelimit.{$ipHash}.blocked";
+        $blockCountKey = "ratelimit.{$ipHash}.blockcount";
         
         $blockData = $cache->get($blockKey);
         
@@ -61,7 +61,7 @@ class RateLimitHelper
         $attempts = $cache->get($attemptsKey, []);        
         $attempts = array_filter($attempts, fn($time) => $time > ($now - self::TIME_WINDOW));
         
-        if (count($attempts) >= ($templateConfig['rate_limit']['max_attempts'] ?? self::MAX_ATTEMPTS)) {
+        if (count($attempts) >= ($templateConfig['ratelimit']['maxattempts'] ?? self::MAX_ATTEMPTS)) {
             $blockCount = $cache->get($blockCountKey, 0) + 1;
             $cache->set($blockCountKey, $blockCount, 86400);
             

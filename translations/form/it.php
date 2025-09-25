@@ -42,10 +42,10 @@ return [
         'fields' => [
             'required' => 'Questo campo è obbligatorio.',
             'email' => 'Si prega di inserire un indirizzo email valido.',
-            'too_short' => 'Il tuo input deve essere di almeno :minLength caratteri.',
+            'too_short' => 'Il tuo input deve essere di almeno :minlength caratteri.',
             'message' => [
-                'too_short' => 'Il tuo messaggio deve essere di almeno :minLength caratteri.',
-                'too_long' => 'Il tuo messaggio deve essere lungo al massimo :maxLength caratteri.'
+                'too_short' => 'Il tuo messaggio deve essere di almeno :minlength caratteri.',
+                'too_long' => 'Il tuo messaggio deve essere lungo al massimo :maxlength caratteri.'
             ],
             'number' => 'Si prega di inserire un numero valido.',
             'tel' => 'Si prega di inserire un numero di telefono valido.',
@@ -67,8 +67,8 @@ return [
                 'start_after_end' => 'La data di inizio deve essere precedente alla data di fine.'
             ],
             'file' => [
-                'too_large' => 'Il file è troppo grande. La dimensione massima è :maxSize MB.',
-                'invalid_type' => 'Tipo di file non valido. Tipi consentiti: :allowedTypes.',
+                'too_large' => 'Il file è troppo grande. La dimensione massima è :maxsize MB.',
+                'invalid_type' => 'Tipo di file non valido. Tipi consentiti: :allowedtypes.',
                 'security_error' => 'Il file potrebbe contenere codice dannoso.',
                 'too_many_files' => 'Il numero massimo di file è :maxFiles.',
                 'move_error' => 'Errore durante lo spostamento del file. Errore PHP: ',
@@ -82,7 +82,7 @@ return [
                 'mime_mismatch' => 'Il file sembra essere corrotto o manipolato.'
             ],
             'password' => [
-                'min_length' => 'La password deve essere di almeno :minLength caratteri.'
+                'min_length' => 'La password deve essere di almeno :minlength caratteri.'
             ],
             'phone' => 'Si prega di inserire un numero di telefono valido.',
             'option' => 'Opzione selezionata non valida.',

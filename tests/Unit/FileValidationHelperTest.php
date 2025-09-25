@@ -25,7 +25,7 @@ class FileValidationHelperTest extends TestCase
         $this->createTestFiles();
         
         $this->fieldConfig = [
-            'max_size' => 5 * 1024 * 1024 // 5MB
+            'maxsize' => 5 * 1024 * 1024 // 5MB
         ];
     }
 

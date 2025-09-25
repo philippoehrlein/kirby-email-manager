@@ -181,10 +181,10 @@ class EmailHelper {
         $userName = null;
 
         foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
-            if (isset($fieldConfig['reply_to']) && $fieldConfig['reply_to'] === true && !empty($data[$fieldKey])) {
+            if (isset($fieldConfig['replyto']) && $fieldConfig['replyto'] === true && !empty($data[$fieldKey])) {
                 $replyToEmail = $data[$fieldKey];
             }
-            if (isset($fieldConfig['user_name']) && $fieldConfig['user_name'] === true && !empty($data[$fieldKey])) {
+            if (isset($fieldConfig['username']) && $fieldConfig['username'] === true && !empty($data[$fieldKey])) {
                 $userName = $data[$fieldKey];
             }
         }
@@ -256,7 +256,7 @@ class EmailHelper {
      */
     public static function getReplyEmail($templateConfig, $data) {
         foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
-            if (isset($fieldConfig['reply_to']) && $fieldConfig['reply_to'] === true && !empty($data[$fieldKey])) {
+            if (isset($fieldConfig['']) && $fieldConfig['replyto'] === true && !empty($data[$fieldKey])) {
                 return $data[$fieldKey];
             }
         }

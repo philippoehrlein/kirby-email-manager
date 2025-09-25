@@ -12,9 +12,9 @@ type: managed-template  # Required, must be 'managed-template'
 name:                   # Required — string (single-language) or map (multilingual)
 
 # Form Settings
-form_submission:      # Optional, anti-spam settings
-  min_time: 3         # Optional - Minimum time in seconds before form can be submitted, default: 3
-  max_time: 7200      # Optional - Maximum time in seconds before form expires, default: 7200
+formsubmission:      # Optional, anti-spam settings
+  mintime: 3         # Optional - Minimum time in seconds before form can be submitted, default: 3
+  maxtime: 7200      # Optional - Maximum time in seconds before form expires, default: 7200
 
 # Email Settings
 emails:               # Required
@@ -42,7 +42,7 @@ fields:              # Required
     required: true   # Optional (default: false)
     width: 1/2       # Optional - Field width (1/1, 1/2, 1/3, 2/3, 1/4, 3/4)
     placeholder:     # Optional — string (single) or map (multi)
-    validate:        # Optional - Available: email, url, phone, date, minLength:X, maxLength:Y
+    validate:        # Optional - Available: email, url, phone, date, minlength:X, maxlength:Y
     error:           # Optional — string (single) or map (multi) - Custom error message
     title:           # Optional — string (single) or map (multi) - Tooltip/Help text
     aria:            # Optional — string (single) or map (multi) - Accessibility label
@@ -53,11 +53,11 @@ fields:              # Required
     # text
     minlength: X      # Optional - Minimum length for text input (where X is any positive int)
     maxlength: Y      # Optional - Maximum length for text input (where Y is any positive int larger than X)
-    user_name: true   # Optional - Marks field as username, will be used for reply email and reply-to address
+    username: true   # Optional - Marks field as username, will be used for reply email and reply-to address
 
     # email
     reply: true       # Optional - Send reply email to this address
-    reply_to: true    # Optional - Use as reply-to address
+    replyto: true    # Optional - Use as reply-to address
 
     # select/radio/checkbox
     options:         # Required for these types
@@ -69,16 +69,9 @@ fields:              # Required
     step: 1800      # Optional - Interval in seconds (1800 = 30min)
 
     # file
-    max_files: 3    # Optional - Maximum number of files
-    max_size: 5242880  # Optional - Maximum size in bytes
-    allowed_mimes:   # Optional - Allowed MIME types
-      - application/pdf
-      - image/jpeg
-      - image/png
-
-    # date-range
-    placeholder_start:  # Optional (multilingual)
-    placeholder_end:    # Optional (multilingual)
+    max: 3    # Optional - Maximum number of files
+    maxsize: 5242880  # Optional - Maximum size in bytes
+    extension:   # Optional - Allowed file types (array; jpg, jpeg, png, gif, webp, svg, pdf, doc, docx, xls, xlsx, ppt, pptx, txt, csv, json, zip, rar, 7z)
 
     # textarea
     rows: 6          # Optional - Default height
@@ -97,9 +90,9 @@ validation:          # Optional — define only if explicitly requested or if th
     required:        # Optional — string (single) or map (multi)
     email:           # Optional — string (single) or map (multi)
     name:            # Optional — string (single) or map (multi)
-    too_short:       # Optional — string (single) or map (multi) - possible variable :minLength
+    too_short:       # Optional — string (single) or map (multi) - possible variable :minlength
     message:
-      too_short:     # Optional — string (single) or map (multi) - possible variable :minLength
+      too_short:     # Optional — string (single) or map (multi) - possible variable :minlength
     gdpr:            # Optional — string (single) or map (multi)
     date:
       invalid:       # Optional — string (single) or map (multi)
@@ -109,8 +102,8 @@ validation:          # Optional — define only if explicitly requested or if th
       min:           # Optional — string (single) or map (multi)
       max:           # Optional — string (single) or map (multi)
     file:
-      too_large:     # Optional — string (single) or map (multi) - possible variable :maxSize
-      invalid_type:  # Optional — string (single) or map (multi) - possible variable :allowedTypes
+      too_large:     # Optional — string (single) or map (multi) - possible variable :maxsize
+      invalid_type:  # Optional — string (single) or map (multi) - possible variable :allowedtypes
       move_error:    # Optional — string (single) or map (multi)
       upload_error:  # Optional — string (single) or map (multi)
       too_large_ini: # Optional — string (single) or map (multi)
@@ -123,7 +116,7 @@ validation:          # Optional — define only if explicitly requested or if th
       unknown_error: # Optional — string (single) or map (multi)
       malicious:     # Optional — string (single) or map (multi)
     password:
-      min_length:    # Optional — string (single) or map (multi) - possible variable :minLength
+      min_length:    # Optional — string (single) or map (multi) - possible variable :minlength
     phone:           # Optional — string (single) or map (multi)
     option:          # Optional — string (single) or map (multi)
     time:

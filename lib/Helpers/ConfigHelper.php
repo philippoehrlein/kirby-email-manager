@@ -49,7 +49,7 @@ class ConfigHelper
 
         self::validateFields($templateConfig['fields']);
         self::validateEmails($templateConfig['emails']);
-        self::validateFormSubmission($templateConfig['form_submission'] ?? []);
+        self::validateFormSubmission($templateConfig['formsubmission'] ?? []);
         self::validateWebhooks($templateConfig['webhooks'] ?? []);
         self::validateCaptcha($templateConfig['captcha'] ?? []);
     }
@@ -101,10 +101,10 @@ class ConfigHelper
      */
     private static function validateFormSubmission($formSubmission)
     {
-        if (isset($formSubmission['min_time']) && $formSubmission['min_time'] < 0) {
-            throw new Exception(self::t('error.invalid_min_time'));
+        if (isset($formSubmission['mintime']) && $formSubmission['mintime'] < 0) {
+            throw new Exception(self::t('error.invalid_mintime'));
         }
-        if (isset($formSubmission['max_time']) && $formSubmission['max_time'] < $formSubmission['min_time']) {
+        if (isset($formSubmission['maxtime']) && $formSubmission['maxtime'] < $formSubmission['mintime']) {
             throw new Exception(self::t('error.invalid_max_time'));
         }
     }
@@ -142,13 +142,13 @@ class ConfigHelper
         if (!isset($captcha['frontend']['snippet'])) {
             throw new Exception(self::t('error.missing_captcha_snippet', 'Missing CAPTCHA snippet configuration'));
         }
-        if (!isset($captcha['frontend']['field_name'])) {
+        if (!isset($captcha['frontend']['fieldname'])) {
             throw new Exception(self::t('error.missing_captcha_field_name', 'Missing CAPTCHA field name'));
         }
         if (!isset($captcha['options'])) {
             throw new Exception(self::t('error.missing_captcha_options', 'Missing CAPTCHA options'));
         }
-        if (!isset($captcha['error_messages'])) {
+        if (!isset($captcha['errormessages'])) {
             throw new Exception(self::t('error.missing_captcha_error_messages', 'Missing CAPTCHA error messages'));
         }
     }

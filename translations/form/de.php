@@ -42,10 +42,10 @@ return [
         'fields' => [
             'required' => 'Dieses Feld ist erforderlich.',
             'email' => 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
-            'too_short' => 'Ihre Eingabe muss mindestens :minLength Zeichen lang sein.',
+            'too_short' => 'Ihre Eingabe muss mindestens :minlength Zeichen lang sein.',
             'message' => [
-                'too_short' => 'Ihre Nachricht muss mindestens :minLength Zeichen lang sein.',
-                'too_long' => 'Ihre Nachricht darf höchstens :maxLength Zeichen lang sein.'
+                'too_short' => 'Ihre Nachricht muss mindestens :minlength Zeichen lang sein.',
+                'too_long' => 'Ihre Nachricht darf höchstens :maxlength Zeichen lang sein.'
             ],
             'number' => 'Bitte geben Sie eine gültige Zahl ein.',
             'tel' => 'Bitte geben Sie eine gültige Telefonnummer ein.',
@@ -67,8 +67,8 @@ return [
                 'start_after_end' => 'Das Startdatum muss vor dem Enddatum liegen.'
             ],
             'file' => [
-                'too_large' => 'Die Datei ist zu groß. Maximale Größe ist :maxSize MB.',
-                'invalid_type' => 'Ungültiger Dateityp. Erlaubte Typen sind: :allowedTypes.',
+                'too_large' => 'Die Datei ist zu groß. Maximale Größe ist :maxsize MB.',
+                'invalid_type' => 'Ungültiger Dateityp. Erlaubte Typen sind: :allowedtypes.',
                 'security_error' => 'Die Datei enthält möglicherweise schädlichen Code.',
                 'too_many_files' => 'Die maximale Anzahl der Dateien beträgt :maxFiles.',
                 'move_error' => 'Fehler beim Verschieben der Datei. PHP-Fehler: ',
@@ -82,7 +82,7 @@ return [
                 'mime_mismatch' => 'Die Datei scheint beschädigt oder manipuliert zu sein.'
             ],
             'password' => [
-                'min_length' => 'Das Passwort muss mindestens :minLength Zeichen lang sein.'
+                'min_length' => 'Das Passwort muss mindestens :minlength Zeichen lang sein.'
             ],
             'phone' => 'Bitte geben Sie eine gültige Telefonnummer ein.',
             'option' => 'Ungültige Option ausgewählt.',

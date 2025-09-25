@@ -85,7 +85,7 @@ class FieldAttributeHelper
         $attributes['type'] = 'password';
         $attributes['placeholder'] = $placeholder;
         if (!empty($fieldConfig['validate'])) {
-          if (strpos($fieldConfig['validate'], 'minLength:') === 0) {
+          if (strpos($fieldConfig['validate'], 'minlength:') === 0) {
             $attributes['minlength'] = intval(substr($fieldConfig['validate'], 10));
           }
         }
@@ -117,10 +117,22 @@ class FieldAttributeHelper
 
       case 'file':
         $attributes['type'] = 'file';
-        $attributes['accept'] = implode(',', $fieldConfig['allowed_mimes'] ?? []);
-        $attributes['data-max-files'] = $fieldConfig['max_files'] ?? 1;
-        $attributes['data-max-size'] = $fieldConfig['max_size'] ?? 5242880;
-        if (($fieldConfig['max_files'] ?? 1) > 1) {
+        
+        // Support extensions for accept attribute
+        if (isset($fieldConfig['extension']) && is_array($fieldConfig['extension'])) {
+          // Convert file extensions to accept attribute format
+          $acceptTypes = [];
+          foreach ($fieldConfig['extension'] as $type) {
+            $type = strtolower(trim($type));
+            // Add dot prefix for accept attribute
+            $acceptTypes[] = '.' . $type;
+          }
+          $attributes['accept'] = implode(',', $acceptTypes);
+        }
+        
+        $attributes['data-max-files'] = $fieldConfig['max'] ?? 1;
+        $attributes['data-max-size'] = $fieldConfig['maxsize'] ?? 5242880;
+        if (($fieldConfig['max'] ?? 1) > 1) {
           $attributes['multiple'] = true;
           $attributes['name'] .= '[]';
         }

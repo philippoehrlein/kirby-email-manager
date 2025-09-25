@@ -48,8 +48,8 @@ class ValidationHelper
 
     // CAPTCHA validation (only if configured)
     if (isset($templateConfig['captcha']) && 
-        isset($templateConfig['captcha']['frontend']['field_name']) && 
-        $fieldKey === $templateConfig['captcha']['frontend']['field_name']) {
+        isset($templateConfig['captcha']['frontend']['fieldname']) && 
+        $fieldKey === $templateConfig['captcha']['frontend']['fieldname']) {
         
         $captchaErrors = self::validateCaptcha($data, $templateConfig, $languageHelper);
         
@@ -290,7 +290,7 @@ class ValidationHelper
     if (!empty($data[$fieldKey]) && !empty($fieldConfig['minlength'])) {
       $minLength = $fieldConfig['minlength'];
       if (strlen($data[$fieldKey]) < $minLength) {
-        $errors[$fieldKey] = str_replace(':minLength', $minLength, $languageHelper->get('validation.fields.message.too_short'));
+        $errors[$fieldKey] = str_replace(':minlength', $minLength, $languageHelper->get('validation.fields.message.too_short'));
       }
     }
     return $errors;
@@ -311,7 +311,7 @@ class ValidationHelper
     if (!empty($data[$fieldKey]) && !empty($fieldConfig['maxlength'])) {
       $maxLength = $fieldConfig['maxlength'];
       if (strlen($data[$fieldKey]) > $maxLength) {
-        $errors[$fieldKey] = str_replace(':maxLength', $maxLength, $languageHelper->get('validation.fields.message.too_long'));
+        $errors[$fieldKey] = str_replace(':maxlength', $maxLength, $languageHelper->get('validation.fields.message.too_long'));
       }
     }
     return $errors;
@@ -334,18 +334,18 @@ class ValidationHelper
     }
 
     $captchaConfig = $templateConfig['captcha'];
-    $fieldName = $captchaConfig['frontend']['field_name'] ?? 'captcha-response';
+    $fieldName = $captchaConfig['frontend']['fieldname'] ?? 'captcha-response';
 
     if (empty($data[$fieldName])) {
         $errors[$fieldName] = $languageHelper->get('captcha.error.missing');
         return $errors;
     }
 
-    if (!kirby()->option('philippoehrlein.kirby-email-manager.captcha.validate_callback')) {
+    if (!kirby()->option('philippoehrlein.kirby-email-manager.captcha.callback')) {
         error_log('CAPTCHA validation callback not configured');
         return $errors; 
     }
-    $validateCallback = kirby()->option('philippoehrlein.kirby-email-manager.captcha.validate_callback');
+    $validateCallback = kirby()->option('philippoehrlein.kirby-email-manager.captcha.callback');
     
     if (!is_callable($validateCallback)) {
         return $errors;

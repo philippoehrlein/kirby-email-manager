@@ -6,6 +6,7 @@ use Kirby\Content\Content;
 use Kirby\Data\Data;
 use Kirby\Exception\Exception;
 use KirbyEmailManager\Helpers\LanguageHelper;
+use KirbyEmailManager\Helpers\FormHelper;
 use Kirby\Content\Field;
 use Kirby\Cms\Page;
 
@@ -121,6 +122,11 @@ class EmailTemplate
         foreach ($this->formData as $key => $value) {
             if (in_array($key, ['timestamp', 'csrf', 'submit', 'gdpr'], true)) {
                 continue;
+            }
+
+            // Handle select fields - get display value instead of key
+            if (is_string($value) && isset($this->config['fields'][$key]['type']) && $this->config['fields'][$key]['type'] === 'select') {
+                $value = FormHelper::getSelectDisplayValue($key, $value, $this->config, $this->languageHelper);
             }
 
             $formData[$key] = $this->createField(

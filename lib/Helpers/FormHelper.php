@@ -2,6 +2,8 @@
 
 namespace KirbyEmailManager\Helpers;
 
+use KirbyEmailManager\Helpers\LanguageHelper;
+
 /**
  * FormHelper
  *
@@ -104,5 +106,30 @@ class FormHelper
         }
 
         return trim($className);
+    }
+
+    /**
+     * Get the display value for a select field
+     *
+     * @param string $fieldKey The field key
+     * @param string $selectedValue The selected value
+     * @param array $templateConfig The template configuration
+     * @param LanguageHelper $languageHelper The language helper
+     * @return string The display value
+     */
+    public static function getSelectDisplayValue(string $fieldKey, string $selectedValue, array $templateConfig, LanguageHelper $languageHelper): string
+    {
+        // Get options from template config
+        $options = $templateConfig['fields'][$fieldKey]['options'] ?? [];
+        
+        if (empty($options) || !isset($options[$selectedValue])) {
+            return $selectedValue; // Fallback to original value
+        }
+
+        // Get the label (can be string or map)
+        $label = $options[$selectedValue];
+        
+        // Use LanguageHelper's getTranslatedValue to handle string/map
+        return LanguageHelper::getTranslatedValue($label, $languageHelper->getLanguage(), 'en') ?? $selectedValue;
     }
 }

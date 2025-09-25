@@ -116,7 +116,6 @@ class EmailHelper {
                 ]);
             } catch (Exception $e) {
                 error_log('Error sending reply email: ' . $e->getMessage());
-                // We don't throw the error here since the main email was already sent
             }
         }
     }

@@ -8,15 +8,15 @@ use KirbyEmailManager\Helpers\LanguageHelper;
 
 // Get config from FormHandler
 $formHandler = new FormHandler($kirby, $page, $contentWrapper);
-
 $templateConfig = $formHandler->getTemplateConfig();
+
 $languageHelper = new LanguageHelper(null, $templateConfig);
 $languageCode = $languageHelper->getLanguage();
 
+$sendButtonText = $languageHelper->get('buttons.send.label');
+
 $resetButton = $templateConfig['buttons']['reset'] ?? ['show' => true];
 $resetButtonShow = $resetButton['show'] ?? true;
-
-$sendButtonText = $languageHelper->get('buttons.send.label');
 $resetButtonText = $languageHelper->get('buttons.reset.label');
 
 $pluginConfig = kirby()->option('philippoehrlein.kirby-email-manager.classConfig', []);
@@ -38,19 +38,8 @@ snippet('email-manager/styles/grid', ['config' => $config]);
 
 
 <form id="contactForm" method="post" enctype="multipart/form-data" action="<?= $page->url() ?>" class="<?= FormHelper::getClassName('form', $config) ?>">
-  <?php if (isset($alert['message']) && $alert['type'] === 'error' && kirby()->request()->is('POST')): ?>
-      <p class="<?= FormHelper::getClassName('error', $config, 'error') ?>"><?= $alert['message'] ?></p>
-  <?php elseif (isset($alert['message']) && $alert['type'] === 'warning' && kirby()->request()->is('POST')): ?>
-      <p class="<?= FormHelper::getClassName('error', $config, 'warning') ?>"><?= $alert['message'] ?></p>
-  <?php endif ?>
-
-  <div class="visually-hidden" aria-hidden="true">
-    <label for="website_hp_" tabindex="-1">
-      <span class="visually-hidden"><?= $languageHelper->get('form.honeypot.label') ?></span>
-    </label>
-    <input type="text" name="website_hp_" id="website_hp_" tabindex="-1" autocomplete="off">
-  </div>
-
+  <?php snippet('email-manager/form/alerts', ['alert' => $alert, 'config' => $config]) ?>
+  <?php snippet('email-manager/form/honeypot', ['label' => $languageHelper->get('form.honeypot.label')]) ?>
   <input type="hidden" name="timestamp" value="<?= time() ?>">
 
   <div class="<?= FormHelper::getClassName('grid', $config) ?>">
@@ -108,11 +97,10 @@ snippet('email-manager/styles/grid', ['config' => $config]);
 
   <!-- GDPR Checkbox -->
   <?php if ($contentWrapper->gdpr_checkbox()->toBool()): ?>
+    <?php $gdprText = $contentWrapper->gdpr_text()->kt()->permalinksToUrls(); ?>
+
     <div class="<?= FormHelper::getClassName('field', $config, 'checkbox') ?>">
       <input type="checkbox" tabindex="0" class="<?= FormHelper::getClassName('input', $config, 'checkbox') ?>" id="gdpr" name="gdpr" <?= array_key_exists('gdpr', $data) ? 'checked' : '' ?> required>
-      <?php
-       $gdprText = $contentWrapper->gdpr_text()->kt()->permalinksToUrls();
-      ?>
       <label for="gdpr"><?= $gdprText ?></label>
     </div>
   <?php endif; ?>

@@ -129,9 +129,26 @@ class EmailTemplate
                 $value = FormHelper::getSelectDisplayValue($key, $value, $this->config, $this->languageHelper);
             }
 
+            // Decode any HTML entities that may have been introduced during sanitization,
+            // so emails render natural characters like apostrophes instead of entities
+            if (is_array($value)) {
+                $decodedValues = array_map(function ($item) {
+                    if (!is_string($item)) {
+                        return $item;
+                    }
+                    $decoded = html_entity_decode($item, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    return strip_tags($decoded);
+                }, array_filter($value));
+                $valueForField = implode(', ', $decodedValues);
+            } else {
+                $valueForField = is_string($value)
+                    ? strip_tags(html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
+                    : $value;
+            }
+
             $formData[$key] = $this->createField(
                 $key,
-                is_array($value) ? implode(', ', array_filter($value)) : $value
+                $valueForField
             );
         }
 

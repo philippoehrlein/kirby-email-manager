@@ -91,5 +91,4 @@ export default {
   gap: var(--spacing-2);
   padding: var(--spacing-1) 0;
 }
-
 </style>

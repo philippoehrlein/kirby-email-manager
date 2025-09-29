@@ -1,10 +1,12 @@
 <template>
   <div>
-    <k-block-title :fieldset="{
+    <k-block-title 
+    :fieldset="{
       'icon': 'email-manager',
       'name': 'Email Manager',
       'label' : selectedEmailTemplate.text ? selectedEmailTemplate.text : null
-    }" />
+    }" 
+    />
     <ul class="email-status-list">
       <li v-for="(value, key) in statusItems" :key="key">
         <k-icon 
@@ -20,7 +22,6 @@
       </li>
     </ul>
   </div>
-
 </template>
 
 <script>

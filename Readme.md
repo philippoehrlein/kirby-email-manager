@@ -1,30 +1,25 @@
 # Kirby Email Manager
 
+![License](https://img.shields.io/badge/license-proprietary-green)
+![Version](https://img.shields.io/badge/beta-0.9.0-blue)
+
 The **Email Manager** is a powerful plugin for [Kirby CMS](https://getkirby.com/) that simplifies email form creation and management. Designed for developers, it ensures a seamless experience while giving CMS users the flexibility to adapt content dynamically.
 
->Complete documentation is available on the [Email Manager Documentation](https://email-manager.philippoehrlein.de).
+![Cover Kirby Email Manager](.github/kirby-email-manager-cover.png)
+
+>Complete documentation is available in the [Email Manager Documentation](https://email-manager.philippoehrlein.de).
 
 
 ## Features
-- **Quick Setup:** Get started in minutes with pre-built blueprints and templates.
-- **Kirby Integration:** Built with Kirby’s syntax and conventions for a natural developer experience.
-- **Customizable Forms:** Adjust templates, layouts, and CSS to meet your project needs.
-- **Security:** Includes CSRF protection, input sanitization, and secure file validation.
-- **Extendable:** Add custom CAPTCHAs and integrate webhooks effortlessly.
-- **Multi-Language Support:** Pre-configured for EN, DE, FR, IT, and ES.
-
-
-## Installation
-
-### Composer Installation (Recommended)
-Run the following command in your Kirby installation directory:
-```bash
-composer require philippoehrlein/kirby-email-manager
-```
-
-### Manual Installation
-1.	Download the latest release from the [GitHub repository](https://github.com/philippoehrlein/kirby-email-manager/releases/latest).
-2.	Extract the contents and move the kirby-email-manager folder to /site/plugins/.
+- **Quick Setup:** Forms ready in minutes.
+- **Customizable:** Adapt snippets and keep layouts flexible.
+- **Your Styles:** Use your own CSS classes for full design control.
+- **Extensible:** Add custom CAPTCHA solutions and webhooks.
+- **Secure:** CSRF protection, validation, optional rate limiting.
+- **Spam Protection:** Filters block bots and unwanted submissions.
+- **Easy to Use:** Use as blocks or tabs via blueprints; manage in the Panel.
+- **Stay Compliant:** Maintain texts and policies directly in the Panel.
+- **Multi Email:** Route to different recipients based on user input.
 
 
 ## Quick Start
@@ -35,7 +30,7 @@ In your Kirby configuration file (`site/config/config.php`), set up the email tr
 ```php
 return [
     'email' => [
-        'noreply' => 'no-reply@yourdomain.com'
+        'noreply' => 'no-reply@yourdomain.com',
         'transport' => [
             'type' => 'smtp',
             'host' => 'smtp.server.com',
@@ -128,3 +123,21 @@ Create `site/templates/contact.php`:
 4. Set up success title and message for form submissions
 
 Your contact form is now ready to use!
+
+
+## License
+
+- The plugin is distributed under a **proprietary license**.
+- **Production use** requires a valid license per publicly accessible domain.
+- **Local/Staging** usage is free without a license.
+- Source code may be publicly viewable, but **no redistribution or derivative works** are permitted without written consent.
+- **Updates**: All future updates are included.
+
+Please read the full license terms in [`LICENSE.md`](./LICENSE.md). For questions, use the contact form on the website.
+
+
+## Support
+
+- Documentation: https://email-manager.philippoehrlein.de
+- Issues: https://github.com/philippoehrlein/kirby-email-manager/issues
+- Contact: github@philippoehrlein.de

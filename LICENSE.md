@@ -1,5 +1,5 @@
 # Kirby Email Manager License
-Published: December 12, 2024
+Published: September 29, 2025
 
 ## Definitions
 ### Licensor: 

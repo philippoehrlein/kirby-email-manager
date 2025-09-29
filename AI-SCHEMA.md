@@ -35,6 +35,7 @@ webhooks:             # Optional - Webhook configurations, define only if explic
       - form.success  # Available events: form.success, form.error
 
 # Form Fields
+# the fieldnames 'footer', 'subject' and 'topic' are reserved. 
 fields:              # Required
   fieldname:         # Any unique identifier
     type: text       # Required - Available types: text, email, tel, url, textarea, select, radio, checkbox, date, time, date-range, file, number

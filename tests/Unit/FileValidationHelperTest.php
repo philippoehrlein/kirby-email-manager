@@ -175,7 +175,7 @@ class FileValidationHelperTest extends TestCase
 
         $errors = FileValidationHelper::validateFile($file, $this->fieldConfig, $this->languageCode);
         $this->assertArrayHasKey('error', $errors);
-        $this->assertEquals('Die Datei scheint beschädigt oder manipuliert zu sein.', $errors['error']);
+        $this->assertEquals('Dateityp stimmt nicht mit der Dateiendung überein.', $errors['error']);
     }
 
     /**

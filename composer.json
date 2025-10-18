@@ -2,7 +2,7 @@
   "name": "philippoehrlein/kirby-email-manager",
   "description": "A Kirby plugin for managing email templates",
   "type": "kirby-plugin",
-  "version": "0.9.0",
+  "version": "0.9.0-beta",
   "license": "proprietary",
   "homepage": "https://github.com/philippoehrlein/kirby-email-manager",
   "support": {

@@ -120,7 +120,7 @@ class EmailTemplate
         }
 
         foreach ($this->formData as $key => $value) {
-            if (in_array($key, ['timestamp', 'csrf', 'submit', 'gdpr'], true)) {
+            if (in_array($key, ['timestamp', 'csrf', 'submit', 'gdpr', 'website_hp_'], true)) {
                 continue;
             }
 

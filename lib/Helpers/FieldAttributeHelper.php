@@ -159,8 +159,8 @@ class FieldAttributeHelper
         break;
 
       case 'select':
-        if (!$fieldConfig['required']) {
-          $attributes['placeholder'] = $placeholder;
+        if (!($fieldConfig['required'] ?? false)) {
+          $attributes['placeholder'] = $placeholder ?? '';
         }
         break;
       

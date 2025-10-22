@@ -94,9 +94,6 @@ class EmailHelper {
         $replyPath = $kirby->root('templates') . '/emails/' . $selectedTemplate . '/reply.text.php';
         $replyEmail = self::getReplyEmail($templateConfig, $data);
 
-        error_log('replyEmail: ' . print_r($replyEmail, true));
-        error_log('replyPath: ' . $replyPath);
-        
         $hasReplyField = false;
         foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
             if ($fieldConfig['type'] === 'email' && isset($fieldConfig['reply']) && $fieldConfig['reply'] === true) {
@@ -104,16 +101,16 @@ class EmailHelper {
                 break;
             }
         }
-        error_log('hasReplyField: ' . $hasReplyField);
         
         if ($replyEmail !== null && file_exists($replyPath) && $hasReplyField) {
             $subject = self::getReplySubject($templateConfig);
+            $replyFormSenderName = self::getReplyFormSender($templateConfig);
             $emailTemplate->addSubject($subject);
 
             try {
                 $kirby->email([
                     'template' => $selectedTemplate . '/reply',
-                    'from'     => [$formSenderEmail => $formSenderName],
+                    'from'     => [$formSenderEmail => $replyFormSenderName],
                     'to'       => $replyEmail,
                     'subject'  => $subject,
                     'data'     => [
@@ -246,12 +243,22 @@ class EmailHelper {
     }
     
     /**
-     * Retrieves the confirmation sender based on the template configuration.
+     * Retrieves the sender based on the template configuration.
      *
      * @param array $templateConfig The configuration for the email template.
-     * @return string The confirmation sender.
+     * @return string The mail sender.
      */
     public static function getFormSender($templateConfig) {
+        return self::initLanguageHelper($templateConfig)->get('emails.mail.sender');
+    }
+
+    /**
+     * Retrieves the reply sender based on the template configuration.
+     *
+     * @param array $templateConfig The configuration for the email template.
+     * @return string The reply sender.
+     */
+    public static function getReplyFormSender($templateConfig) {
         return self::initLanguageHelper($templateConfig)->get('emails.reply.sender');
     }
 

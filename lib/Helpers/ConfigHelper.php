@@ -38,7 +38,7 @@ class ConfigHelper
             throw new Exception(self::t('error.template_config_empty'));
         }
 
-        $requiredKeys = ['fields', 'buttons', 'emails'];
+        $requiredKeys = ['fields', 'emails'];
         foreach ($requiredKeys as $key) {
             if (!isset($templateConfig[$key])) {
                 $message = self::t('error.missing_required_key');

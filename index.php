@@ -16,5 +16,5 @@ Kirby::plugin('philippoehrlein/kirby-email-manager', [
     'options' => [
         'cache.ip' => true
     ],
-    'version' => '0.9.0-beta'
+    'version' => '0.9.1-beta'
 ]);

@@ -86,7 +86,7 @@ class EmailHelper {
         try {
             $kirby->email($emailConfig);
         } catch (Exception $e) {
-            error_log('Fehler beim Senden der Haupt-E-Mail: ' . $e->getMessage());
+            error_log('Error sending main email: ' . $e->getMessage());
             throw $e;
         }
         

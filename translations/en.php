@@ -42,4 +42,21 @@ return [
     'philippoehrlein.kirby-email-manager.panel.status.success_message' => 'Success Message',
     'philippoehrlein.kirby-email-manager.panel.status.gdpr' => 'GDPR Checkbox',
     'philippoehrlein.kirby-email-manager.panel.help.multiple_recipients' => 'By providing individual success messages for each email address, you can address different scenarios. For example, you can communicate longer response times during high workloads or provide specific information for certain departments.',
+
+     // === ACTIVATE SECTION ===
+     'philippoehrlein.kirby-email-manager.activate-section.title' => 'Buy a license and activate your Email Manager.',
+     'philippoehrlein.kirby-email-manager.activate-section.button.buy' => 'Buy',
+     'philippoehrlein.kirby-email-manager.activate-section.button.activate' => 'Activate',
+ 
+     // === LICENSE ACTIVATION DIALOG ===
+     'philippoehrlein.kirby-email-manager.panel.license.headline' => 'Activate license',
+     'philippoehrlein.kirby-email-manager.license-activation-dialog.title' => 'Activate your license',
+     'philippoehrlein.kirby-email-manager.license-activation-dialog.local-warning' => 'You are in a local development environment. Activate the license <strong>only in the production environment</strong>.',
+     'philippoehrlein.kirby-email-manager.license-activation-dialog.license.label' => 'License Key',
+     'philippoehrlein.kirby-email-manager.license-activation-dialog.license.help' => 'Your license key was sent to you after the purchase via email. Please paste it here or <a href="https://email-manager.philippoehrlein.de#buy" target="_blank">buy a new license</a>.',
+     'philippoehrlein.kirby-email-manager.license-activation-dialog.email.label' => 'Email',
+     'philippoehrlein.kirby-email-manager.license-activation-dialog.email.help' => 'Please enter the email address you used to purchase the license.',
+     'philippoehrlein.kirby-email-manager.license-activation-dialog.success' => 'Thank you! License activated successfully!',
+     'philippoehrlein.kirby-email-manager.license-activation-dialog.error.missing-fields' => 'Please fill in all fields.',
+     'philippoehrlein.kirby-email-manager.license-activation-dialog.error.activation-failed' => 'Activation failed: {error}',
 ];

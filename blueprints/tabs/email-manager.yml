@@ -8,6 +8,8 @@ columns:
   main:
     width: 3/5
     sections:
+      license:
+        type: email-manager-license
       email: email-manager/email-section
 
   sidebar:

@@ -13,9 +13,7 @@ class ExceptionHelper {
    * @param LanguageHelper $languageHelper The language helper.
    * @return array The error message.
    */
-  public static function handleException($e, LanguageHelper $languageHelper) {
-    error_log('Error: ' . $e->getMessage());
-    
+  public static function handleException($e, LanguageHelper $languageHelper) {    
     $errorMessage = $languageHelper->get('error.error_occurred');
     
     // Only show detailed error messages in debug mode

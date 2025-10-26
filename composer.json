@@ -4,7 +4,7 @@
   "type": "kirby-plugin",
   "version": "0.9.1-beta",
   "license": "proprietary",
-  "homepage": "https://github.com/philippoehrlein/kirby-email-manager",
+  "homepage": "https://email-manager.philippoehrlein.de",
   "support": {
     "issues": "https://github.com/philippoehrlein/kirby-email-manager/issues",
     "source": "https://github.com/philippoehrlein/kirby-email-manager",

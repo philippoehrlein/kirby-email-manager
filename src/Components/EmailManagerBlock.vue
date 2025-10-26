@@ -1,82 +1,133 @@
 <template>
-  <div>
+  <div class="k-block">
     <k-block-title 
-    :fieldset="{
-      'icon': 'email-manager',
-      'name': 'Email Manager',
-      'label' : selectedEmailTemplate.text ? selectedEmailTemplate.text : null
-    }" 
+      :fieldset="{
+        icon: 'email-manager',
+        name: 'Email Manager',
+        label: selectedEmailTemplate ?? false
+      }" 
     />
     <ul class="email-status-list">
       <li v-for="(value, key) in statusItems" :key="key">
         <k-icon 
           :type="validationRules[key] ? 'check' : 'cancel'" 
           :color="validationRules[key] ? 'positive' : 'negative'" 
-        />{{ value }}
+        />
+        {{ value }}
       </li>
       <li v-if="content.gdpr_checkbox">
         <k-icon 
-          :type="validationRules.gdpr ? 'check' : 'cancel'" 
-          :color="validationRules.gdpr ? 'positive' : 'negative'" 
-        />{{ $t('philippoehrlein.kirby-email-manager.panel.status.gdpr') }}
+          :type="isGdprValid ? 'check' : 'cancel'" 
+          :color="isGdprValid ? 'positive' : 'negative'" 
+        />
+        {{ panel.t('philippoehrlein.kirby-email-manager.panel.status.gdpr') }}
       </li>
     </ul>
+    <buy-activate-buttons />
   </div>
 </template>
 
-<script>
-export default {
-  computed: {
-    selectedEmailTemplate() {
-      return this.$attrs.tabs.email.fields.email_templates.options.find(option => option.value === this.content.email_templates);
-    },
-    isSingleEmail() {
-      return !this.content.send_to_more;
-    },
+<script setup lang="ts">
+import { computed, usePanel } from 'kirbyuse';
 
-    hasEmailTemplate() {
-      return !!this.content.email_templates;
-    },
-
-    validationRules() {
-      return {
-        emailTemplate: !!this.content.email_templates,
-        recipients: this.validateRecipients(),
-        successMessage: this.validateSuccessMessage(),
-        gdpr: this.validateGdpr()
-      };
-    },
-
-    allRequiredFieldsSet() {
-      return Object.values(this.validationRules).every(value => value);
-    },
-
-    statusItems() {
-      return {
-        emailTemplate: this.$t('philippoehrlein.kirby-email-manager.panel.status.email_template'),
-        recipients: this.$t('philippoehrlein.kirby-email-manager.panel.status.recipients'),
-        successMessage: this.$t('philippoehrlein.kirby-email-manager.panel.status.success_message')
-      };
-    }
-  },
-
-  methods: {
-    validateRecipients() {
-      return this.isSingleEmail 
-        ? !!this.content.send_to
-        : this.content.send_to_structure?.length > 0;
-    },
-
-    validateSuccessMessage() {
-      return !!(this.content.send_to_success_title && this.content.send_to_success_text);
-    },
-
-    validateGdpr() {
-      if (!this.content.gdpr_checkbox) return true;
-      return this.content.gdpr_text.length > 0;
-    }
-  }
+// Types
+interface EmailTemplateOption {
+  value: string;
+  text: string;
 }
+
+interface EmailTab {
+  fields: {
+    email_templates: {
+      options: EmailTemplateOption[];
+    };
+  };
+}
+
+interface Tabs {
+  email: EmailTab;
+}
+
+interface EmailManagerContent {
+  email_templates: string;
+  send_to_more: boolean;
+  send_to: string;
+  send_to_success_title: string;
+  send_to_success_text: string;
+  gdpr_checkbox: boolean;
+  gdpr_text: string;
+  email_legal_footer: string;
+  send_to_structure: {
+    topic: string;
+    email: string;
+  }[];
+}
+
+interface ValidationRules {
+  emailTemplate: boolean;
+  recipients: boolean;
+  successMessage: boolean;
+  gdpr: boolean;
+}
+
+interface StatusItems {
+  emailTemplate: string;
+  recipients: string;
+  successMessage: string;
+}
+
+// Props
+const props = defineProps<{
+  content: EmailManagerContent;
+  tabs: Tabs;
+}>();
+
+// Composables
+const panel = usePanel();
+
+// Computed properties
+const computedContent = computed<EmailManagerContent>(() => props.content);
+const tabs = computed<Tabs>(() => props.tabs);
+
+const selectedEmailTemplate = computed(() => {
+  const emailTemplate = tabs.value.email.fields.email_templates.options.find(
+    option => option.value === computedContent.value.email_templates
+  );
+  return emailTemplate ? emailTemplate.text : false;
+});
+
+const isSingleEmail = computed(() => !computedContent.value.send_to_more);
+
+// Validation functions
+const validateRecipients = (): boolean => {
+  return isSingleEmail.value 
+    ? !!computedContent.value.send_to
+    : (computedContent.value.send_to_structure?.length ?? 0) > 0;
+};
+
+const validateSuccessMessage = (): boolean => {
+  return !!(computedContent.value.send_to_success_title && computedContent.value.send_to_success_text);
+};
+
+const validateGdpr = (): boolean => {
+  if (!computedContent.value.gdpr_checkbox) return true;
+  return computedContent.value.gdpr_text.length > 0;
+};
+
+const validationRules = computed(() => ({
+  emailTemplate: !!computedContent.value.email_templates,
+  recipients: validateRecipients(),
+  successMessage: validateSuccessMessage(),
+  gdpr: validateGdpr()
+} as ValidationRules));
+
+const isGdprValid = computed(() => validateGdpr());
+
+const statusItems = computed<StatusItems>(() => ({
+  emailTemplate: panel.t('philippoehrlein.kirby-email-manager.panel.status.email_template'),
+  recipients: panel.t('philippoehrlein.kirby-email-manager.panel.status.recipients'),
+  successMessage: panel.t('philippoehrlein.kirby-email-manager.panel.status.success_message')
+}));
 </script>
 <style scoped>
 .email-status-list {
@@ -85,7 +136,7 @@ export default {
 
 .email-status-list li {
   display: flex;
-  color: var(--color-gray-800);
+  color: var(--color-text-light);
   flex-direction: row;
   align-items: center;
   gap: var(--spacing-2);

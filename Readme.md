@@ -67,13 +67,13 @@ fields:
     type: text
     required: true
     validate: alpha
-    user_name: true
+    username: true
   email:
     label: Email
     placeholder: Enter your email
     type: email
     required: true
-    reply_to: true
+    replyto: true
   message:
     label: Message
     placeholder: Enter your message

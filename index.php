@@ -23,7 +23,7 @@ $plugin = [
   ],
   'areas' => require PathHelper::configDir() . 'areas.php',
   'sections' => require PathHelper::configDir() . 'sections.php',
-  'version' => '0.9.1-beta'
+  'version' => '0.9.2-beta'
 ];
 
 

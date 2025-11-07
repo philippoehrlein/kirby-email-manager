@@ -1,39 +1,23 @@
 # Betriebssystem-Dateien
 .DS_Store
-Thumbs.db
 
-# Entwicklungsumgebungen
+# Entwicklungsumgebungen (falls jemand anderes mitarbeitet)
 .vscode/
 .idea/
 
 # Abhängigkeiten
 /node_modules/
-/vendor/
-
-# Kompilierte Dateien
-*.min.css
-*.min.js
 
 # Konfigurationsdateien
 .env
 
 # Temporäre Dateien
 *.log
-*.tmp
-
-# Composer
-composer.phar
 
 # Sicherungsdateien
 *.bak
 *.swp
 *~
-
-# Build-Verzeichnis
-/dist/
-
-# Lokale Konfigurationsdateien
-config.local.php
 
 # Test Coverage
 /tests/coverage/

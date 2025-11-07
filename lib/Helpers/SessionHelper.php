@@ -1,8 +1,6 @@
 <?php
 namespace KirbyEmailManager\Helpers;
 
-use Kirby\Session\Session;
-
 /**
  * SessionHelper class for managing session-related functions
  * 

@@ -1,5 +1,5 @@
 # Kirby Email Manager License
-Published: September 29, 2025
+Published: November 06, 2025
 
 ## Definitions
 ### Licensor: 
@@ -12,7 +12,7 @@ Published: September 29, 2025
 ### Plugin (“Email Manager”): 
   A Kirby plugin enabling developers to create contact forms using Kirby’s typical syntax (YML blueprints and PHP templates). CMS users can customize options such as privacy checkboxes, recipient email(s), success messages, and email footers.
 ### Domain: 
-  The unique domain (e.g., “example.com”) provided at the time of purchase, on which the Plugin is licensed for production use.
+  The unique domain (e.g., "example.com") provided during activation, on which the Plugin is licensed for production use.
 
 ## Scope of the License
 ### Local and Non-Production Use: 
@@ -22,15 +22,17 @@ Published: September 29, 2025
 
 ## License Purchase
 ### Acquisition: 
-  Licenses must be purchased via the plugin website (https://email-manager.philippoehrlein.de). The Licensee will provide a domain during checkout, and the license will be bound to that specific domain. The Checkout process is handled by Paddle.
+  Licenses must be purchased via the plugin website (https://email-manager.philippoehrlein.de). The checkout process is handled by Paddle.
+### Activation: 
+  Upon activation of the Plugin, the Licensee will provide a domain, and the license will be bound to that specific domain.
 ### No Domain Transfer: 
-  Once a license is assigned to a domain, it cannot be transferred to another domain.
+  Once a license is assigned to a domain during activation, it cannot be transferred to another domain.
 
 ## Rights and Restrictions
 ### Permitted Use: 
   The Licensee is granted the right to install and use the Plugin on the licensed domain in a production environment.
 ### Source Code Access: 
-  The Plugin’s source code may be publicly viewed (e.g., on GitHub), but this does not grant rights to reproduce, modify, distribute, or create derivative works of the Plugin without explicit written permission from the Licensor.
+The Plugin’s source code may be publicly viewed (e.g., on GitHub). The Licensee may modify the Plugin’s source code for personal or client use on the licensed domain. The Licensor is not responsible for any issues resulting from such modifications. Redistribution, resale, or public release of modified or derivative versions is prohibited without written permission from the Licensor.
 ### No Redistribution: 
   The Licensee shall not sell, lease, rent, sublicense, redistribute, or otherwise transfer the Plugin or any portion thereof to any third party.
 
@@ -74,7 +76,7 @@ TO THE FULLEST EXTENT PERMITTED BY LAW, THE LICENSOR SHALL NOT BE LIABLE FOR ANY
 If any provision of this license is held to be invalid or unenforceable, the remaining provisions shall remain in full force and effect.
 
 ## Amendments
-The Licensor reserves the right to modify or update these terms at any time. In case of changes, the Licensee will be notified. If the Licensee does not agree to the updated terms, the Licensee may continue using the Plugin under the previous terms but may forfeit the right to future updates.
+The Licensor reserves the right to modify or update these terms at any time. In case of changes, the Licensee will be notified via the plugin website and the GitHub repository. If the Licensee does not agree to the updated terms, the Licensee may continue using the Plugin under the previous terms but may forfeit the right to future updates.
 
 ## Contact
 For inquiries, use the contact form at https://email-manager.philippoehrlein.de/contact.

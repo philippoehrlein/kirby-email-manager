@@ -46,8 +46,12 @@ class RateLimitHelper
         $blockData = $cache->get($blockKey);
         
         if ($blockData) {
-            $blockTime = is_array($blockData) ? ($blockData['created'] ?? time()) : time() - self::BLOCK_DURATION;
-            $blockDuration = is_array($blockData) ? ($blockData['duration'] ?? self::BLOCK_DURATION) : self::BLOCK_DURATION;
+            $blockTime = is_array($blockData) && isset($blockData['created']) 
+                ? (int)$blockData['created'] 
+                : time() - self::BLOCK_DURATION;
+            $blockDuration = is_array($blockData) && isset($blockData['duration'])
+                ? (int)$blockData['duration']
+                : self::BLOCK_DURATION;
             $expiresAt = $blockTime + $blockDuration;
             
             if ($now >= $expiresAt) {

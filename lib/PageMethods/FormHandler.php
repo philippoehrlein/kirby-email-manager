@@ -12,7 +12,6 @@ use KirbyEmailManager\Helpers\LogHelper;
 use KirbyEmailManager\Helpers\ConfigHelper;
 use KirbyEmailManager\Helpers\SuccessMessageHelper;
 use KirbyEmailManager\Helpers\SecurityHelper;
-use KirbyEmailManager\Helpers\FileValidationHelper;
 use KirbyEmailManager\Helpers\WebhookHelper;
 use KirbyEmailManager\Helpers\RateLimitHelper;
 use KirbyEmailManager\Helpers\AttachmentHelper;
@@ -232,7 +231,7 @@ class FormHandler
                             'type' => 'error',
                             'message' => $this->languageHelper->get('error.rate_limit_exceeded')
                         ],
-                        'data' => $data ?? []
+                        'data' => $data
                     ];
                 }
 

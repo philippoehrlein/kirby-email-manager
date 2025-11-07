@@ -145,15 +145,15 @@ class AttachmentHelper
         foreach ($uploads as $fieldKey => $uploadField) {
             $fileList = self::normalizeUploads($uploadField);
             
-            if (empty($fileList)) {
-                continue;
-            }
-
             $fieldConfig = $templateConfig['fields'][$fieldKey] ?? [];
             
             // Required file check
             if (!empty($fieldConfig['required']) && empty($fileList)) {
                 $allErrors[$fieldKey] = 'validation.fields.file.no_file_uploaded';
+                continue;
+            }
+            
+            if (empty($fileList)) {
                 continue;
             }
 

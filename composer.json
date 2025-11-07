@@ -2,7 +2,7 @@
   "name": "philippoehrlein/kirby-email-manager",
   "description": "A Kirby plugin for managing email templates",
   "type": "kirby-plugin",
-  "version": "0.9.2-beta",
+  "version": "1.0.0",
   "license": "proprietary",
   "homepage": "https://email-manager.philippoehrlein.de",
   "support": {
@@ -48,7 +48,7 @@
   "scripts": {
     "test": "phpunit",
     "test:coverage": "phpunit --coverage-html test/coverage",
-    "analyse": "phpstan analyse",
+    "analyse": "phpstan analyse --memory-limit=512M",
     "check": [
       "Composer\\Config::disableProcessTimeout",
       "@php commands/check-templates.php"

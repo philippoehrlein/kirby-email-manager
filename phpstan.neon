@@ -1,13 +1,14 @@
 parameters:
     level: 5
+    phpVersion: 80100
     paths:
-        - src
+        - lib
     excludePaths:
         - tests
-    checkMissingIterableValueType: false
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
         - '#Call to an undefined method KirbyEmailManager\\PageMethods\\ContentWrapper::[a-zA-Z_]+\(\)#'
         - '#Call to an undefined method Kirby\\Content\\Content::[a-zA-Z_]+\(\)#'
         - '#Call to an undefined method Kirby\\Cms\\Page::[a-zA-Z_]+\(\)#'
         - '#Call to an undefined method Kirby\\Session\\Session::(get|remove)\(\)#'
+        - '#Call to an undefined static method Kirby\\Toolkit\\V::[a-zA-Z_]+\(\)#'

@@ -1,6 +1,6 @@
 <template>
-  <k-button-group v-if="!activated" layout="collapsed">
-    <k-button variant="filled" icon="cart" theme="pink" size="sm" :link="buyurl">
+  <k-button-group v-if="activated === false" layout="collapsed">
+    <k-button variant="filled" icon="cart" theme="pink" size="sm" :link="buyurl" target="_blank">
       {{ panel.t('philippoehrlein.kirby-email-manager.activate-section.button.buy') }}
     </k-button>
     <k-button variant="filled" icon="key" theme="pink" size="sm" dialog="email-manager/license/activation">
@@ -15,7 +15,7 @@ import { onMounted, ref } from 'vue';
 
 const emit = defineEmits(['activated']);
 const panel = usePanel();
-const activated = ref<boolean>(false);
+const activated = ref<boolean | null>(null); 
 
 const buyurl = 'https://email-manager.philippoehrlein.de#buy';
 

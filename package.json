@@ -1,13 +1,28 @@
 {
+  "name": "kirby-email-manager",
+  "version": "1.0.0",
   "private": true,
+  "license": "proprietary",
+  "homepage": "https://email-manager.philippoehrlein.de",
+  "support": {
+    "issues": "https://github.com/philippoehrlein/kirby-email-manager/issues",
+    "source": "https://github.com/philippoehrlein/kirby-email-manager",
+    "docs": "https://email-manager.philippoehrlein.de",
+    "email": "github@philippoehrlein.com"
+  },
+  "authors": [
+    {
+      "name": "Philipp Oehrlein",
+      "email": "github@philippoehrlein.com"
+    }
+  ],
   "scripts": {
     "dev": "npx kirbyup src/index.js --watch",
     "serve": "npx kirbyup serve src/index.js",
     "build": "npx kirbyup src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier \"src/**\" --write",
-    "gen:index": "php scripts/generate-index.php"
+    "format": "prettier \"src/**\" --write"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.11.0",

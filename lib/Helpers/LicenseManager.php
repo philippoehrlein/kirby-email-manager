@@ -5,6 +5,11 @@ namespace KirbyEmailManager\Helpers;
 use Kirby\Cms\App;
 use Kirby\Exception\Exception;
 
+/**
+ * LicenseManager class for managing the license
+ * @author Philipp Oehrlein
+ * @version 1.0.0
+ */
 class LicenseManager
 {
     private const PREFIX = 'KEM';

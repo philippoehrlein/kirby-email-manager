@@ -1,0 +1,55 @@
+type: managed-template
+name: Customer Feedback
+
+emails:
+  mail:
+    subject: New feedback received
+    sender: Feedback Bot
+  reply:
+    subject: Thank you for your feedback
+    sender: Feedback Bot
+
+fields:
+  name:
+    type: text
+    label: Name
+    required: true
+    placeholder: Your name
+    username: true
+    maxlength: 120
+    aria: Your full name
+  email:
+    type: email
+    label: Email
+    required: true
+    placeholder: your@email.com
+    replyto: true
+    reply: true
+    aria: Your email address
+    help: Used only if we need to follow up.
+  rating:
+    type: radio
+    label: How would you rate your experience?
+    required: true
+    options:
+      5: Excellent (5)
+      4: Good (4)
+      3: Okay (3)
+      2: Poor (2)
+      1: Very poor (1)
+    aria: Select a rating from 1 to 5
+  comments:
+    type: textarea
+    label: Comments
+    required: false
+    placeholder: Tell us more about your experience…
+    rows: 6
+    resizable: vertical
+    aria: Additional comments
+    help: Share details, suggestions, or issues you encountered.
+
+buttons:
+  send:
+    label: Send feedback
+  reset:
+    show: false

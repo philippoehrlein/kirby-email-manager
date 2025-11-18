@@ -124,8 +124,11 @@ class EmailTemplate
                 continue;
             }
 
+            // Get field type from config
+            $fieldType = $this->config['fields'][$key]['type'] ?? null;
+            
             // Handle select fields - get display value instead of key
-            if (is_string($value) && isset($this->config['fields'][$key]['type']) && $this->config['fields'][$key]['type'] === 'select') {
+            if (is_string($value) && $fieldType === 'select') {
                 $value = FormHelper::getSelectDisplayValue($key, $value, $this->config, $this->languageHelper);
             }
 

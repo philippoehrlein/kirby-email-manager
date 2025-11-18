@@ -19,3 +19,6 @@ phpunit.xml export-ignore
 phpstan.neon export-ignore
 tests/ export-ignore
 .phpunit.result.cache export-ignore
+
+# Examples
+examples/ export-ignore

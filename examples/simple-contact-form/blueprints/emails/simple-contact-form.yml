@@ -1,0 +1,42 @@
+type: managed-template
+name: Simple Contact Form
+
+form_submission:
+  min_time: 3
+  max_time: 7200
+
+emails:
+  mail:
+    subject: New Contact Form Submission
+    sender: Website Contact Form
+
+fields:
+  name:
+    type: text
+    label: Name
+    required: true
+    username: true
+    minlength: 2
+    maxlength: 100
+
+  email:
+    type: email
+    label: Email
+    required: true
+    replyto: true
+    reply: true
+    validate: email
+
+  message:
+    type: textarea
+    label: Message
+    required: true
+    rows: 6
+    minlength: 5
+    maxlength: 2000
+
+buttons:
+  send:
+    label: Send
+  reset:
+    show: false

@@ -1,0 +1,56 @@
+type: managed-template
+name: Booking Request Form
+
+emails:
+  mail:
+    subject: New Event Registration
+    sender: Event Team
+  reply:
+    subject: Registration Confirmation
+    sender: Event Team
+
+fields:
+  name:
+    type: text
+    label: Full name
+    required: true
+    placeholder: Jane Doe
+    username: true
+
+  email:
+    type: email
+    label: Email address
+    required: true
+    placeholder: jane.doe@example.com
+    validate: email
+    reply: true
+    replyto: true
+
+  eventdate:
+    type: date
+    label: Event date
+    required: true
+    aria: Select the event date
+    min: today
+    max: +6months
+    help: Must be between today and 6 months from today
+
+  participants:
+    type: number
+    label: Number of participants
+    required: true
+    min: 1
+    step: 1
+    max: 20
+    placeholder: "1"
+    help: Maximum 20 participants
+
+  newsletter:
+    type: checkbox
+    label: false
+    options:
+      subscribe: Subscribe me to the newsletter
+
+buttons:
+  send:
+    label: Register

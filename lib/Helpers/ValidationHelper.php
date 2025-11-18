@@ -416,12 +416,6 @@ class ValidationHelper
             }
             break;
             
-        case 'checkbox':
-            if (!is_array($value)) {
-                $errors[$fieldKey] = $languageHelper->get('validation.fields.checkbox');
-            }
-            break;
-            
         case 'radio':
             if (!is_string($value)) {
                 $errors[$fieldKey] = $languageHelper->get('validation.fields.radio');

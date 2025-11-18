@@ -59,9 +59,9 @@ $attributes = FieldHelper::prepareFieldAttributes(
     'options' => $attributes->options ?? []
   ]); ?>
 
-  <?php if (isset($fieldConfig['help'][$languageCode])): ?>
+  <?php if (isset($fieldConfig['help'])): ?>
     <p class="<?= FieldHelper::getFieldClassName('help', $config) ?>">
-      <?= $fieldConfig['help'][$languageCode] ?>
+      <?= LanguageHelper::getTranslatedValue($fieldConfig['help'], $languageCode) ?>
     </p>
   <?php endif; ?>
 

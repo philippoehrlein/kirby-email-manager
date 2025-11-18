@@ -1,0 +1,58 @@
+type: managed-template
+name: Booking Request Form
+
+emails:
+  mail:
+    subject: New booking request
+    sender: Reservations Team
+  reply:
+    subject: Thank you for your booking request
+    sender: Reservations Team
+
+fields:
+  name:
+    type: text
+    label: Full name
+    required: true
+    placeholder: Jane Doe
+    minlength: 2
+    maxlength: 100
+    username: true
+
+  email:
+    type: email
+    label: Email address
+    required: true
+    placeholder: jane.doe@example.com
+    validate: email
+    reply: true
+    replyto: true
+
+  phone:
+    type: tel
+    label: Phone number
+    required: false
+    placeholder: "+1 415 555 0134"
+    validate: phone
+
+  stay:
+    type: date-range
+    label: Stay (arrival – departure)
+    required: true
+    aria: Select the stay dates
+    validate: date
+    min: today
+
+  message:
+    type: textarea
+    label: Message
+    required: false
+    placeholder: Tell us about your trip, special requests, or questions…
+    rows: 6
+    resizable: vertical
+
+buttons:
+  send:
+    label: Send request
+  reset:
+    show: false

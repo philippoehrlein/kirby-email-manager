@@ -259,7 +259,11 @@ class EmailHelper {
      * @return string The reply sender.
      */
     public static function getReplyFormSender($templateConfig) {
-        return self::initLanguageHelper($templateConfig)->get('emails.reply.sender');
+        $replySender = self::initLanguageHelper($templateConfig)->get('emails.reply.sender');
+        if ($replySender === 'emails.reply.sender') {
+            return kirby()->site()->title()->value();
+        }
+        return $replySender;
     }
 
     /**

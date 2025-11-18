@@ -1,0 +1,58 @@
+type: managed-template
+name: Job Application Form
+
+emails:
+  mail:
+    subject: New Job Application Submission
+    sender: HR Team
+  reply:
+    subject: Thank you for your application
+    sender: HR Team
+
+fields:
+  name:
+    type: text
+    label: Full Name
+    required: true
+    placeholder: Jane Doe
+    minlength: 3
+    username: true
+
+  email:
+    type: email
+    label: Email Address
+    required: true
+    width: 1/2
+    placeholder: jane.doe@example.com
+    reply: true
+    replyto: true
+
+  phone:
+    type: tel
+    label: Phone Number
+    required: true
+    width: 1/2
+    placeholder: +1 555 123 4567
+
+  resume:
+    type: file
+    label: Resume (PDF)
+    required: true
+    max: 1
+    maxsize: 5242880
+    extension:
+      - pdf
+    error: Please upload a single PDF file up to 5 MB.
+
+  motivation:
+    type: textarea
+    label: Motivation
+    required: true
+    placeholder: Briefly explain why you are a great fit for this role.
+    rows: 8
+    resizable: vertical
+    minlength: 50
+
+buttons:
+  send:
+    label: Submit Application

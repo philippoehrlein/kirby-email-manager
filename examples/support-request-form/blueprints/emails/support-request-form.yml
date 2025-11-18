@@ -1,0 +1,65 @@
+type: managed-template
+name: Support Request Form
+
+emails:
+  mail:
+    subject: New support request
+    sender: Support Form
+  reply:
+    subject: Your support request
+    sender: Support Team
+
+fields:
+  name:
+    type: text
+    label: Name
+    required: true
+    placeholder: Your full name
+    minlength: 2
+    maxlength: 120
+    username: true
+
+  email:
+    type: email
+    label: Email
+    required: true
+    placeholder: you@example.com
+    validate: email
+    replyto: true
+    reply: true
+
+  category:
+    type: select
+    label: Issue category
+    required: true
+    options:
+      account: Account
+      billing: Billing
+      technical: Technical issue
+      bug: Bug report
+      featurerequest: Feature request
+      other: Other
+
+  message:
+    type: textarea
+    label: Message
+    required: true
+    placeholder: Describe the problem, steps to reproduce, and expected behavior
+    rows: 8
+    resizable: vertical
+    minlength: 20
+
+  attachment:
+    type: file
+    label: Attachment
+    required: false
+    max: 1
+    maxsize: 5242880
+    extension:
+      - pdf
+      - jpeg
+      - png
+
+buttons:
+  send:
+    label: Send

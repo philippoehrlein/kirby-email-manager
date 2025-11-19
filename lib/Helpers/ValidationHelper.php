@@ -127,7 +127,7 @@ class ValidationHelper
 
       case 'tel':
         $telValue = $data[$fieldKey] ?? null;
-        
+
         if (!empty($telValue)) {
           $pattern = $fieldConfig['pattern'] ?? '^[0-9+\-\s()]{8,}$';
           if (!preg_match("/$pattern/", $telValue)) {
@@ -358,6 +358,12 @@ class ValidationHelper
     return $errors;
   }
 
+  /**
+   * Validates if a date is valid.
+   *
+   * @param string $date The date to validate.
+   * @return bool True if the date is valid, false otherwise.
+   */
   private static function isValidDate($date): bool
   {
     if (!is_string($date)) {
@@ -370,9 +376,23 @@ class ValidationHelper
     return $d && $d->format($dateFormat) === $date;
   }
 
+  /**
+   * Validates the data type of a field.
+   *
+   * @param string $fieldKey The key of the field to validate.
+   * @param mixed $value The value of the field to validate.
+   * @param string $type The type of the field to validate.
+   * @param LanguageHelper $languageHelper The language helper instance.
+   * @return array The validation errors.
+   */
   private static function validateDataType(string $fieldKey, $value, string $type, LanguageHelper $languageHelper): array 
   {
     $errors = [];
+    
+    // Skip validation for empty values
+    if (empty($value)) {
+        return $errors;
+    }
     
     switch($type) {
         case 'email':

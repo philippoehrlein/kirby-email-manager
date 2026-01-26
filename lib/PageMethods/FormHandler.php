@@ -15,6 +15,7 @@ use KirbyEmailManager\Helpers\SecurityHelper;
 use KirbyEmailManager\Helpers\WebhookHelper;
 use KirbyEmailManager\Helpers\RateLimitHelper;
 use KirbyEmailManager\Helpers\AttachmentHelper;
+use KirbyEmailManager\Helpers\BlacklistHelper;
 
 /**
  * FormHandler class provides methods to handle form submissions.
@@ -183,6 +184,17 @@ class FormHandler
             // Clean form data
             $data = SecurityHelper::sanitizeAndValidateFormData($data);
 
+            // Blacklist check (silent rejection like honeypot)
+            $blacklistResult = BlacklistHelper::check($data);
+            if ($blacklistResult['blocked']) {
+                WebhookHelper::trigger('form.blocked', [
+                    'reason' => 'blacklist',
+                    'matched' => $blacklistResult['matched'],
+                    'data' => $data
+                ], $this->templateConfig);
+                go($this->page->url());
+            }
+
             // Process file uploads early to get validation errors
             $uploads = $this->kirby->request()->files()->toArray();
             $uploadResult = AttachmentHelper::processUploads($uploads, $this->templateConfig, $this->languageCode);
@@ -238,6 +250,24 @@ class FormHandler
                 $errors = [];
                 $emailContent = [];
 
+                // Validate topic field if send_to_more is enabled
+                if ($this->contentWrapper->send_to_more()->toBool() && isset($data['topic'])) {
+                    $allowedTopics = [];
+                    foreach ($this->contentWrapper->send_to_structure()->toStructure() as $item) {
+                        $allowedTopics[] = $item->topic()->value();
+                    }
+                    
+                    if (!in_array($data['topic'], $allowedTopics, true)) {
+                        return [
+                            'alert' => [
+                                'type' => 'error',
+                                'message' => $this->languageHelper->get('validation.fields.option')
+                            ],
+                            'data' => $data
+                        ];
+                    }
+                }
+
                 if(isset($data['topic'])) {
                     $subject = $this->languageHelper->get('emails.subject.topic', ['topic' => $data['topic']]);
                 } else {
@@ -287,26 +317,6 @@ class FormHandler
                     $alert['errors'] = $errors;
                 } else {
                     try {
-                        // Jetzt Attachments aus aktuellen Uploads sicher verschieben und sammeln
-                        $uploads = $this->kirby->request()->files()->toArray();
-                        foreach ($uploads as $field => $uploadField) {
-                            if (!is_array($uploadField)) {
-                                continue;
-                            }
-                            $fileList = isset($uploadField['name']) && isset($uploadField['tmp_name'])
-                                ? [$uploadField]
-                                : array_values($uploadField);
-                            foreach ($fileList as $upload) {
-                                if (is_array($upload) && isset($upload['error']) && $upload['error'] === UPLOAD_ERR_OK) {
-                                    $originalName = SecurityHelper::sanitizeFilename($upload['name']);
-                                    $targetPath = $upload['tmp_name'] . '_' . $originalName;
-                                    if (move_uploaded_file($upload['tmp_name'], $targetPath)) {
-                                        $attachments[] = $targetPath;
-                                    }
-                                }
-                            }
-                        }
-
                         EmailHelper::sendEmail($this->kirby, $this->contentWrapper, $this->page, $this->templateConfig, $data, $this->languageCode, $attachments, $subject);
 
                         $alert['type'] = 'success';

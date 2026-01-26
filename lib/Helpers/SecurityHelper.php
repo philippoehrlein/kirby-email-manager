@@ -191,4 +191,28 @@ class SecurityHelper
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         return in_array($extension, array_map('strtolower', $allowedExtensions));
     }
+
+    /**
+     * Sanitizes email header values to prevent header injection attacks.
+     * 
+     * Removes all newline characters (CR, LF) and null bytes that could be used
+     * to inject additional email headers.
+     *
+     * @param string|null $value The header value to sanitize
+     * @return string The sanitized value
+     */
+    public static function sanitizeEmailHeader(?string $value): string
+    {
+        if ($value === null) {
+            return '';
+        }
+        
+        // Remove all newline characters and null bytes that could inject headers
+        $sanitized = str_replace(["\r", "\n", "\0", "\x0B"], '', $value);
+        
+        // Trim whitespace
+        $sanitized = trim($sanitized);
+        
+        return $sanitized;
+    }
 }

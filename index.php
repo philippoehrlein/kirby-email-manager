@@ -18,12 +18,9 @@ $plugin = [
   'options' => require PathHelper::configDir() . 'main.php',
   'translations' => TranslationHelper::loadTranslations(PathHelper::translationDir()),
   'hooks' => require PathHelper::configDir() . 'hooks.php',
-  'options' => [
-      'cache.ip' => true
-  ],
   'areas' => require PathHelper::configDir() . 'areas.php',
   'sections' => require PathHelper::configDir() . 'sections.php',
-  'version' => '0.9.2-beta'
+  'version' => '1.0.0'
 ];
 
 

@@ -123,7 +123,7 @@ class LicenseManager
             }
         }
 
-        // Signatur-Validierung mit RSA
+        // Signatur validation with RSA
         $signatureValid = $this->validateSignature();
         if (!$signatureValid) {
             return false;

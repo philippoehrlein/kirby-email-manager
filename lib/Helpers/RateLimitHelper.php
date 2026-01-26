@@ -31,11 +31,11 @@ class RateLimitHelper
         }
         
         // Get salt with fallback
-        $salt = kirby()->option('philippoehrlein/kirby-email-manager.ip.salt', '');
-        if (empty($salt)) {
-            // Generate a random salt as fallback
-            $salt = bin2hex(random_bytes(16));
-        }
+        // For maximum security, set a custom salt in your config:
+        $salt = kirby()->option(
+            'philippoehrlein/kirby-email-manager.ip.salt', 
+            'kem-default-salt-v1-change-in-production'
+        );
         
         $ipHash = hash('sha256', $ip . $salt);
         

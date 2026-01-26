@@ -164,8 +164,10 @@ class EmailHelper {
         
         // Check if send_to_more is enabled
         if ($contentWrapper->send_to_more()->toBool() && isset($data['topic'])) {
+            // Sanitize topic to prevent email header injection
+            $topic = SecurityHelper::sanitizeEmailHeader($data['topic']);
             // Subject with topic
-            $subject = str_replace(':topic', $data['topic'], $languageHelper->get('emails.mail.subject'));
+            $subject = str_replace(':topic', $topic, $languageHelper->get('emails.mail.subject'));
         } else {
             // Standard subject
             $subject = $languageHelper->get('emails.mail.subject');
@@ -190,7 +192,8 @@ class EmailHelper {
                 $replyToEmail = $data[$fieldKey];
             }
             if (isset($fieldConfig['username']) && $fieldConfig['username'] === true && !empty($data[$fieldKey])) {
-                $userName = $data[$fieldKey];
+                // Sanitize username to prevent email header injection via display name
+                $userName = SecurityHelper::sanitizeEmailHeader($data[$fieldKey]);
             }
         }
 

@@ -135,7 +135,11 @@ class SecurityHelperTest extends TestCase
             'null_email' => [null, false],
             'sql_injection' => ["' OR '1'='1", false],
             'multiple_at' => ['test@@example.com', false],
-            'special_chars' => ['test+filter@example.com', true]
+            'special_chars' => ['test+filter@example.com', true],
+            'carriage_return' => ['test\r@example.com', false],
+            'newline' => ['test\n@example.com', false],
+            'null_byte' => ['test\0@example.com', false],
+            'vertical_tab' => ['test\x0B@example.com', false]
         ];
     }
 

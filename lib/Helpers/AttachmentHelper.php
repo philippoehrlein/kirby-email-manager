@@ -91,7 +91,7 @@ class AttachmentHelper
             $originalName = SecurityHelper::sanitizeFilename($file['name']);
             $targetPath = $baseDir . '/' . $originalName; // Originalname beibehalten
 
-            // Bei Namenskollisionen eindeutigen Suffix hinzufügen
+            // Add unique suffix for name collisions
             if (file_exists($targetPath)) {
                 $pi = pathinfo($originalName);
                 $base = $pi['filename'] ?? 'file';
@@ -121,7 +121,7 @@ class AttachmentHelper
                 $dirs[dirname($path)] = true;
             }
         }
-        // Versuche die erstellten Temp-Ordner zu entfernen (falls leer)
+        // Try to remove created temp directories (if empty)
         foreach (array_keys($dirs) as $dir) {
             @rmdir($dir);
         }

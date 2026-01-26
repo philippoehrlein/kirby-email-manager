@@ -5,8 +5,18 @@ use Kirby\Plugin\License;
 use Kirby\Plugin\LicenseStatus;
 use Kirby\Plugin\Plugin;
 
+/**
+ * EmailManagerLicense class for managing the license
+ * @author Philipp Oehrlein
+ * @version 1.0.0
+ */
+
 class EmailManagerLicense extends License
 {
+  /**
+   * Constructor for EmailManagerLicense
+   * @param Plugin $plugin The plugin instance
+   */
   public function __construct(
     protected Plugin $plugin
   ) {

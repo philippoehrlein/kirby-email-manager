@@ -20,7 +20,7 @@ $plugin = [
   'hooks' => require PathHelper::configDir() . 'hooks.php',
   'areas' => require PathHelper::configDir() . 'areas.php',
   'sections' => require PathHelper::configDir() . 'sections.php',
-  'version' => '1.0.0'
+  'version' => '1.0.1'
 ];
 
 

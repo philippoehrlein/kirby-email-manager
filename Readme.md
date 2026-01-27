@@ -22,6 +22,22 @@ The **Email Manager** is a powerful plugin for [Kirby CMS](https://getkirby.com/
 - **Multi Email:** Route to different recipients based on user input.
 
 
+## Installation
+
+### Composer Installation (recommended)
+
+Run the following command in your site's root folder:
+
+```bash
+composer require philippoehrlein/kirby-email-manager
+```
+
+### Manual Installation
+
+1. Download and extract the plugin
+2. Copy the `kirby-email-manager` folder to `/site/plugins/`
+
+
 ## Quick Start
 ### 1. Configure Kirby for Email Sending
 

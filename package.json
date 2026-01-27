@@ -8,12 +8,12 @@
     "issues": "https://github.com/philippoehrlein/kirby-email-manager/issues",
     "source": "https://github.com/philippoehrlein/kirby-email-manager",
     "docs": "https://email-manager.philippoehrlein.de",
-    "email": "github@philippoehrlein.com"
+    "email": "github@philippoehrlein.de"
   },
   "authors": [
     {
       "name": "Philipp Oehrlein",
-      "email": "github@philippoehrlein.com"
+      "email": "github@philippoehrlein.de"
     }
   ],
   "scripts": {

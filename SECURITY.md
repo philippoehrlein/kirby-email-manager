@@ -11,7 +11,7 @@ The following versions of the Kirby Email Manager plugin are currently supported
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Kirby Email Manager, please report it responsibly by sending an email to [github@philippoehrlein.com](mailto:github@philippoehrlein.com).
+If you discover a security vulnerability in Kirby Email Manager, please report it responsibly by sending an email to [github@philippoehrlein.de](mailto:github@philippoehrlein.de).
 
 **I take security seriously and will:**
 - Acknowledge your report within 48 hours

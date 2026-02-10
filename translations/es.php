@@ -43,6 +43,9 @@ return [
     'philippoehrlein.kirby-email-manager.panel.status.gdpr' => 'Casilla GDPR',
     'philippoehrlein.kirby-email-manager.panel.help.multiple_recipients' => 'Al proporcionar mensajes de éxito individuales para cada dirección de correo, puedes abordar diferentes escenarios. Por ejemplo, puedes comunicar tiempos de respuesta más largos durante altas cargas de trabajo o proporcionar información específica para ciertos departamentos.',
 
+    // === E-Mail Messages ===
+    'philippoehrlein.kirby-email-manager.email.default.message' => 'Nuevo correo electrónico desde el formulario de contacto.',
+    'philippoehrlein.kirby-email-manager.email.default.reply_message' => 'Gracias por tu correo electrónico.',
      // === ACTIVATE SECTION ===
      'philippoehrlein.kirby-email-manager.activate-section.title' => 'Compra una licencia y activa tu Gestor de correos.',
      'philippoehrlein.kirby-email-manager.activate-section.button.buy' => 'Comprar',

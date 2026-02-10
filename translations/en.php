@@ -43,6 +43,9 @@ return [
     'philippoehrlein.kirby-email-manager.panel.status.gdpr' => 'GDPR Checkbox',
     'philippoehrlein.kirby-email-manager.panel.help.multiple_recipients' => 'By providing individual success messages for each email address, you can address different scenarios. For example, you can communicate longer response times during high workloads or provide specific information for certain departments.',
 
+    // === E-Mail Messages ===
+    'philippoehrlein.kirby-email-manager.email.default.message' => 'New email from the contact form.',
+    'philippoehrlein.kirby-email-manager.email.default.reply_message' => 'Thank you for your email.',
      // === ACTIVATE SECTION ===
      'philippoehrlein.kirby-email-manager.activate-section.title' => 'Buy a license and activate your Email Manager.',
      'philippoehrlein.kirby-email-manager.activate-section.button.buy' => 'Buy',

@@ -34,6 +34,12 @@ function getSnippets(): array
             }
             $key = 'email-manager/' . str_replace('.php', '', $relativePath);
             $snippets[$key] = $file->getPathname();
+
+            // Emails-Snippets zusätzlich unter kurzem Namen registrieren (für snippet('emails/xxx') in Templates)
+            if (strpos($relativePath, 'emails/') === 0) {
+                $shortKey = str_replace('.php', '', $relativePath);
+                $snippets[$shortKey] = $file->getPathname();
+            }
         }
     }
 

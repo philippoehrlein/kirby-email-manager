@@ -43,6 +43,10 @@ return [
     'philippoehrlein.kirby-email-manager.panel.status.gdpr' => 'Datenschutz Checkbox',
     'philippoehrlein.kirby-email-manager.panel.help.multiple_recipients' => 'Durch individuelle Erfolgsmeldungen pro E-Mail-Adresse können Sie auf verschiedene Situationen eingehen. Zum Beispiel können Sie bei einer hohen Auslastung längere Antwortzeiten kommunizieren oder spezifische Informationen für bestimmte Abteilungen bereitstellen.',
 
+    // === E-Mail Messages ===
+    'philippoehrlein.kirby-email-manager.email.default.message' => 'Neue E-Mail über das Kontaktformular.',
+    'philippoehrlein.kirby-email-manager.email.default.reply_message' => 'Vielen Dank für Ihre E-Mail.',
+
       // === ACTIVATE SECTION ===
     'philippoehrlein.kirby-email-manager.activate-section.title' => 'Kaufe eine Lizenz und aktiviere deinen Email Manager.',
     'philippoehrlein.kirby-email-manager.activate-section.button.buy' => 'Kaufen',

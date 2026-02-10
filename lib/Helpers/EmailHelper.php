@@ -52,6 +52,8 @@ class EmailHelper {
         $replyToEmail = self::getReplyToEmail($templateConfig, $data);
         $formSenderName = self::getFormSender($templateConfig);
         $formSenderEmail = self::createNoReplyEmail($kirby);
+        $hasReplyField = self::hasReplyField($templateConfig);
+        $templates = self::getTemplates($selectedTemplate, $kirby, $hasReplyField);
 
         // Get footer content if available
         $footerContent = null;
@@ -67,7 +69,7 @@ class EmailHelper {
 
         // Send main email
         $emailConfig = [
-            'template' => $selectedTemplate . '/mail',
+            'template' => $templates['mail'],
             'from'     => [$formSenderEmail => $formSenderName],
             'to'       => $to,
             'subject'  => $subject,
@@ -91,25 +93,23 @@ class EmailHelper {
         }
         
         // Check if reply should be sent
-        $replyPath = $kirby->root('templates') . '/emails/' . $selectedTemplate . '/reply.text.php';
+        if (!$templates['isDefault']) {
+            $fileExists = file_exists($kirby->root('templates') . '/emails/' . $selectedTemplate . '/reply.text.php');
+        } else {
+            $fileExists = true;
+        }
+
         $replyEmail = self::getReplyEmail($templateConfig, $data);
 
-        $hasReplyField = false;
-        foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
-            if ($fieldConfig['type'] === 'email' && isset($fieldConfig['reply']) && $fieldConfig['reply'] === true) {
-                $hasReplyField = true;
-                break;
-            }
-        }
         
-        if ($replyEmail !== null && file_exists($replyPath) && $hasReplyField) {
+        if ($replyEmail !== null && $fileExists && $hasReplyField) {
             $subject = self::getReplySubject($templateConfig);
             $replyFormSenderName = self::getReplyFormSender($templateConfig);
             $emailTemplate->addSubject($subject);
 
             try {
                 $kirby->email([
-                    'template' => $selectedTemplate . '/reply',
+                    'template' => $templates['reply'],
                     'from'     => [$formSenderEmail => $replyFormSenderName],
                     'to'       => $replyEmail,
                     'subject'  => $subject,
@@ -283,5 +283,48 @@ class EmailHelper {
             }
         }
         return null;
+    }
+
+    /**
+     * Checks if the template has a reply field.
+     *
+     * @param array $templateConfig The configuration for the email template.
+     * @return bool True if the template has a reply field, false otherwise.
+     */
+    public static function hasReplyField($templateConfig) {
+        $hasReplyField = false;
+        foreach ($templateConfig['fields'] as $fieldKey => $fieldConfig) {
+            if ($fieldConfig['type'] === 'email' && isset($fieldConfig['reply']) && $fieldConfig['reply'] === true) {
+                $hasReplyField = true;
+                break;
+            }
+        }
+        return $hasReplyField;
+    }
+
+    /**
+     * Retrieves the templates for the given template ID.
+     *
+     * @param string $templateId The template ID.
+     * @param \Kirby\Cms\App $kirby The Kirby application instance.
+     * @return array The templates.
+     */
+    public static function getTemplates($templateId, $kirby, $hasReplyField) {
+        $mailPath = $templateId . '/mail';
+        $replyPath = $templateId . '/reply';
+        
+        if (file_exists($kirby->root('templates') . '/emails/' . $mailPath . '.text.php')) {
+            return [
+                'mail' => $mailPath,
+                'reply' => $hasReplyField ? $replyPath : null,
+                'isDefault' => false
+            ];
+        }
+
+        return [
+            'mail' => 'default/mail',
+            'reply' => $hasReplyField ? 'default/reply' : null,
+            'isDefault' => true
+        ];
     }
 }

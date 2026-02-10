@@ -78,44 +78,6 @@ class FormHandler
         // Add template ID to config
         $this->templateConfig['id'] = $selectedTemplateId;
         
-        // Validate template paths
-        $this->validateTemplatePaths($selectedTemplateId);
-    }
-
-    /**
-     * Validates that all required template files exist
-     */
-    protected function validateTemplatePaths($templateId)
-    {
-        $templateBase = $this->kirby->root('templates') . '/emails/' . $templateId;
-        
-        // Required text template
-        $requiredFiles = [
-            'mail.text.php'
-        ];
-
-        // Optional templates
-        $optionalFiles = [
-            'mail.html.php',
-            'reply.text.php',
-            'reply.html.php'
-        ];
-
-        // Check required files
-        foreach ($requiredFiles as $file) {
-            $path = $templateBase . '/' . $file;
-            if (!file_exists($path)) {
-                throw new Exception("Required template file not found: {$path}");
-            }
-        }
-
-        // Log warning for missing optional templates
-        foreach ($optionalFiles as $file) {
-            $path = $templateBase . '/' . $file;
-            if (!file_exists($path)) {
-                error_log("Warning: Optional template not found: {$path}");
-            }
-        }
     }
 
     /**

@@ -22,3 +22,6 @@
 # Test Coverage
 /tests/coverage/
 .phpunit.result.cache
+
+# Intern
+ideas.md

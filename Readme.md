@@ -1,7 +1,7 @@
 # Kirby Email Manager
 
 ![License](https://img.shields.io/badge/License-Proprietary-green)
-![Version](https://img.shields.io/badge/Version-1.0.1-blue)
+![Version](https://img.shields.io/badge/Version-1.1.0-blue)
 
 The **Email Manager** is a powerful plugin for [Kirby CMS](https://getkirby.com/) that simplifies email form creation and management. Designed for developers, it ensures a seamless experience while giving CMS users the flexibility to adapt content dynamically.
 
@@ -100,8 +100,8 @@ fields:
     minlength: 10
 ```
 
-#### Email Template File
-Create `site/templates/emails/contact-form/mail.txt.php`:
+#### Email Template File (optional)
+If you don't create custom templates, the plugin uses built-in default templates (mail + reply). To customize, create `site/templates/emails/contact-form/mail.text.php`:
 
 ```php
 From: <?= $form->email() ?>

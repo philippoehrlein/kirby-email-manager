@@ -60,4 +60,14 @@ class PathHelper
     {
         return self::pluginDir() . 'snippets/';
     }
+
+    /**
+     * Retrieves the template directory.
+     * 
+     * @return string The template directory path.
+     */
+    public static function templateDir(): string
+    {
+        return self::pluginDir() . 'templates/';
+    }
 }

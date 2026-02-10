@@ -43,6 +43,9 @@ return [
     'philippoehrlein.kirby-email-manager.panel.status.gdpr' => 'Case RGPD',
     'philippoehrlein.kirby-email-manager.panel.help.multiple_recipients' => 'En fournissant des messages de succès individuels pour chaque adresse email, vous pouvez répondre à différents scénarios. Par exemple, vous pouvez communiquer des délais de réponse plus longs en période de forte charge ou fournir des informations spécifiques pour certains départements.',
 
+     // === E-Mail Messages ===
+     'philippoehrlein.kirby-email-manager.email.default.message' => 'Nouveau email depuis le formulaire de contact.',
+     'philippoehrlein.kirby-email-manager.email.default.reply_message' => 'Merci pour votre email.',
      // === ACTIVATE SECTION ===
      'philippoehrlein.kirby-email-manager.activate-section.title' => 'Achetez une licence et activez votre Gestionnaire d\'emails.',
      'philippoehrlein.kirby-email-manager.activate-section.button.buy' => 'Acheter',

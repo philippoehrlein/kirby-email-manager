@@ -2,20 +2,17 @@ label: philippoehrlein.kirby-email-manager.panel.legal.headline
 icon: document
 
 fields:
-  gdpr_checkbox:
-    label: philippoehrlein.kirby-email-manager.panel.gdpr.checkbox_label
-    type: toggle
-    default: false
-    help: philippoehrlein.kirby-email-manager.panel.gdpr.checkbox_help
 
-  gdpr_text:
-    label: philippoehrlein.kirby-email-manager.panel.gdpr.text_label
-    type: writer
-    required: true
+  kem_email_legal_form:
+    type: toggle
+    label: philippoehrlein.kirby-email-manager.panel.legal.use_form_label
+    text:
+      - philippoehrlein.kirby-email-manager.panel.legal.use_form_no
+      - philippoehrlein.kirby-email-manager.panel.legal.use_form_yes
+    default: false
+    help: philippoehrlein.kirby-email-manager.panel.legal.use_form_help
+
+  legal_fields:
+    extends: email-manager/legal-fields
     when:
-      gdpr_checkbox: true
-  
-  email_legal_footer:
-    label: philippoehrlein.kirby-email-manager.panel.legal.footer_label
-    type: writer
-    help: philippoehrlein.kirby-email-manager.panel.legal.footer_help
+      kem_email_legal_form: true

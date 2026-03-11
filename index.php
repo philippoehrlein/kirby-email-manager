@@ -13,6 +13,8 @@ $kirbyMajorVersion = intval(explode('.', $kirbyVersion)[0]);
 $plugin = [
   'api' =>  require PathHelper::configDir() . 'api.php',
   'blueprints' => require PathHelper::configDir() . 'blueprints.php',
+  'collections' => require PathHelper::configDir() . 'collections.php',
+  'fields' => require PathHelper::configDir() . 'fields.php',
   'pageMethods' => require PathHelper::configDir() . 'pageMethods.php',
   'snippets' => require PathHelper::configDir() . 'snippets.php',
   'options' => require PathHelper::configDir() . 'main.php',
@@ -21,7 +23,7 @@ $plugin = [
   'areas' => require PathHelper::configDir() . 'areas.php',
   'sections' => require PathHelper::configDir() . 'sections.php',
   'templates' => require PathHelper::configDir() . 'templates.php',
-  'version' => '1.1.0'
+  'version' => '1.2.0'
 ];
 
 

@@ -55,14 +55,8 @@ class EmailHelper {
         $hasReplyField = self::hasReplyField($templateConfig);
         $templates = self::getTemplates($selectedTemplate, $kirby, $hasReplyField);
 
-        // Get footer content if available
-        $footerContent = null;
-        if ($contentWrapper->email_legal_footer()->notEmpty()) {
-            $footer = $contentWrapper->email_legal_footer();
-            if (!empty($footer)) {
-                $footerContent = UrlHelper::convertLinksToAbsolute($footer, $kirby);
-            }
-        }
+        // Get footer content (lokal oder global)
+        $footerContent = LegalHelper::getEmailFooter($contentWrapper, $languageCode, $kirby);
 
         $emailTemplate = new EmailTemplate($page, $data, $footerContent, $selectedTemplate, $templateConfig);
         $emailTemplate->addSubject($subject);

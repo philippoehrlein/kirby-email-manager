@@ -22,8 +22,10 @@ class BlacklistHelper
      */
     public static function check(array $data): array
     {
-        $blacklist = kirby()->option('philippoehrlein.kirby-email-manager.blacklist', []);
-        return self::checkAgainstList($data, $blacklist);
+        $siteBlacklist = site()->kem_blacklist()->split() ?? [];
+        $optionBlacklist = kirby()->option('philippoehrlein.kirby-email-manager.blacklist', []);
+        $blacklist = array_merge($siteBlacklist, $optionBlacklist);
+        return self::checkAgainstList($data, array_values(array_unique($blacklist)));
     }
 
     /**

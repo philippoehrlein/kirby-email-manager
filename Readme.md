@@ -1,7 +1,7 @@
 # Kirby Email Manager
 
 ![License](https://img.shields.io/badge/License-Proprietary-green)
-![Version](https://img.shields.io/badge/Version-1.1.0-blue)
+![Version](https://img.shields.io/badge/Version-1.2.0-blue)
 
 The **Email Manager** is a powerful plugin for [Kirby CMS](https://getkirby.com/) that simplifies email form creation and management. Designed for developers, it ensures a seamless experience while giving CMS users the flexibility to adapt content dynamically.
 
@@ -18,7 +18,7 @@ The **Email Manager** is a powerful plugin for [Kirby CMS](https://getkirby.com/
 - **Secure:** CSRF protection, validation, optional rate limiting.
 - **Spam Protection:** Filters block bots and unwanted submissions.
 - **Easy to Use:** Use as blocks or tabs via blueprints; manage in the Panel.
-- **Stay Compliant:** Maintain texts and policies directly in the Panel.
+- **Stay Compliant:** Maintain global and per-form legal texts and policies directly in the Panel.
 - **Multi Email:** Route to different recipients based on user input.
 
 

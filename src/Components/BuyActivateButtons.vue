@@ -15,7 +15,7 @@ import { onMounted, ref } from 'vue';
 
 const emit = defineEmits(['activated']);
 const panel = usePanel();
-const activated = ref<boolean | null>(null); 
+const activated = ref<boolean>(false); 
 
 const buyurl = 'https://email-manager.philippoehrlein.de#buy';
 

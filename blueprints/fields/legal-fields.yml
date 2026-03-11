@@ -1,0 +1,19 @@
+type: group
+fields:
+  gdpr_checkbox:
+    label: philippoehrlein.kirby-email-manager.panel.gdpr.checkbox_label
+    type: toggle
+    default: false
+    help: philippoehrlein.kirby-email-manager.panel.gdpr.checkbox_help
+
+  gdpr_text:
+    label: philippoehrlein.kirby-email-manager.panel.gdpr.text_label
+    type: writer
+    required: true
+    when:
+      gdpr_checkbox: true
+
+  email_legal_footer:
+    label: philippoehrlein.kirby-email-manager.panel.legal.footer_label
+    type: writer
+    help: philippoehrlein.kirby-email-manager.panel.legal.footer_help

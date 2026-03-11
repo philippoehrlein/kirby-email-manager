@@ -41,11 +41,31 @@ return [
     'philippoehrlein.kirby-email-manager.panel.status.recipients' => 'Correo del destinatario',
     'philippoehrlein.kirby-email-manager.panel.status.success_message' => 'Mensaje de éxito',
     'philippoehrlein.kirby-email-manager.panel.status.gdpr' => 'Casilla GDPR',
+    'philippoehrlein.kirby-email-manager.panel.status.local_legal_forms' => 'Formulario tiene información legal propia',
     'philippoehrlein.kirby-email-manager.panel.help.multiple_recipients' => 'Al proporcionar mensajes de éxito individuales para cada dirección de correo, puedes abordar diferentes escenarios. Por ejemplo, puedes comunicar tiempos de respuesta más largos durante altas cargas de trabajo o proporcionar información específica para ciertos departamentos.',
 
     // === E-Mail Messages ===
     'philippoehrlein.kirby-email-manager.email.default.message' => 'Nuevo correo electrónico desde el formulario de contacto.',
     'philippoehrlein.kirby-email-manager.email.default.reply_message' => 'Gracias por tu correo electrónico.',
+
+    // === GLOBAL LEGAL SECTION ===
+    'philippoehrlein.kirby-email-manager.panel.legal.global_legal_info_text' => 'Información predeterminada para todos los formularios. Cada formulario puede personalizar esta configuración individualmente.',
+    'philippoehrlein.kirby-email-manager.panel.legal.use_form_label' => '¿Usar información legal específica para este formulario?',
+    'philippoehrlein.kirby-email-manager.panel.legal.use_form_no' => 'No, usar información legal general',
+    'philippoehrlein.kirby-email-manager.panel.legal.use_form_yes' => 'Sí, usar información legal específica para este formulario',
+    'philippoehrlein.kirby-email-manager.panel.legal.use_form_help' => 'Si "No", se usa la información legal global. Si "Sí", introducir la información legal en los campos de abajo para este formulario.',
+    'philippoehrlein.kirby-email-manager.panel.legal.local_forms_label' => 'Formularios legales locales',
+    'philippoehrlein.kirby-email-manager.panel.form_overrides.title' => 'Formularios',
+    'philippoehrlein.kirby-email-manager.panel.form_overrides.label' => 'Formularios con configuraciones legales personalizadas',
+    'philippoehrlein.kirby-email-manager.panel.form_overrides.empty' => 'Todos los formularios utilizan las configuraciones predeterminadas.',
+
+     // === GLOBAL SPAM SECTION ===
+     'philippoehrlein.kirby-email-manager.panel.spam.headline' => 'Protección contra spam',
+     'philippoehrlein.kirby-email-manager.panel.spam.notice_label' => 'Aviso',
+     'philippoehrlein.kirby-email-manager.panel.spam.notice' => 'La protección contra spam <strong>no informa</strong> al remitente sobre el bloqueo. Por favor, use esta función <strong>con cuidado.</strong>',
+     'philippoehrlein.kirby-email-manager.panel.spam.blacklist_label' => 'Lista negra',
+     'philippoehrlein.kirby-email-manager.panel.spam.blacklist_help' => 'Palabras que activarán la protección contra spam.',
+
      // === ACTIVATE SECTION ===
      'philippoehrlein.kirby-email-manager.activate-section.title' => 'Compra una licencia y activa tu Gestor de correos.',
      'philippoehrlein.kirby-email-manager.activate-section.button.buy' => 'Comprar',

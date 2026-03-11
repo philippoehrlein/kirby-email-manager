@@ -1,0 +1,28 @@
+type: fields
+fields:
+  kem_email_legal_headline:
+    label: philippoehrlein.kirby-email-manager.panel.legal.headline
+    type: headline
+
+  kem_info:
+    type: info
+    label: info
+    text: philippoehrlein.kirby-email-manager.panel.legal.global_legal_info_text
+
+  kem_gdpr_checkbox:
+    label: philippoehrlein.kirby-email-manager.panel.gdpr.checkbox_label
+    type: toggle
+    default: false
+    help: philippoehrlein.kirby-email-manager.panel.gdpr.checkbox_help
+
+  kem_gdpr_text:
+    label: philippoehrlein.kirby-email-manager.panel.gdpr.text_label
+    type: writer
+    required: true
+    when:
+      kem_gdpr_checkbox: true
+
+  kem_email_legal_footer:
+    label: philippoehrlein.kirby-email-manager.panel.legal.footer_label
+    type: writer
+    help: philippoehrlein.kirby-email-manager.panel.legal.footer_help

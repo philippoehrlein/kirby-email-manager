@@ -1,6 +1,7 @@
 import BuyActivateButtons from './Components/BuyActivateButtons.vue';
 import EmailManagerBlock from './Components/EmailManagerBlock.vue';
 import LicenseSection from './Components/LicenseSection.vue';
+import LocalForms from './Components/LocalForms.vue';
 
 window.panel.plugin('philippoehrlein/kirby-email-manager', {
   icons: {
@@ -10,7 +11,10 @@ window.panel.plugin('philippoehrlein/kirby-email-manager', {
     'email-manager': EmailManagerBlock
   },
   components: {
-    'buy-activate-buttons': BuyActivateButtons
+    'email-manager-buy-activate-buttons': BuyActivateButtons,
+  },
+  fields: {
+    'email-manager-local-forms': LocalForms
   },
   sections: {
     'email-manager-license': LicenseSection

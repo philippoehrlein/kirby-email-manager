@@ -22,8 +22,15 @@
         />
         {{ panel.t('philippoehrlein.kirby-email-manager.panel.status.gdpr') }}
       </li>
+      <li v-if="content.kem_email_legal_form">
+        <k-icon 
+          type="info" 
+          color="blue" 
+        />
+        {{ panel.t('philippoehrlein.kirby-email-manager.panel.status.local_legal_forms') }}
+      </li>
     </ul>
-    <buy-activate-buttons />
+    <email-manager-buy-activate-buttons />
   </div>
 </template>
 
@@ -54,6 +61,7 @@ interface EmailManagerContent {
   send_to: string;
   send_to_success_title: string;
   send_to_success_text: string;
+  kem_email_legal_form: boolean;
   gdpr_checkbox: boolean;
   gdpr_text: string;
   email_legal_footer: string;

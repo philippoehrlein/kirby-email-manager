@@ -3,6 +3,7 @@ use KirbyEmailManager\Helpers\FormHelper;
 use KirbyEmailManager\Helpers\SecurityHelper;
 use KirbyEmailManager\PageMethods\FormHandler;
 use KirbyEmailManager\Helpers\LanguageHelper;
+use KirbyEmailManager\Helpers\LegalHelper;
 
 // Form-Builder: Generates the form layout and structure
 
@@ -96,8 +97,8 @@ snippet('email-manager/styles/grid', ['config' => $config]);
   </div>
 
   <!-- GDPR Checkbox -->
-  <?php if ($contentWrapper->gdpr_checkbox()->toBool()): ?>
-    <?php $gdprText = $contentWrapper->gdpr_text()->kt()->permalinksToUrls(); ?>
+  <?php if (LegalHelper::getGDPRStatus($contentWrapper)): ?>
+    <?php $gdprText = LegalHelper::getGDPRText($contentWrapper); ?>
 
     <div class="<?= FormHelper::getClassName('field', $config, 'checkbox') ?>">
       <input type="checkbox" tabindex="0" class="<?= FormHelper::getClassName('input', $config, 'checkbox') ?>" id="gdpr" name="gdpr" <?= array_key_exists('gdpr', $data) ? 'checked' : '' ?> required>

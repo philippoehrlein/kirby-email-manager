@@ -1,0 +1,16 @@
+type: fields
+fields:
+  kem_spam_headline:
+    label: philippoehrlein.kirby-email-manager.panel.spam.headline
+    type: headline
+
+  kem_spam_notice:
+    type: info
+    label: philippoehrlein.kirby-email-manager.panel.spam.notice_label
+    text: philippoehrlein.kirby-email-manager.panel.spam.notice
+    theme: notice
+
+  kem_blacklist:
+    label: philippoehrlein.kirby-email-manager.panel.spam.blacklist_label
+    type: tags
+    help: philippoehrlein.kirby-email-manager.panel.spam.blacklist_help

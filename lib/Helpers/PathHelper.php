@@ -70,4 +70,24 @@ class PathHelper
     {
         return self::pluginDir() . 'templates/';
     }
+
+    /**
+     * Retrieves the controller directory.
+     * 
+     * @return string The controller directory path.
+     */
+    public static function controllerDir(): string
+    {
+        return self::pluginDir() . 'controllers/';
+    }
+
+    /**
+     * Retrieves the collection directory.
+     * 
+     * @return string The collection directory path.
+     */
+    public static function collectionDir(): string
+    {
+        return self::pluginDir() . 'collections/';
+    }
 }

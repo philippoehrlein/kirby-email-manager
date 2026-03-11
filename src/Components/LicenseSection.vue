@@ -4,7 +4,7 @@
       <k-icon type="key" color="pink-600" />
       <h1>{{ panel.t('philippoehrlein.kirby-email-manager.panel.license.headline') }}</h1>
     </div>
-    <buy-activate-buttons @activated="setActivated" />
+    <email-manager-buy-activate-buttons @activated="setActivated" />
   </div>
 </template>
 

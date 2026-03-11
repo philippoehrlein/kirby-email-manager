@@ -27,3 +27,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - **Email compatibility** – Default templates use inline CSS and wrapper div (better support in Outlook, Gmail, etc.)
+
+## [1.2.0] - 2026-03-11
+
+### Added
+- **Global legal settings** – Global panel section to manage default legal information for all forms.
+- **Per-form legal overrides** – Toggle to use either global or custom legal information for each form (`kem_email_legal_form` + `legal-fields`).
+- **Global spam / blacklist settings** – Global spam section with explanatory notice and configurable blacklist combining site-level entries and plugin options.
+- **Local forms overview** – New field `email-manager-local-forms` listing all forms that override the global legal settings.
+
+### Changed
+- **Legal / GDPR handling** – Centralized logic in `LegalHelper` for the GDPR checkbox and email footer, taking both global and local configuration into account.

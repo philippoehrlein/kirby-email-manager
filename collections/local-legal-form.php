@@ -1,7 +1,7 @@
 <?php
 
-return function ($site) {  
-  $currentLanguage = kirby()->language()->code();
+return function ($site) {
+  $currentLanguage = kirby()->languageCode();
 
   $pages = $site->index()->filter(function ($page) use ($currentLanguage) {
 

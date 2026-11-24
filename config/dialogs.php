@@ -1,5 +1,7 @@
 <?php
 
+use Kirby\Toolkit\HtmlString;
+
 return [
   [
     'pattern' => 'email-manager/license/activation',
@@ -18,10 +20,11 @@ return [
       $fields = [];
 
       // warning for local development
+      // Kirby 6 escapes plain strings in the Panel; mark trusted HTML explicitly
       if ($isLocal) {
         $fields['local-warning'] = [
           'type' => 'info',
-          'text' => t('philippoehrlein.kirby-email-manager.license-activation-dialog.local-warning'),
+          'text' => HtmlString::translate('philippoehrlein.kirby-email-manager.license-activation-dialog.local-warning'),
           'theme' => 'warning',
         ];
       }
@@ -32,7 +35,7 @@ return [
         'type' => 'text',
         'required' => true,
         'placeholder' => 'KEM-',
-        'help' => t('philippoehrlein.kirby-email-manager.license-activation-dialog.license.help'),
+        'help' => HtmlString::translate('philippoehrlein.kirby-email-manager.license-activation-dialog.license.help'),
       ];
 
       // email field

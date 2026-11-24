@@ -18,10 +18,8 @@ class LegalHelper
     public static function getEmailFooter($contentWrapper, string $languageCode, Kirby $kirby): ?string
     {
         if (self::usesIndividualLegal($contentWrapper)) {
-            $footerContent = $contentWrapper->email_legal_footer();
-            $footerContent = $footerContent->isNotEmpty()
-                ? $footerContent
-                : null;
+            $field = $contentWrapper->email_legal_footer();
+            $footerContent = $field->isNotEmpty() ? (string)$field : null;
         } else {
             $footerContent = self::getGlobalFooter($languageCode, $kirby);
         }

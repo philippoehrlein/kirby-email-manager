@@ -32,7 +32,7 @@ class ContentWrapper extends Content
         
         $this->page = $page;
         $content = $page->content()->toArray();
-        parent::__construct($content);
+        parent::__construct($content, $page);
         $this->blockContent = $blockContent;
     }
 

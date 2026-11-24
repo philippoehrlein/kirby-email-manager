@@ -1,13 +1,22 @@
 <template>
-  <div class="kem-local-forms-container">
+  <k-field
+    :help="help"
+    :input="false"
+    :label="label"
+    :name="name"
+    :type="type"
+    class="kem-local-forms-field"
+  >
     <k-headline class="kem-local-forms-headline">
       {{ panel.t('philippoehrlein.kirby-email-manager.panel.form_overrides.title') }}
     </k-headline>
-    <k-section :label="panel.t('philippoehrlein.kirby-email-manager.panel.form_overrides.label')">
-      <k-items v-if="collection.length > 0" :items="collection" />
-      <k-empty v-else :text="panel.t('philippoehrlein.kirby-email-manager.panel.form_overrides.empty')" icon="page" />
-    </k-section>
-  </div>
+    <k-items v-if="collection.length > 0" :items="collection" />
+    <k-empty
+      v-else
+      :text="panel.t('philippoehrlein.kirby-email-manager.panel.form_overrides.empty')"
+      icon="page"
+    />
+  </k-field>
 </template>
 
 <script setup lang="ts">
@@ -19,21 +28,28 @@ interface Icon {
   color: string;
 }
 
-interface Collection {
+interface CollectionItem {
   id: string;
   text: string;
   link: string;
   image: Icon;
 }
 
-defineProps<{
-  collection: Collection[];
-}>();
+withDefaults(defineProps<{
+  collection?: CollectionItem[];
+  help?: string;
+  label?: string;
+  name?: string;
+  type?: string;
+}>(), {
+  collection: () => [],
+});
+
 const panel = usePanel();
 </script>
 
 <style scoped>
-.kem-local-forms-container {
+.kem-local-forms-field {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-5);

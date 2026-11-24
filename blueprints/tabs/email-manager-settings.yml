@@ -7,6 +7,11 @@ columns:
   legal_content:
     width: 1/2
     sections:
+      license:
+        type: fields
+        fields:
+          kem_license:
+            type: email-manager-license
       legal: email-manager/legal-section-global
       local_forms:
         type: fields

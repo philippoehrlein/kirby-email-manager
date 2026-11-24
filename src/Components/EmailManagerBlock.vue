@@ -8,24 +8,34 @@
       }" 
     />
     <ul class="email-status-list">
-      <li v-for="(value, key) in statusItems" :key="key">
-        <k-icon 
-          :type="validationRules[key] ? 'check' : 'cancel'" 
-          :color="validationRules[key] ? 'positive' : 'negative'" 
+      <li
+        v-for="(value, key) in statusItems"
+        :key="key"
+        :data-theme="validationRules[key] ? 'positive' : 'negative'"
+      >
+        <k-icon
+          :type="validationRules[key] ? 'check' : 'cancel'"
+          class="email-status-icon"
         />
         {{ value }}
       </li>
-      <li v-if="content.gdpr_checkbox">
-        <k-icon 
-          :type="isGdprValid ? 'check' : 'cancel'" 
-          :color="isGdprValid ? 'positive' : 'negative'" 
+      <li
+        v-if="content.gdpr_checkbox"
+        :data-theme="isGdprValid ? 'positive' : 'negative'"
+      >
+        <k-icon
+          :type="isGdprValid ? 'check' : 'cancel'"
+          class="email-status-icon"
         />
         {{ panel.t('philippoehrlein.kirby-email-manager.panel.status.gdpr') }}
       </li>
-      <li v-if="content.kem_email_legal_form">
-        <k-icon 
-          type="info" 
-          color="blue" 
+      <li
+        v-if="content.kem_email_legal_form"
+        data-theme="info"
+      >
+        <k-icon
+          type="info"
+          class="email-status-icon"
         />
         {{ panel.t('philippoehrlein.kirby-email-manager.panel.status.local_legal_forms') }}
       </li>
@@ -35,7 +45,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, usePanel } from 'kirbyuse';
+import { usePanel } from 'kirbyuse';
+import { computed } from 'vue';
+
 
 // Types
 interface EmailTemplateOption {
@@ -144,10 +156,14 @@ const statusItems = computed<StatusItems>(() => ({
 
 .email-status-list li {
   display: flex;
-  color: var(--color-text-light);
+  color: var(--color-text-dimmed);
   flex-direction: row;
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-1) 0;
+}
+
+.email-status-icon {
+  color: light-dark(var(--theme-color-700), var(--theme-color-400));
 }
 </style>

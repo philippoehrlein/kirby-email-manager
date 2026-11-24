@@ -7,10 +7,10 @@ fields:
   email_templates:
     label: philippoehrlein.kirby-email-manager.panel.templates.label
     type: select
-    options: query
     required: true
-    query:
-      fetch: kirby.option('philippoehrlein.kirby-email-manager.templates')
+    options:
+      type: query
+      query: kirby.option('philippoehrlein.kirby-email-manager.templates')
       text: "{{ item.name }}"
       value: "{{ item.id }}"
 

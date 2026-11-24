@@ -5,17 +5,17 @@ fields:
   email_templates:
     label: philippoehrlein.kirby-email-manager.panel.templates.label
     type: select
-    options: query
     required: true
-    query:
-      fetch: kirby.option('philippoehrlein.kirby-email-manager.templates')
+    options:
+      type: query
+      query: kirby.option('philippoehrlein.kirby-email-manager.templates')
       text: "{{ item.name }}"
       value: "{{ item.id }}"
 
   send_to_more:
     type: toggle
     label: philippoehrlein.kirby-email-manager.panel.email.send_to_more_label
-    text: 
+    text:
       - philippoehrlein.kirby-email-manager.panel.email.send_to_one
       - philippoehrlein.kirby-email-manager.panel.email.send_to_many
 
@@ -32,7 +32,7 @@ fields:
     when:
       send_to_more: true
     columns:
-      topic: 
+      topic:
         width: 1/2
       email:
         width: 1/2

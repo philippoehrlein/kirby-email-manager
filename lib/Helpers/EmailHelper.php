@@ -48,7 +48,7 @@ class EmailHelper {
 
         $to = self::getToEmail($contentWrapper, $data);
         $subject = self::getEmailSubject($contentWrapper, $data, $templateConfig);
-        $selectedTemplate = $contentWrapper->email_templates();
+        $selectedTemplate = (string)$contentWrapper->email_templates()->value();
         $replyToEmail = self::getReplyToEmail($templateConfig, $data);
         $formSenderName = self::getFormSender($templateConfig);
         $formSenderEmail = self::createNoReplyEmail($kirby);
@@ -95,8 +95,7 @@ class EmailHelper {
 
         $replyEmail = self::getReplyEmail($templateConfig, $data);
 
-        
-        if ($replyEmail !== null && $fileExists && $hasReplyField) {
+        if ($replyEmail !== null && $fileExists && $hasReplyField && !empty($templates['reply'])) {
             $subject = self::getReplySubject($templateConfig);
             $replyFormSenderName = self::getReplyFormSender($templateConfig);
             $emailTemplate->addSubject($subject);
@@ -115,6 +114,7 @@ class EmailHelper {
                 ]);
             } catch (Exception $e) {
                 error_log('Error sending reply email: ' . $e->getMessage());
+                throw $e;
             }
         }
     }

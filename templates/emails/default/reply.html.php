@@ -7,6 +7,10 @@
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.5;">
       <p><?= t('philippoehrlein.kirby-email-manager.email.default.reply_message', 'Thank you for your email.') ?></p>
       <?php snippet('emails/data-html', ['form' => $form]) ?>
+      <?php if ($email->footer()->isNotEmpty()): ?>
+        <hr>
+        <?= $email->footer() ?>
+      <?php endif; ?>
     </div>
   </body>
 </html>

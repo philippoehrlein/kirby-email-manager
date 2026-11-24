@@ -180,6 +180,7 @@ class EmailTemplate
      */
     public function addSubject(string $subject): void
     {
-        $this->content()->subject()->value($subject);
+        // Kirby 6: Field::value() returns a clone and no longer mutates in place
+        $this->content->update(['subject' => $subject]);
     }
 }

@@ -2,6 +2,115 @@
 
 All notable changes of the PHPUnit 9.6 release series are documented in this file using the [Keep a CHANGELOG](https://keepachangelog.com/) principles.
 
+## [9.6.39] - 2026-11-13
+
+### Changed
+
+* Make PHAR build reproducible across filesystems (files are now added to the PHAR sorted by their path instead of in the order in which the filesystem lists them)
+
+### Removed
+
+* The library PHAR (`phpunit-library-X.Y.Z.phar`) is no longer built, it could not be loaded since PHPUnit 9.5.8
+
+## [9.6.38] - 2026-10-05
+
+### Changed
+
+* The Software Bill of Materials (SBOM) embedded in the PHAR now uses CycloneDX 1.7 and provides the NTIA minimum elements as well as the data fields that BSI TR-03183-2 (version 2.1.0) requires for logical and identified components, including component creators, original, distribution and effective licences, source code URIs, and the PHP runtime and its extensions as external components
+
+## [9.6.37] - 2026-09-23
+
+### Changed
+
+* Do not pass empty output of a test that was run in a separate process to `unserialize()` (which emits a warning for an empty string as of PHP 8.6)
+
+## [9.6.36] - 2026-08-11
+
+### Changed
+
+* Use `spl_object_id()` instead of `spl_object_hash()` (which will be deprecated in PHP 8.6)
+* Use the error suppression operator (`@`) when calling `DeepCopy\DeepCopy::copy()` because it uses `spl_object_hash()` (which will be deprecated in PHP 8.6)
+
+## [9.6.35] - 2026-07-06
+
+### Changed
+
+* [#6797](https://github.com/sebastianbergmann/phpunit/issues/6797): Adapt code generated for test double of interface with constructor for PHP 8.6
+
+## [9.6.34] - 2026-01-27
+
+### Fixed
+
+* Regression introduced in PHPUnit 9.6.33
+
+## [9.6.33] - 2026-01-27
+
+### Changed
+
+* To prevent Poisoned Pipeline Execution (PPE) attacks using prepared `.coverage` files in pull requests, a PHPT test will no longer be run if the temporary file for writing code coverage information already exists before the test runs
+
+## [9.6.32] - 2026-01-24
+
+### Changed
+
+* `PHPUnit\Framework\MockObject` exceptions are now subtypes of `PHPUnit\Exception`
+
+## [9.6.31] - 2025-12-06
+
+* No changes; `phpunit.phar` rebuilt with PHP 8.4 to work around PHP-Scoper issue [#1139](https://github.com/humbug/php-scoper/issues/1139)
+
+## [9.6.30] - 2025-12-01
+
+### Changed
+
+* Updated list of deprecated PHP configuration settings for PHP 8.4, PHP 8.5, and PHP 8.6
+
+## [9.6.29] - 2025-09-24
+
+* No changes; `phpunit.phar` rebuilt with updated dependencies
+
+## [9.6.28] - 2025-09-23
+
+* No changes; `phpunit.phar` rebuilt with updated dependencies
+
+## [9.6.27] - 2025-09-14
+
+### Changed
+
+* [#6366](https://github.com/sebastianbergmann/phpunit/issues/6366): Exclude `__sleep()` and `__wakeup()` from test double code generation on PHP >= 8.5
+
+## [9.6.26] - 2025-09-11
+
+### Changed
+
+* Implement `__serialize()` in addition to `__sleep()` (which will be deprecated in PHP 8.5)
+
+## [9.6.25] - 2025-08-20
+
+### Changed
+
+* Do not configure `report_memleaks` setting (which will be deprecated in PHP 8.5) for PHPT processes
+
+## [9.6.24] - 2025-08-10
+
+### Changed
+
+* Do not use `ReflectionProperty::setAccessible()` with PHP >= 8.1
+* Do not use `SplObjectStorage` methods that will be deprecated in PHP 8.5
+
+## [9.6.23] - 2025-05-02
+
+### Changed
+
+* [#5956](https://github.com/sebastianbergmann/phpunit/issues/5956): Improved handling of deprecated `E_STRICT` constant
+* Improved message when test is considered risky for printing unexpected output
+
+## [9.6.22] - 2024-12-05
+
+### Fixed
+
+* [#6071](https://github.com/sebastianbergmann/phpunit/issues/6071): PHP Archives (PHARs) of PHPUnit 8.5 and PHPUnit 9.6 bundle outdated versions of Prophecy
+
 ## [9.6.21] - 2024-09-19
 
 ### Changed
@@ -156,6 +265,24 @@ All notable changes of the PHPUnit 9.6 release series are documented in this fil
 * [#5064](https://github.com/sebastianbergmann/phpunit/issues/5064): Deprecate `PHPUnit\Framework\TestCase::getMockClass()`
 * [#5132](https://github.com/sebastianbergmann/phpunit/issues/5132): Deprecate `Test` suffix for abstract test case classes
 
+[9.6.39]: https://github.com/sebastianbergmann/phpunit/compare/9.6.38...9.6.39
+[9.6.38]: https://github.com/sebastianbergmann/phpunit/compare/9.6.37...9.6.38
+[9.6.37]: https://github.com/sebastianbergmann/phpunit/compare/9.6.36...9.6.37
+[9.6.36]: https://github.com/sebastianbergmann/phpunit/compare/9.6.35...9.6.36
+[9.6.35]: https://github.com/sebastianbergmann/phpunit/compare/9.6.34...9.6.35
+[9.6.34]: https://github.com/sebastianbergmann/phpunit/compare/9.6.33...9.6.34
+[9.6.33]: https://github.com/sebastianbergmann/phpunit/compare/9.6.32...9.6.33
+[9.6.32]: https://github.com/sebastianbergmann/phpunit/compare/9.6.31...9.6.32
+[9.6.31]: https://github.com/sebastianbergmann/phpunit/compare/9.6.30...9.6.31
+[9.6.30]: https://github.com/sebastianbergmann/phpunit/compare/9.6.29...9.6.30
+[9.6.29]: https://github.com/sebastianbergmann/phpunit/compare/9.6.28...9.6.29
+[9.6.28]: https://github.com/sebastianbergmann/phpunit/compare/9.6.27...9.6.28
+[9.6.27]: https://github.com/sebastianbergmann/phpunit/compare/9.6.26...9.6.27
+[9.6.26]: https://github.com/sebastianbergmann/phpunit/compare/9.6.25...9.6.26
+[9.6.25]: https://github.com/sebastianbergmann/phpunit/compare/9.6.24...9.6.25
+[9.6.24]: https://github.com/sebastianbergmann/phpunit/compare/9.6.23...9.6.24
+[9.6.23]: https://github.com/sebastianbergmann/phpunit/compare/9.6.22...9.6.23
+[9.6.22]: https://github.com/sebastianbergmann/phpunit/compare/9.6.21...9.6.22
 [9.6.21]: https://github.com/sebastianbergmann/phpunit/compare/9.6.20...9.6.21
 [9.6.20]: https://github.com/sebastianbergmann/phpunit/compare/9.6.19...9.6.20
 [9.6.19]: https://github.com/sebastianbergmann/phpunit/compare/9.6.18...9.6.19

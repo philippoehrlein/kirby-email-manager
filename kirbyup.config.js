@@ -1,8 +1,9 @@
 import { resolve } from 'node:path'
+import { defineConfig } from 'kirbyup/config'
 
-export default {
+export default defineConfig({
   alias: {
-    '@': resolve(__dirname, 'src'),
-    '@components': resolve(__dirname, 'src/components'),
-  }
-}
+    '@': resolve(import.meta.dirname, 'src'),
+    '@components': resolve(import.meta.dirname, 'src/components'),
+  },
+})

@@ -132,14 +132,10 @@ class SimpleImage
     }
 
     /**
-     * Destroys the image resource.
+     * @deprecated 4.4.0 Has no effect anymore
      */
     public function reset(): static
     {
-        if ($this->hasImage()) {
-            imagedestroy($this->image);
-        }
-
         return $this;
     }
 
@@ -193,20 +189,18 @@ class SimpleImage
         }
 
         // Determine mime type
-        $this->mimeType = $matches[1];
-        if (! preg_match('/^image\/(gif|jpeg|png)$/', $this->mimeType)) {
+        $mimeType = $matches[1];
+        if (! preg_match('/^image\/(gif|jpeg|png)$/', $mimeType)) {
             throw new Exception(
-                'Unsupported format: '.$this->mimeType,
+                'Unsupported format: ' . $mimeType,
                 self::ERR_UNSUPPORTED_FORMAT
             );
         }
 
         // Get image data
-        $uri = base64_decode(strval(preg_replace('/^data:(.*?);base64,/', '', $uri)));
-        $this->image = imagecreatefromstring($uri);
-        if (! $this->image) {
-            throw new Exception('Invalid image data.', self::ERR_INVALID_IMAGE);
-        }
+        $data = base64_decode(strval(preg_replace('/^data:(.*?);base64,/', '', $uri)));
+
+        $this->fromString($data, $mimeType);
 
         return $this;
     }
@@ -221,7 +215,7 @@ class SimpleImage
      */
     public function fromFile(string $file): static
     {
-    // Set fopen options.
+        // Set fopen options.
         $sslVerify = $this->getFlag('sslVerify'); // Don't perform peer validation when true
         $opts = [
             'ssl' => [
@@ -231,20 +225,40 @@ class SimpleImage
         ];
 
         // Check if the file exists and is readable.
-        $file = @file_get_contents($file, false, stream_context_create($opts));
-        if ($file === false) {
+        $data = @file_get_contents($file, false, stream_context_create($opts));
+        if ($data === false) {
             throw new Exception("File not found: $file", self::ERR_FILE_NOT_FOUND);
         }
 
-        // Create image object from string
-        $this->image = imagecreatefromstring($file);
+        $this->fromString($data);
 
-        // Get image info
-        $info = @getimagesizefromstring($file);
-        if ($info === false) {
-            throw new Exception("Invalid image file: $file", self::ERR_INVALID_IMAGE);
+        return $this;
+    }
+
+    /**
+     * Creates a new image from an image data string.
+     *
+     * @param string $data
+     * @param string|null $mimeType
+     * @return SimpleImage
+     * @throws Exception
+     */
+    public function fromString(string $data, ?string $mimeType = null): static
+    {
+
+        if($mimeType === null) {
+            // Get image info
+            $info = @getimagesizefromstring($data);
+            if ($info === false) {
+                throw new Exception("Invalid image data", self::ERR_INVALID_IMAGE);
+            }
+            $this->mimeType = $info['mime'];
+        } else {
+            $this->mimeType = $mimeType;
         }
-        $this->mimeType = $info['mime'];
+
+        // Create image object from string
+        $this->image = imagecreatefromstring($data);
 
         if (! $this->image) {
             throw new Exception('Unsupported format: '.$this->mimeType, self::ERR_UNSUPPORTED_FORMAT);
@@ -263,17 +277,20 @@ class SimpleImage
                 imagefill($gif, 0, 0, $alpha);
 
                 imagecopy($this->image, $gif, 0, 0, 0, 0, $width, $height);
-                imagedestroy($gif);
                 break;
             case 'image/jpeg':
                 // Load exif data from JPEG images
                 if (function_exists('exif_read_data')) {
-                    $this->exif = @exif_read_data('data://image/jpeg;base64,'.base64_encode($file));
+                    $stream = fopen('php://memory', 'r+b');
+                    fwrite($stream, $data);
+                    rewind($stream);
+                    $this->exif = @exif_read_data($stream);
+                    fclose($stream);
                 }
                 break;
         }
 
-        // Convert pallete images to true color images
+        // Convert palette images to true color images
         imagepalettetotruecolor($this->image);
 
         return $this;
@@ -302,21 +319,6 @@ class SimpleImage
         return $this;
     }
 
-    /**
-     * Creates a new image from a string.
-     *
-     * @param  string  $string The raw image data as a string.
-     * @return SimpleImage
-     *
-     * @throws Exception
-     *
-     * @example
-     *    $string = file_get_contents('image.jpg');
-     */
-    public function fromString(string $string): SimpleImage|static
-    {
-        return $this->fromFile('data://;base64,'.base64_encode($string));
-    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
     // Savers
@@ -331,7 +333,7 @@ class SimpleImage
      *
      * @throws Exception Thrown when WEBP support is not enabled or unsupported format.
      */
-    public function generate(string $mimeType = null, array|int $options = 100): array
+    public function generate(string|null $mimeType = null, array|int $options = 100): array
     {
         // Format defaults to the original mime type
         $mimeType = $mimeType ?: $this->mimeType;
@@ -473,7 +475,7 @@ class SimpleImage
      *
      * @throws Exception
      */
-    public function toDataUri(string $mimeType = null, array|int $options = 100): string
+    public function toDataUri(string|null $mimeType = null, array|int $options = 100): string
     {
         $image = $this->generate($mimeType, $options);
 
@@ -490,7 +492,7 @@ class SimpleImage
      *
      * @throws Exception
      */
-    public function toDownload(string $filename, string $mimeType = null, array|int $options = 100): static
+    public function toDownload(string $filename, string|null $mimeType = null, array|int $options = 100): static
     {
         $image = $this->generate($mimeType, $options);
 
@@ -517,7 +519,7 @@ class SimpleImage
      *
      * @throws Exception Thrown if failed write to file.
      */
-    public function toFile(string $file, string $mimeType = null, array|int $options = 100): static
+    public function toFile(string $file, string|null $mimeType = null, array|int $options = 100): static
     {
         $image = $this->generate($mimeType, $options);
 
@@ -538,7 +540,7 @@ class SimpleImage
      *
      * @throws Exception
      */
-    public function toScreen(string $mimeType = null, array|int $options = 100): static
+    public function toScreen(string|null $mimeType = null, array|int $options = 100): static
     {
         $image = $this->generate($mimeType, $options);
 
@@ -557,7 +559,7 @@ class SimpleImage
      *
      * @throws Exception
      */
-    public function toString(string $mimeType = null, array|int $options = 100): string
+    public function toString(string|null $mimeType = null, array|int $options = 100): string
     {
         return $this->generate($mimeType, $options)['data'];
     }
@@ -620,6 +622,28 @@ class SimpleImage
     {
         return $this->mimeType;
     }
+
+	/**
+	 * Gets the corresponding extension for the current MIME type
+	 *
+	 * @throws Exception Thrown if invalid MIME type found (edge case)
+	 */
+	public function getExtension(): string
+	{
+		return match (strtolower($this->mimeType)) {
+			'image/jpeg' => 'jpg',
+			'image/png' => 'png',
+			'image/gif' => 'gif',
+			'image/webp' => 'webp',
+			'image/avif' => 'avif',
+			'image/bmp', 'image/x-ms-bmp', 'image/x-windows-bmp' => 'bmp',
+			//other image types supported are WAP BMP and GD's internal pics
+			default => throw new \Exception(
+				'Unsupported format: '.$this->mimeType,
+				self::ERR_UNSUPPORTED_FORMAT
+			)
+		};
+	}
 
     /**
      * Gets the image's current orientation.
@@ -975,7 +999,7 @@ class SimpleImage
      * @param  int|null  $height The new image height.
      * @return SimpleImage
      */
-    public function resize(int $width = null, int $height = null): static
+    public function resize(int|null $width = null, int|null $height = null): static
     {
         // No dimensions specified
         if (! $width && ! $height) {
@@ -1027,7 +1051,7 @@ class SimpleImage
      * @param  int|null  $res_y The vertical resolution in DPI
      * @return SimpleImage
      */
-    public function resolution(int $res_x, int $res_y = null): static
+    public function resolution(int $res_x, int|null $res_y = null): static
     {
         if (is_null($res_y)) {
             imageresolution($this->image, $res_x);
@@ -1087,7 +1111,7 @@ class SimpleImage
      *
      * @throws Exception
      */
-    public function text(string $text, array $options, array &$boundary = null): static
+    public function text(string $text, array $options, array|null &$boundary = null): static
     {
         // Check for freetype support
         if (! function_exists('imagettftext')) {
@@ -2196,7 +2220,7 @@ class SimpleImage
      *
      * @throws Exception Thrown if library \League\ColorExtractor is missing.
      */
-    public function extractColors(int $count = 5, string|array $backgroundColor = null): array
+    public function extractColors(int $count = 5, string|array|null $backgroundColor = null): array
     {
         // Check for required library
         if (! class_exists('\\'.ColorExtractor::class)) {

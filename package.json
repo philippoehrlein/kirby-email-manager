@@ -1,7 +1,8 @@
 {
   "name": "kirby-email-manager",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "private": true,
+  "type": "module",
   "license": "proprietary",
   "homepage": "https://email-manager.philippoehrlein.de",
   "support": {
@@ -17,20 +18,18 @@
     }
   ],
   "scripts": {
-    "dev": "npx kirbyup src/index.js --watch",
-    "serve": "npx kirbyup serve src/index.js",
-    "build": "npx kirbyup src/index.js",
+    "dev": "kirbyup dev src/index.js",
+    "build": "kirbyup src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier \"src/**\" --write"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.11.0",
-    "@vitejs/plugin-vue": "^5.1.3",
     "autoprefixer": "^10.4.21",
-    "kirbyup": "^3.1.12",
-    "kirbyuse": "^0.11.3",
+    "kirbyup": "^4.0.0",
+    "kirbyuse": "^2.0.0",
     "prettier": "^3.5.3",
-    "vite": "^5.4.2"
+    "vue": "^3.5.46"
   }
 }

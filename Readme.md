@@ -1,7 +1,8 @@
 # Kirby Email Manager
 
 ![License](https://img.shields.io/badge/License-Proprietary-green)
-![Version](https://img.shields.io/badge/Version-1.2.0-blue)
+![Version](https://img.shields.io/badge/Version-2.0.0-blue)
+![Kirby](https://img.shields.io/badge/Kirby-6-black)
 
 The **Email Manager** is a powerful plugin for [Kirby CMS](https://getkirby.com/) that simplifies email form creation and management. Designed for developers, it ensures a seamless experience while giving CMS users the flexibility to adapt content dynamically.
 
@@ -22,19 +23,32 @@ The **Email Manager** is a powerful plugin for [Kirby CMS](https://getkirby.com/
 - **Multi Email:** Route to different recipients based on user input.
 
 
+## Requirements
+
+| Plugin version | Kirby | PHP   |
+|----------------|-------|-------|
+| **2.x**        | 6     | ≥ 8.3 |
+| **1.x**        | 4 / 5 | ≥ 8.1 |
+
 ## Installation
 
 ### Composer Installation (recommended)
 
-Run the following command in your site's root folder:
+**Kirby 6** (current release):
 
 ```bash
-composer require philippoehrlein/kirby-email-manager
+composer require philippoehrlein/kirby-email-manager:^2.0
+```
+
+**Kirby 4 or 5** (maintenance line):
+
+```bash
+composer require philippoehrlein/kirby-email-manager:^1.2
 ```
 
 ### Manual Installation
 
-1. Download and extract the plugin
+1. Download and extract the plugin (use a `2.x` release for Kirby 6, or `1.x` for Kirby 4/5)
 2. Copy the `kirby-email-manager` folder to `/site/plugins/`
 
 
